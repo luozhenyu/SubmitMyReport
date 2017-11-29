@@ -14,3 +14,9 @@
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('index');
+
+
+Route::get('/group', 'GroupController@index')->name('group');
+
+
+Route::post('/group', 'GroupController@create');

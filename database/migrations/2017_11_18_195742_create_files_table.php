@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateFilesTable extends Migration
 {
@@ -16,6 +16,7 @@ class CreateFilesTable extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('extension');
             $table->string('sha512');
             $table->timestamps();
         });
