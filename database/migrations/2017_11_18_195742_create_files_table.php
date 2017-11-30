@@ -19,6 +19,10 @@ class CreateFilesTable extends Migration
             $table->string('extension');
             $table->string('sha512');
             $table->timestamps();
+
+            //和Assignment表、submission表可能的从属关系
+            $table->integer('assignment_id')->unsigned()->nullable();
+            $table->integer('submission_id')->unsigned()->nullable();
         });
     }
 
