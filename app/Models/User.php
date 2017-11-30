@@ -32,7 +32,7 @@ class User extends Authenticatable
 
     public function Groups()
     {
-        return $this->hasMany(Group::class,'user_id');
+        return $this->hasMany(Group::class,'creator_id');
     }
 
     public function Assignments()

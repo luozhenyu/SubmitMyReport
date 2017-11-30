@@ -19,7 +19,7 @@ class Group extends Model
 
     public function User()
     {
-        return $this->belongTo(User::class,'user_id');
+        return $this->belongTo(User::class,'creator_id');
     }
 
     public function Assignments()
