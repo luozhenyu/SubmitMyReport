@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Group;
 use App\Models\Submission;
+use App\Models\Picture;
+use App\Models\File;
 
 class Assignment extends Model
 {
@@ -30,5 +32,15 @@ class Assignment extends Model
     public function Submissions()
     {
         return $this->hasMany(Submission::class,'assignment_id');
+    }
+
+    public function Pictures()
+    {
+        return $this->hasMany(Picture::class,'assignment_id');
+    }
+
+    public function Files()
+    {
+        return $this->hasMany(File::class,'assignment_id');
     }
 }
