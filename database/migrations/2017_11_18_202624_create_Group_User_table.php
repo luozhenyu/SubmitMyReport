@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGroupsTable extends Migration
+class CreateGroupUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('groups', function (Blueprint $table) {
+        Schema::create('Group_User', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->text('description');
             $table->timestamps();
 
-            //创建者ID
-            $table->integer('creator_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->integer('group_id')->unsigned();
+            //是否是管理员
+            $table->boolean('isAdministrator')->default(false);
         });
     }
 
@@ -31,6 +31,6 @@ class CreateGroupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groups');
+        Schema::dropIfExists('Group_User');
     }
 }
