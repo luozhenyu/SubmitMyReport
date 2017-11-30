@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Submission::class,'user_id');
     }
+
+    public function belongsToManyGroup()
+    {
+        return $this->belongsToMany(Group::class,'Group_User','user_id','group_id')->withPivot('isAdministrator');
+    }
 }

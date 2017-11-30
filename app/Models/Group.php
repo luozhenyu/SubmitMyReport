@@ -27,4 +27,9 @@ class Group extends Model
         return $this->hasMany(Assignment::class,'group_id');
     }
 
+    public function belongsToManyUser()
+    {
+        return $this->belongsToMany(User::class,'Group_User','group_id','user_id')->withPivot('isAdministrator');
+    }
 }
+
