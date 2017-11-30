@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Assignment;
 
 class Group extends Model
 {
@@ -14,4 +16,15 @@ class Group extends Model
     protected $fillable = [
         'name', 'description',
     ];
+
+    public function User()
+    {
+        return $this->belongTo(User::class,'user_id');
+    }
+
+    public function Assignments()
+    {
+        return $this->hasMany(Assignment::class,'group_id');
+    }
+
 }

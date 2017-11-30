@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Group;
+use App\Models\Assignment;
+use App\Models\Submission;
 
 class User extends Authenticatable
 {
@@ -26,4 +29,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function Groups()
+    {
+        return $this->hasMany(Group::class,'user_id');
+    }
+
+    public function Assignments()
+    {
+        return $this->hasMany(Assignment::class,'user_id');
+    }
+
+
+    public function Submissions()
+    {
+        return $this->hasMany(Submission::class,'user_id');
+    }
 }
