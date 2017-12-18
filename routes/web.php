@@ -20,3 +20,7 @@ Route::get('/group', 'GroupController@index')->name('group');
 
 
 Route::post('/group', 'GroupController@create');
+
+Route::get('/test',function(Request $request){
+    return view('homework.posthomework');
+});
