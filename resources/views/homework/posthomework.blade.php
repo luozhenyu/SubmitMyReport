@@ -1,20 +1,17 @@
 @extends('layouts.app');
 
 @push('css')
-    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/bootstrap-fileinput/4.0.0/css/fileinput.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet">
 @endpush
 
+
 @push('js')
-    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.0.0/js/fileinput.min.js"></script>
-    <script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript">
-        $(function () {
-            $('#date1').datetimepicker({
-                format: 'YYYY-MM-DD',
-                locale: moment.locale('zh-cn')
-            });
+        $('#datepicker').datepicker({
+            format: 'mm/dd/yyyy'
         });
     </script>
 @endpush
@@ -36,11 +33,12 @@
 
                             <div class="form-group">
                                 <label class="col-md-1 col-md-offset-1 col-sm-12 text-left">Deadline</label>
-                                <div class="col-md-8 col-sm-12 input-group date " id='date1'>
-                                    <input type="text" class="form-control">
-                                    <span class="input-group-addon">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </span>
+                                <div class="input-group date col-md-9 col-sm-12" id="datepicker">
+                                    <input class="form-control" type="text">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </div>
+
                                 </div>
                             </div>
 
