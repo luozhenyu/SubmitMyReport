@@ -4,16 +4,30 @@
 
 @push('css')
     <link href="{{ url('components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ url('components/bootstrap-fileinput/css/fileinput.min.css') }}" rel="stylesheet">
+
 @endpush
 
 
 @push('js')
     <script src="{{ url('components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ url('components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js') }}"></script>
+    <script src="{{ url('components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url('components/bootstrap-fileinput/js/fileinput.min.js') }}"></script>
+    <script src="{{ url('components/bootstrap-fileinput/js/locales/zh.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('#datepicker').datepicker({
-                format: 'mm/dd/yyyy'
+            $("#myFile").fileinput({
+                language : 'en',
+                uploadUrl : "${ctx}/admin/uplode/photo",
+                autoReplace : true,
+                maxFileCount : 5,
+                allowedFileExtensions : [ "zip", "rar", "7z" ],
+                browseClass : "btn btn-primary", //按钮样式
+                previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
+            }).on("fileuploaded", function(e, data) {
+                var res = data.response;
+                alert(res.success);
+                $("#logo").attr("value", res.success);
             });
         });
     </script>
@@ -53,13 +67,18 @@
                     <div class="panel-footer">
                         <form class="form-horizontal" method="submit">
                             <div class="form-group">
-                                <div class="col-md-offset-1 col-md-10 col-sm-12">
-                                    <input type="file" class="frame-file">
+                                <div class="col-sm-12">
+                                    <label class="col-sm-12 text-left">Add Files</label>
+                                    <br/>
+                                    <div class="col-sm-12">
+                                        <input id="myFile" type="file" name="myFile" class="fileloading">
+                                    </div>
+                                    <input type="hidden" name="#" id="#">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-offset-1 col-md-10 col-sm-12 text-right">
+                                <div class="col-sm-12 text-right">
                                     <button class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
