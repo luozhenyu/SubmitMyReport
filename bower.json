@@ -1,5 +1,5 @@
 {
-  "name": "SubmitMyReport",
+  "name": "submit_my_report",
   "description": "",
   "main": "",
   "license": "MIT",
@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "bootstrap-datepicker": "^1.7.1"
   }
 }

@@ -1,17 +1,20 @@
 @extends('layouts.app')
 
+@section('title','')
+
 @push('css')
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="{{ url('components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
 @endpush
 
 
 @push('js')
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+    <script src="{{ url('components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url('components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js') }}"></script>
     <script type="text/javascript">
-        $('#datepicker').datepicker({
-            format: 'mm/dd/yyyy'
+        $(function () {
+            $('#datepicker').datepicker({
+                format: 'mm/dd/yyyy'
+            });
         });
     </script>
 @endpush
@@ -46,7 +49,8 @@
                                 <label class="col-md-10 col-md-offset-1 col-sm-12 text-left">Details</label>
                                 <br/>
                                 <div class="col-md-10 col-md-offset-1 col-sm-12 date">
-                                    <textarea class="col-md-12 col-sm-12 form-control" style="height: 250px;resize:none"></textarea>
+                                    <textarea class="col-md-12 col-sm-12 form-control"
+                                              style="height: 250px;resize:none"></textarea>
                                 </div>
                             </div>
 
