@@ -29,6 +29,6 @@ class CreateAssignmentFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pictures');
+        Schema::dropIfExists('assignment_file');
     }
 }

@@ -29,6 +29,6 @@ class CreateSubmissionPictureTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pictures');
+        Schema::dropIfExists('submission_picture');
     }
 }

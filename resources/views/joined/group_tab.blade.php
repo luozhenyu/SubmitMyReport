@@ -4,7 +4,9 @@
             <h3>{{$group_name}}</h3>
         </div>
         <div class="row">
-            <div><small>created by {{$creator}} on {{$created_on}}</small></div>
+            <div>
+                <small>created by {{$creator}} on {{$created_on}}</small>
+            </div>
         </div>
         <div class="row" style="margin-top: 10px;">
             <div class="jumbotron">

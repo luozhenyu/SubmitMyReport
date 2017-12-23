@@ -21,11 +21,11 @@ Route::get('/group', 'GroupController@index')->name('group');
 
 Route::post('/group', 'GroupController@create');
 
-Route::get('/test', function (){
+Route::get('/test', function () {
     return view('homework.submithomework');
 });
 
-Route::get('/submit',function(Request $request){
+Route::get('/submit', function (Request $request) {
     $data = array(
         'user' => "yzhq97",
         'title' => "Submission",
@@ -40,7 +40,7 @@ Route::get('/submit',function(Request $request){
 
 Route::get('/joined', 'JoinedController@testshow');
 
-Route::get('/manage', function() {
+Route::get('/manage', function () {
     $groups = array(
         "All",
         "Operating System",
@@ -134,7 +134,7 @@ Route::get('/manage', function() {
     return view('manage.manage', $data);
 });
 
-Route::get('/assignment', function() {
+Route::get('/assignment', function () {
     $sub1 = array(
         'name' => "杨卓谦",
         'time' => '2017-7-9',

@@ -17,20 +17,26 @@
                         @endfor
                     @endif
                 </ul>
-                <p style="padding-top: 10px;"><button class="btn btn-primary btn-md" data-toggle="modal" data-target="#createGroupModal" style="width: 100%;">Create Group</button></p>
+                <p style="padding-top: 10px;">
+                    <button class="btn btn-primary btn-md" data-toggle="modal" data-target="#createGroupModal"
+                            style="width: 100%;">Create Group
+                    </button>
+                </p>
                 @include('manage.create_group_modal')
             </div>
 
             <div class="col col-sm-12 offset-sm-0 col-md-8 offset-md-0 col-lg-8 offset-lg-0 col-xl-8 offset-xl-0">
                 <div class="container">
                     <ul id="myTab" class="row nav nav-pills">
-                        <li class="nav-item"><a class="nav-link active" href="#tab_assignments" data-toggle="tab">Assignments</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="#tab_assignments" data-toggle="tab">Assignments</a>
+                        </li>
                         <li class="nav-item"><a class="nav-link" href="#tab_group" data-toggle="tab">Group</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#tab_members" data-toggle="tab">Members</a> </li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_members" data-toggle="tab">Members</a></li>
                     </ul>
 
                     <div class="row tab-content" style="margin-top: 20px; height:85%; border-radius: 5px;">
-                        <div role="tabpanel" class="tab-pane fade show active" id="tab_assignments" style="width: 100%;">
+                        <div role="tabpanel" class="tab-pane fade show active" id="tab_assignments"
+                             style="width: 100%;">
                             @include('manage.assignment_tab')
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab_group" style="width: 100%;">

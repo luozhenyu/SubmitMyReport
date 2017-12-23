@@ -15,14 +15,14 @@
     <script type="text/javascript">
         $(function () {
             $("#myFile").fileinput({
-                language : 'en',
-                uploadUrl : "${ctx}/admin/uplode/photo",
-                autoReplace : true,
-                maxFileCount : 5,
-                allowedFileExtensions : [ "zip", "rar", "7z" ],
-                browseClass : "btn btn-primary", //按钮样式
-                previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
-            }).on("fileuploaded", function(e, data) {
+                language: 'en',
+                uploadUrl: "${ctx}/admin/uplode/photo",
+                autoReplace: true,
+                maxFileCount: 5,
+                allowedFileExtensions: ["zip", "rar", "7z"],
+                browseClass: "btn btn-primary", //按钮样式
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>"
+            }).on("fileuploaded", function (e, data) {
                 var res = data.response;
                 alert(res.success);
                 $("#logo").attr("value", res.success);
@@ -35,7 +35,8 @@
     <div class="container">
         <div class="row" style="height: 30px;"></div>
         <div class="col col-sm-12 offset-sm-0 col-md-8 offset-md-3">
-            <div class="container" style="height:85%; overflow: scroll; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
+            <div class="container"
+                 style="height:85%; overflow: scroll; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
                 <div class="row" style="padding-top: 20px; padding-left: 30px; padding-right: 30px;">
                     <a href="/joined" role="button" class="btn btn-outline-primary">Back</a>
                     &nbsp&nbsp
@@ -62,7 +63,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 text-center">
-                                <button class="btn btn-primary btn-lg btn-block" style="font-weight: bold">Submit</button>
+                                <button class="btn btn-primary btn-lg btn-block" style="font-weight: bold">Submit
+                                </button>
                             </div>
                         </div>
                     </form>
