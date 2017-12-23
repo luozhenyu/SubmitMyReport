@@ -8,13 +8,12 @@ class JoinedController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function show()
     {
         $user = Auth::user();
-        echo $user;
 
         $groups = array(
             "All",
@@ -55,7 +54,7 @@ class JoinedController extends Controller
             'groups' => $groups,
             'active_group' => 0,
             'active_page' => 'joined',
-            'user' => "yzhq97",
+            'user' => $user,
             'title' => "Joined",
             'assignments' => $assignments,
 
