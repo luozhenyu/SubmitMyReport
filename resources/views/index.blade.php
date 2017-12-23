@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('auth_layout')
 
 @section('title','首页')
 
