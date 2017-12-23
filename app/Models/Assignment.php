@@ -3,11 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Group;
-use App\Models\Submission;
-use App\Models\Picture;
-use App\Models\File;
 
 class Assignment extends Model
 {
@@ -17,30 +12,31 @@ class Assignment extends Model
      * @var array
      */
     protected $fillable = [
+        'title', 'description'
     ];
 
-    public function User()
+    public function user()
     {
-        return $this->belongTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function Group()
+    public function group()
     {
-        return $this->belongTo(Group::class,'group_id');
+        return $this->belongsTo(Group::class, 'group_id');
     }
 
-    public function Submissions()
+    public function submissions()
     {
-        return $this->hasMany(Submission::class,'assignment_id');
+        return $this->hasMany(Submission::class, 'assignment_id');
     }
 
-    public function Pictures()
+    public function pictures()
     {
-        return $this->hasMany(Picture::class,'assignment_id');
+        return $this->belongsToMany(Picture::class, 'assignment_picture');
     }
 
-    public function Files()
+    public function files()
     {
-        return $this->hasMany(File::class,'assignment_id');
+        return $this->belongsToMany(File::class, 'assignment_file');
     }
 }

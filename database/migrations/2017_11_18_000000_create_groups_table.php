@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFilesTable extends Migration
+class CreateGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('extension');
-            $table->string('sha512');
+            $table->text('description');
             $table->timestamps();
 
-            //和Assignment表、submission表可能的从属关系
-            $table->integer('assignment_id')->unsigned()->nullable();
-            $table->integer('submission_id')->unsigned()->nullable();
+            //创建者ID
+            $table->integer('user_id')->unsigned();
         });
     }
 
@@ -33,6 +31,6 @@ class CreateFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('groups');
     }
 }

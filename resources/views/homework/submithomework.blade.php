@@ -17,14 +17,14 @@
     <script type="text/javascript">
         $(function () {
             $("#myFile").fileinput({
-                language : 'en',
-                uploadUrl : "${ctx}/admin/uplode/photo",
-                autoReplace : true,
-                maxFileCount : 5,
-                allowedFileExtensions : [ "zip", "rar", "7z" ],
-                browseClass : "btn btn-primary", //按钮样式
-                previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
-            }).on("fileuploaded", function(e, data) {
+                language: 'en',
+                uploadUrl: "${ctx}/admin/uplode/photo",
+                autoReplace: true,
+                maxFileCount: 5,
+                allowedFileExtensions: ["zip", "rar", "7z"],
+                browseClass: "btn btn-primary", //按钮样式
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>"
+            }).on("fileuploaded", function (e, data) {
                 var res = data.response;
                 alert(res.success);
                 $("#logo").attr("value", res.success);
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <form class="form-horizontal" method="submit">
+                        <form class="form-horizontal" method="post">
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <label class="col-sm-12 text-left">Add Files</label>

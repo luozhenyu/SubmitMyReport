@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubmissionsTable extends Migration
+class CreateGroupUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class CreateSubmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('submissions', function (Blueprint $table) {
+        Schema::create('group_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('content');
             $table->timestamps();
 
-            //检查后score为非NULL值
-            $table->integer('score')->unsigned()->nullable();
-            $table->text('remark')->nullable();
-
             $table->integer('user_id')->unsigned();
-            $table->integer('assignment_id')->unsigned();
+            $table->integer('group_id')->unsigned();
+            //是否是管理员
+            $table->boolean('is_admin')->default(false);
         });
     }
 
@@ -34,6 +31,6 @@ class CreateSubmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('submissions');
+        Schema::dropIfExists('Group_User');
     }
 }

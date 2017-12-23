@@ -23,14 +23,14 @@
 
         $(function () {
             $("#myFile").fileinput({
-                language : 'en',
-                uploadUrl : "${ctx}/admin/uplode/photo",
-                autoReplace : true,
-                maxFileCount : 5,
-                allowedFileExtensions : [ "jpg", "png", "gif" ],
-                browseClass : "btn btn-primary", //按钮样式
-                previewFileIcon : "<i class='glyphicon glyphicon-king'></i>"
-            }).on("fileuploaded", function(e, data) {
+                language: 'en',
+                uploadUrl: "${ctx}/admin/uplode/photo",
+                autoReplace: true,
+                maxFileCount: 5,
+                allowedFileExtensions: ["jpg", "png", "gif"],
+                browseClass: "btn btn-primary", //按钮样式
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>"
+            }).on("fileuploaded", function (e, data) {
                 var res = data.response;
                 alert(res.success);
                 $("#logo").attr("value", res.success);
@@ -53,7 +53,7 @@
                                 </div>
 
                                 <div class="col-md-9 col-sm-12">
-                                    <input class=" form-control">
+                                    <input class="form-control">
                                 </div>
                             </div>
 

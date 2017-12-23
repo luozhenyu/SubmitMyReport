@@ -4,9 +4,6 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Group;
-use App\Models\Assignment;
-use App\Models\Submission;
 
 class User extends Authenticatable
 {
@@ -30,24 +27,23 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function Groups()
+    public function createdGroups()
     {
-        return $this->hasMany(Group::class,'creator_id');
+        return $this->hasMany(Group::class, 'user_id');
     }
 
-    public function Assignments()
+    public function assignments()
     {
-        return $this->hasMany(Assignment::class,'user_id');
+        return $this->hasMany(Assignment::class, 'user_id');
     }
 
-
-    public function Submissions()
+    public function submissions()
     {
-        return $this->hasMany(Submission::class,'user_id');
+        return $this->hasMany(Submission::class, 'user_id');
     }
 
-    public function belongsToManyGroup()
+    public function joinedGroups()
     {
-        return $this->belongsToMany(Group::class,'Group_User','user_id','group_id')->withPivot('isAdministrator');
+        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withPivot('is_admin');
     }
 }
