@@ -16,8 +16,8 @@
         </div>
     </div>
 </div>
-<div style="height:85%;overflow: scroll;box-shadow: 0px 2px 7px #bbbbbb;">
-    @if($assignments && count($assignments, 0) > 0)
+<div style="height:80%;overflow: scroll;box-shadow: 0px 2px 7px #bbbbbb;border-radius: 5px;">
+    @if($assignments and count($assignments, 0) > 0)
         <div class="list-group">
             @foreach($assignments as $assignment)
                 @include('manage.assignment_item')

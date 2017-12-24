@@ -13,7 +13,7 @@
 
 Auth::routes();
 
-Route::get('/', 'JoinedController@show')->name('index');
+Route::get('/', 'JoindController@show')->name('index');
 
 
 Route::get('/group', 'GroupController@index')->name('group');
@@ -38,101 +38,11 @@ Route::get('/submit',function(Request $request){
     return view('submit.submit', $data);
 });
 
-Route::get('/joined', 'JoinedController@testshow');
+Route::get('/joined', 'JoindController@show');
 
-Route::get('/manage', function() {
-    $groups = array(
-        "All",
-        "Operating System",
-        "Compiler",
-        "Data Mining",
-        "Database Admin",
-        "Math Modeling"
-    );
+Route::get('/manage', 'ManageController@show');
 
-    $assignment1 = array(
-        'title' => 'Linux Kernel Experiment',
-        'group' => 'Operating System',
-        'ddl' => '2017-12-23',
-        'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'submitted' => false,
-        'got' => 114,
-        'total' => 157
-    );
-    $assignment2 = array(
-        'title' => 'Final Project DDL',
-        'group' => 'Database Admin',
-        'ddl' => '2017-12-21',
-        'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'submitted' => true,
-        'urgent' => false,
-        'got' => 79,
-        'total' => 79
-    );
-    $assignment3 = array(
-        'title' => 'PL0 Compiler',
-        'group' => 'Compiler',
-        'ddl' => '2018-1-5',
-        'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'submitted' => false,
-        'urgent' => false,
-        'got' => 74,
-        'total' => 197
-    );
-    $assignments = array($assignment1, $assignment2, $assignment3, $assignment1, $assignment2, $assignment3, $assignment1, $assignment2, $assignment3);
-
-    $member1 = array(
-        'username' => 'dsf43',
-        'is_admin' => true
-    );
-    $member2 = array(
-        'username' => 'htzzf444',
-        'is_admin' => true
-    );
-    $member3 = array(
-        'username' => 'gbhtyhty',
-        'is_admin' => false
-    );
-    $member4 = array(
-        'username' => 'zzzzzz434',
-        'is_admin' => false
-    );
-    $member5 = array(
-        'username' => 'ffr5dd4',
-        'is_admin' => false
-    );
-    $member6 = array(
-        'username' => 'uxjakssk3',
-        'is_admin' => false
-    );
-    $member7 = array(
-        'username' => 'fasfads',
-        'is_admin' => false
-    );
-    $member8 = array(
-        'username' => 'ewrth',
-        'is_admin' => false
-    );
-
-    $members = array($member1, $member2, $member3, $member4, $member5, $member6, $member7, $member8);
-
-    $data = array(
-        'groups' => $groups,
-        'active_group' => 0,
-        'active_page' => 'manage',
-        'user' => "yzhq97",
-        'title' => "Manage",
-        'assignments' => $assignments,
-        'members' => $members,
-
-        'group_name' => 'Compiler',
-        'creator' => 'yzhq97',
-        'created_on' => '2017-9-7',
-        'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'administrators' => array('yzhq97', 'abc123', '123abc', '2ddf4')
-    );
-    return view('manage.manage', $data);
-});
+Route::post('/create_group', 'ManageController@create_group')->name('create_group');
 
 Route::get('/assignment', function() {
     $sub1 = array(

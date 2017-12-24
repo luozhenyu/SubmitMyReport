@@ -8,20 +8,30 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="POST" action="{{ route('create_group') }}">
+                    {{ csrf_field() }}
                     <div class="form-group">
                         <label for="group-name" class="col-form-label">Group Name:</label>
-                        <input type="text" class="form-control" id="group-name">
+                        <input type="text" class="form-control" id="group-name" name="group_name" required>
                     </div>
                     <div class="form-group">
                         <label for="group-description" class="col-form-label">Description:</label>
-                        <textarea class="form-control" id="group-description"></textarea>
+                        <textarea class="form-control" id="group-description" name="group_description" required></textarea>
+                    </div>
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="form-group">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Create</button>
             </div>
         </div>
     </div>

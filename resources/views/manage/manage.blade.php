@@ -4,10 +4,11 @@
     <div class="container">
         <div class="row" style="height: 20px;"></div>
         <div class="row">
-            <div class="col col-sm-12 offset-sm-0 col-md-2 offset-md-1 col-lg-2 offset-lg-1 col-xl-2 offset-xl-1">
+            <div class="col col-sm-12 offset-sm-0 col-md-2 offset-md-1">
                 <h4 style="text-align: center; margin-top: 20px; margin-bottom: 20px;">Groups</h4>
-                <ul class="list-group">
+                <div style="background-color: white; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
                     @if($groups)
+                        <ul class="list-group">
                         @for ($i = 0; $i < count($groups, 0); $i++)
                             @if ($i == $active_group)
                                 <a href="#" class="list-group-item active">{{$groups[$i]}}</a>
@@ -15,8 +16,14 @@
                                 <a href="#" class="list-group-item">{{$groups[$i]}}</a>
                             @endif
                         @endfor
+                        </ul>
+                    @else
+                        <div style="height: 100px;">
+                            @include('empty_view')
+                        </div>
                     @endif
-                </ul>
+                </div>
+                
                 <p style="padding-top: 10px;"><button class="btn btn-primary btn-md" data-toggle="modal" data-target="#createGroupModal" style="width: 100%;">Create Group</button></p>
                 @include('manage.create_group_modal')
             </div>

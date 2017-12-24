@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function belongsToManyGroup()
     {
-        return $this->belongsToMany(Group::class,'Group_User','user_id','group_id')->withPivot('isAdministrator');
+        return $this->belongsToMany(Group::class,'group_user','user_id','group_id')->withPivot('isAdministrator');
     }
 }
