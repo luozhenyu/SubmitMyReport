@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Assignment;
 
 class Group extends Model
 {
@@ -17,19 +15,19 @@ class Group extends Model
         'name', 'description',
     ];
 
-    public function User()
+    public function user()
     {
-        return $this->belongTo(User::class,'creator_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function Assignments()
+    public function assignments()
     {
-        return $this->hasMany(Assignment::class,'group_id');
+        return $this->hasMany(Assignment::class, 'group_id');
     }
 
-    public function belongsToManyUser()
+    public function member()
     {
-        return $this->belongsToMany(User::class,'Group_User','group_id','user_id')->withPivot('isAdministrator');
+        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')->withPivot('is_admin');
     }
 }
 

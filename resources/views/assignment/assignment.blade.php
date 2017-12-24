@@ -6,7 +6,8 @@
     <div class="container">
         <div class="row" style="height: 30px;"></div>
         <div class="col col-sm-12 offset-sm-0 col-md-10 offset-md-1">
-            <div class="container" style="height:85%; overflow: scroll; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
+            <div class="container"
+                 style="height:85%; overflow: scroll; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
                 <div class="row" style="padding-top: 20px; padding-left: 30px; padding-right: 30px;">
                     <a href="manage" role="button" class="btn btn-outline-primary">Back</a>
                     &nbsp&nbsp

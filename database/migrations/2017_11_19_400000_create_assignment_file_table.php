@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateMessagesTable extends Migration
+class CreateAssignmentFileTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create('assignment_file', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('content');
             $table->timestamps();
+
+            $table->integer('assignment_id')->unsigned();
+            $table->integer('file_id')->unsigned();
         });
     }
 
@@ -27,6 +29,6 @@ class CreateMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('messages');
+        Schema::dropIfExists('assignment_file');
     }
 }

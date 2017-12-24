@@ -6,11 +6,16 @@
     <p class="mb-1" style="padding-bottom: 5px">{{$assignment['description']}}</p>
     @if ($assignment['got']==$assignment['total'])
         <div class="progress" style="height: 18px;">
-            <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="{{$assignment['got']}}" aria-valuemin="0" aria-valuemax="{{$assignment['total']}}">{{$assignment['got']}}/{{$assignment['total']}}</div>
+            <div class="progress-bar bg-success" role="progressbar" style="width: 100%;"
+                 aria-valuenow="{{$assignment['got']}}" aria-valuemin="0"
+                 aria-valuemax="{{$assignment['total']}}">{{$assignment['got']}}/{{$assignment['total']}}</div>
         </div>
     @else
         <div class="progress" style="height: 18px;">
-            <div class="progress-bar bg-primary" role="progressbar" style="width: {{100*$assignment['got']/$assignment['total']}}%;" aria-valuenow="{{$assignment['got']}}" aria-valuemin="0" aria-valuemax="{{$assignment['total']}}">{{$assignment['got']}}/{{$assignment['total']}}</div>
+            <div class="progress-bar bg-primary" role="progressbar"
+                 style="width: {{100*$assignment['got']/$assignment['total']}}%;" aria-valuenow="{{$assignment['got']}}"
+                 aria-valuemin="0" aria-valuemax="{{$assignment['total']}}">{{$assignment['got']}}
+                /{{$assignment['total']}}</div>
         </div>
     @endif
     <div style="padding-top: 10px;">

@@ -2,7 +2,8 @@
     <div class="card">
         <div class="card-header" role="tab" id="heading{{$sub['name']}}">
             <h5 class="mb-0">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{$sub['name']}}" aria-expanded="true" aria-controls="collapse{{$sub['name']}}" style="color: black; font-size: small">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{$sub['name']}}" aria-expanded="true"
+                   aria-controls="collapse{{$sub['name']}}" style="color: black; font-size: small">
                     <div class="container">
                         <div class="row">
                             <div style="width: 50%">{{$sub['name']}}</div>

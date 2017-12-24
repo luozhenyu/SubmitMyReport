@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAssignmentsTable extends Migration
 {
@@ -19,7 +19,9 @@ class CreateAssignmentsTable extends Migration
             $table->text('description');
             $table->timestamps();
 
+            //assignment作者
             $table->integer('user_id')->unsigned();
+            //assignment所属group
             $table->integer('group_id')->unsigned();
         });
     }

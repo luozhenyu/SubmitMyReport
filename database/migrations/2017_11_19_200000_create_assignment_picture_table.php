@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubmissionsTable extends Migration
+class CreateAssignmentPictureTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreateSubmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('submissions', function (Blueprint $table) {
+        Schema::create('assignment_picture', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('content');
             $table->timestamps();
 
-            //检查后score为非NULL值
-            $table->integer('score')->unsigned()->nullable();
-            $table->text('remark')->nullable();
-
-            $table->integer('user_id')->unsigned();
             $table->integer('assignment_id')->unsigned();
+            $table->integer('picture_id')->unsigned();
         });
     }
 
@@ -34,6 +29,6 @@ class CreateSubmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('submissions');
+        Schema::dropIfExists('assignment_picture');
     }
 }

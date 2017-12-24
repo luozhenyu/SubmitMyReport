@@ -1,4 +1,5 @@
-<div class="modal fade" id="joinGroupModal" tabindex="-1" role="dialog" aria-labelledby="joinGroupModalLabel" aria-hidden="true">
+<div class="modal fade" id="joinGroupModal" tabindex="-1" role="dialog" aria-labelledby="joinGroupModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -25,7 +26,7 @@
                     </div>
                     <div class="row" style="height: 300px; overflow: scroll;">
                         <table class="table">
-                            @if ($search_result && count($search_result, 0) > 0)
+                            @if ($search_result)
                                 @foreach($search_result as $result)
                                     <tr>
                                         <td style="line-height: 39px;">

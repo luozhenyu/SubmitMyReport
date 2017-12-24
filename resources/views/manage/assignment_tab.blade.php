@@ -1,9 +1,11 @@
-<div class="container" style="height: 48px; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; background-color: #4884E9; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
+<div class="container"
+     style="height: 48px; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; background-color: #4884E9; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
     <div class="row">
         <div style="width: 50%; padding-left: 20px;">
             <small style="color:white">Filter:&nbsp&nbsp</small>
             <span class="dropdown">
-                <a class="btn btn-sm dropdown-toggle" style="background-color: white;" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="btn btn-sm dropdown-toggle" style="background-color: white;" href="#" role="button"
+                   id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     On Due
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">

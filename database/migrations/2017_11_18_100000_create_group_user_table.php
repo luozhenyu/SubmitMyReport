@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateGroupUserTable extends Migration
 {
@@ -20,7 +20,7 @@ class CreateGroupUserTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('group_id')->unsigned();
             //是否是管理员
-            $table->boolean('isAdministrator')->default(false);
+            $table->boolean('is_admin')->default(false);
         });
     }
 
