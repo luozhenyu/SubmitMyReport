@@ -33,10 +33,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item {{$current_page=='joined'?'active':''}}">
-                <a class="nav-link" href="/joined">Joined<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="../public/joined">Joined<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item {{$current_page=='manage'?'active':''}}">
-                <a class="nav-link" href="/manage">Manage</a>
+                <a class="nav-link" href="./manage">Manage</a>
             </li>
         </ul>
         <ul class="navbar-nav my-2 my-lg-0">

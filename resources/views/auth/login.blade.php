@@ -54,7 +54,7 @@
                     Login
                 </button>
 
-                <a class="btn btn-outline-primary" href="/register">
+                <a class="btn btn-outline-primary" href="{{ route('register') }}">
                     Register
                 </a>
 

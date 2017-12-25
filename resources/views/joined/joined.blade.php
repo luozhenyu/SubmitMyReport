@@ -23,7 +23,7 @@
                         </div>
                     @endif
                 </div>
-                <div style="padding-top: 10px;"><a href="/join_group" role="button" class="btn btn-primary btn-md" style="width: 100%;">Join Group</a></div>
+                <div style="padding-top: 10px;"><a href="./join_group" role="button" class="btn btn-primary btn-md" style="width: 100%;">Join Group</a></div>
             </div>
 
             <div class="col col-sm-12 offset-sm-0 col-md-8 offset-md-0 col-lg-8 offset-lg-0 col-xl-8 offset-xl-0">
