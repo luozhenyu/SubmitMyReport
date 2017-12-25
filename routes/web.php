@@ -15,17 +15,29 @@ Auth::routes();
 
 Route::get('/', 'JoindController@show')->name('index');
 
+//Joined
+Route::get('/joined', 'JoindController@show');
+Route::get('/join_group', 'JoindController@join_group');
+Route::post('/join_group', 'JoindController@join_group');
 
-Route::get('/group', 'GroupController@index')->name('group');
+//Manage
+Route::get('/manage', 'ManageController@show');
+Route::get('/post', 'PostController@show');
+
+//Group and User
+Route::get('/group', 'GroupController@index');
+Route::post('/group/create', 'GroupController@create');
+Route::get('/group/destroy', 'GroupController@destroy');
+
+Route::get('/group/join', 'GroupController@join');
+Route::get('/group/remove', 'GroupController@remove');
+Route::get('/group/quit', 'GroupController@quit');
+Route::get('/group/resign', 'GroupController@resign');
+Route::get('/group/appoint', 'GroupController@appoint');
+Route::get('/group/fire', 'GroupController@fire');
 
 
-Route::post('/group', 'GroupController@create');
-
-Route::get('/test', function (){
-    return view('homework.submithomework');
-});
-
-Route::get('/submit',function(Request $request){
+Route::get('/submit', function (Request $request) {
     $data = array(
         'user' => "yzhq97",
         'title' => "Submission",
@@ -38,13 +50,7 @@ Route::get('/submit',function(Request $request){
     return view('submit.submit', $data);
 });
 
-Route::get('/joined', 'JoindController@show');
-
-Route::get('/manage', 'ManageController@show');
-
-Route::post('/create_group', 'ManageController@create_group')->name('create_group');
-
-Route::get('/assignment', function() {
+Route::get('/assignment', function () {
     $sub1 = array(
         'name' => "杨卓谦",
         'time' => '2017-7-9',

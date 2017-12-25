@@ -32,10 +32,10 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item {{$active_page=='joined'?'active':''}}">
+            <li class="nav-item {{$current_page=='joined'?'active':''}}">
                 <a class="nav-link" href="/joined">Joined<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item {{$active_page=='manage'?'active':''}}">
+            <li class="nav-item {{$current_page=='manage'?'active':''}}">
                 <a class="nav-link" href="/manage">Manage</a>
             </li>
         </ul>
@@ -43,13 +43,20 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    {{$user}}
+                    {{$user->name}}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Info</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="{{ url('/logout') }}"
+                       onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+
+                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
                 </div>
             </li>
         </ul>

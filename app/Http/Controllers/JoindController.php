@@ -2,130 +2,86 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Group;
+use App\Models\User;
 
-class JoindController extends Controller
-{
-    public function __construct()
-    {
+class JoindController extends Controller {
+    public function __construct() {
         $this->middleware('auth');
     }
 
-    public function show()
-    {
-        $user = Auth::user()['name'];
-        $groups = array(
-            "All",
-            "Operating System",
-            "Compiler",
-            "Data Mining",
-            "Database Admin",
-            "Math Modeling"
-        );
-        $assignment1 = array(
-            'title' => 'Linux Kernel Experiment',
-            'group' => 'Operating System',
-            'ddl' => '2017-12-23',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'submitted' => false,
-            'urgent' => true,
-        );
-        $assignment2 = array(
-            'title' => 'Final Project DDL',
-            'group' => 'Database Admin',
-            'ddl' => '2017-12-21',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'submitted' => true,
-            'urgent' => false,
-        );
-        $assignment3 = array(
-            'title' => 'PL0 Compiler',
-            'group' => 'Compiler',
-            'ddl' => '2018-1-5',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'submitted' => false,
-            'urgent' => false,
-        );
-        $assignments = array($assignment1, $assignment2, $assignment3, $assignment1, $assignment2, $assignment3, $assignment1, $assignment2, $assignment3);
+    public function show(Request $request) {
+        $user = $request->user();
+
+        $groups = $user->joinedGroups;
+        $group = null;
+        if ($request->input('current_group')) {
+            $current_group = $request->input('current_group');
+            $group = Group::find($current_group);
+        } else {
+            if (count($groups) > 0) {
+                $group = $groups[0];
+                $current_group = $group->id;
+            } else {
+                $current_group = -1;
+            }
+        }
+
+        $assignments = $group ? $group->assignments:[];
+
+        $members = $group ? $group->member:[];
+        $admins = $group ? $group->admin:[];
+
         $data = array(
+            'current_page' => 'joined',
+            'title' => "Manage",
+
             'groups' => $groups,
-            'active_group' => 0,
-            'active_page' => 'joined',
+            'current_group' => $current_group,
             'user' => $user,
-            'title' => "Joined",
+
             'assignments' => $assignments,
-            'group_name' => 'Compiler',
-            'creator' => 'yzhq97',
-            'created_on' => '2017-9-7',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'administrators' => array('yzhq97', 'abc123', '123abc', '2ddf4'),
-            'search_result' => array(
-                "Operating System 1521",
-                "Operating System 1421",
-                "Compiler",
-                "Computer Network",
-                "Data Mining",
-                "Compiler 1421"
-            )
+
+            'members' => $members,
+            'admins' => $admins,
+
+            'group' => $group
         );
         return view('joined.joined', $data);
     }
 
-    public function testshow()
-    {
-        $groups = array(
-            "All",
-            "Operating System",
-            "Compiler",
-            "Data Mining",
-            "Database Admin",
-            "Math Modeling"
-        );
-        $assignment1 = array(
-            'title' => 'Linux Kernel Experiment',
-            'group' => 'Operating System',
-            'ddl' => '2017-12-23',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'submitted' => false,
-            'urgent' => true,
-        );
-        $assignment2 = array(
-            'title' => 'Final Project DDL',
-            'group' => 'Database Admin',
-            'ddl' => '2017-12-21',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'submitted' => true,
-            'urgent' => false,
-        );
-        $assignment3 = array(
-            'title' => 'PL0 Compiler',
-            'group' => 'Compiler',
-            'ddl' => '2018-1-5',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'submitted' => false,
-            'urgent' => false,
-        );
-        $assignments = array($assignment1, $assignment2, $assignment3, $assignment1, $assignment2, $assignment3, $assignment1, $assignment2, $assignment3);
+    public function join_group(Request $request) {
+        $user = $request->user();
+        $joined_groups = $user->joinedGroups;
+
+        $group_name = $request->input('group_name');
+        $search_result = null;
+
+        if ($group_name) {
+            $search_result = DB::select('select * from groups where name like ?', ["%".$group_name."%"]);
+            for ($i = 0; $i < count($search_result); $i++) {
+                $joined = false;
+                foreach ($joined_groups as $group) {
+                    if ($search_result[$i]->id == $group->id) {
+                        $joined = true;
+                        break;
+                    }
+                }
+                $search_result[$i]->joined = $joined;
+            }
+        } else {
+            $search_result = [];
+        }
+
         $data = array(
-            'groups' => $groups,
-            'active_group' => 0,
-            'active_page' => 'joined',
-            'user' => "yzhq97",
-            'title' => "Joined",
-            'assignments' => $assignments,
-            'group_name' => 'Compiler',
-            'creator' => 'yzhq97',
-            'created_on' => '2017-9-7',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            'administrators' => array('yzhq97', 'abc123', '123abc', '2ddf4'),
-            'search_result' => array(
-                "Operating System 1521",
-                "Operating System 1421",
-                "Compiler",
-                "Computer Network",
-                "Data Mining",
-                "Compiler 1421"
-            )
+            'current_page' => 'joined',
+            'title' => 'Join Group',
+
+            'user' => $user,
+            'search_result' => $search_result
         );
-        return view('joined.joined', $data);
+
+        return view('joined.join_group', $data);
     }
 }

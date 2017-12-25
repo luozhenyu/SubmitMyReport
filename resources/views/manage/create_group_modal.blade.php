@@ -9,15 +9,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('create_group') }}">
+                <form method="POST" action="/group/create">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="group-name" class="col-form-label">Group Name:</label>
-                        <input type="text" class="form-control" id="group-name" name="group_name" required>
+                        <input type="text" class="form-control" id="group-name" name="name" required>
                     </div>
                     <div class="form-group">
                         <label for="group-description" class="col-form-label">Description:</label>
-                        <textarea class="form-control" id="group-description" name="group_description" required></textarea>
+                        <textarea class="form-control" id="group-description" name="description" required></textarea>
                     </div>
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">

@@ -7,13 +7,13 @@
             <div class="col col-sm-12 offset-sm-0 col-md-2 offset-md-1">
                 <h4 style="text-align: center; margin-top: 20px; margin-bottom: 20px;">Groups</h4>
                 <div style="background-color: white; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
-                    @if($groups)
+                    @if(count($groups) > 0)
                         <ul class="list-group">
                         @for ($i = 0; $i < count($groups, 0); $i++)
-                            @if ($i == $active_group)
-                                <a href="#" class="list-group-item active">{{$groups[$i]}}</a>
+                            @if ($groups[$i]->id == $current_group)
+                                <a href="/manage?current_group={{$groups[$i]->id}}" class="list-group-item active">{{$groups[$i]->name}}</a>
                             @else
-                                <a href="#" class="list-group-item">{{$groups[$i]}}</a>
+                                <a href="/manage?current_group={{$groups[$i]->id}}" class="list-group-item">{{$groups[$i]->name}}</a>
                             @endif
                         @endfor
                         </ul>

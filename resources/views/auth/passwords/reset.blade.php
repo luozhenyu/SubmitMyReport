@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('auth_layout')
 
-@section('title','设置密码')
+@section('title','Reset Password')
 
 @section('content')
 <div class="container">

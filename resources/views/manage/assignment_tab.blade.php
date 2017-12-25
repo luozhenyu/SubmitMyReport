@@ -14,11 +14,15 @@
             </span>
         </div>
         <div class="text-right" style="width: 50%; padding-right: 20px;">
-            <a class="btn btn-sm btn-light" href="#" role="button" style="color:#396be4;">&nbspPost&nbsp</a>
+            @if($group)
+                <a class="btn btn-sm btn-light" href="/post?group_id={{$group->id}}" role="button" style="color:#396be4;">&nbspPost&nbsp</a>
+            @else
+                <a class="btn btn-sm btn-light disabled" href="#" role="button" style="color:#396be4;">&nbspPost&nbsp</a>
+            @endif
         </div>
     </div>
 </div>
-<div style="height:80%;overflow: scroll;box-shadow: 0px 2px 7px #bbbbbb;border-radius: 5px;">
+<div style="height:80%;overflow: scroll;box-shadow: 0px 2px 7px #bbbbbb;border-radius: 5px;background-color: white">
     @if($assignments and count($assignments, 0) > 0)
         <div class="list-group">
             @foreach($assignments as $assignment)
@@ -26,6 +30,6 @@
             @endforeach
         </div>
     @else
-        @include('manage.empty_view')
+        @include('empty_view')
     @endif
 </div>

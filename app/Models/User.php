@@ -4,14 +4,10 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Group;
-use App\Models\Assignment;
-use App\Models\Submission;
 
 class User extends Authenticatable
 {
     use Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -20,7 +16,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -30,24 +25,28 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function Groups()
+    public function createdGroups()
     {
-        return $this->hasMany(Group::class,'creator_id');
+        return $this->hasMany(Group::class, 'user_id');
     }
 
-    public function Assignments()
+    public function assignments()
     {
-        return $this->hasMany(Assignment::class,'user_id');
+        return $this->hasMany(Assignment::class, 'user_id');
     }
 
-
-    public function Submissions()
+    public function submissions()
     {
-        return $this->hasMany(Submission::class,'user_id');
+        return $this->hasMany(Submission::class, 'user_id');
     }
 
-    public function belongsToManyGroup()
+    public function managedGroups()
     {
-        return $this->belongsToMany(Group::class,'group_user','user_id','group_id')->withPivot('isAdministrator');
+        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withPivot('is_admin')->wherePivot('is_admin', 1);
+    }
+
+    public function joinedGroups()
+    {
+        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withPivot('is_admin');
     }
 }

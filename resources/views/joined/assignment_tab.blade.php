@@ -11,7 +11,7 @@
         </div>
     </span>
 </div>
-<div style="height:80%;overflow: scroll;border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb;">
+<div style="height:80%;overflow: scroll;border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb; background-color: white;">
     @if($assignments && count($assignments, 0) > 0)
         <div class="list-group">
             @foreach($assignments as $assignment)
@@ -19,6 +19,6 @@
             @endforeach
         </div>
     @else
-        @include('assignment_empty_view')
+        @include('empty_view')
     @endif
 </div>
