@@ -42,7 +42,7 @@
                                             @if ($result->joined)
                                                 <button type="button" class="btn btn-outline-primary disabled">Joined</button>
                                             @else
-                                                <a href="/group/join?group_id={{$result->id}}" role="button" class="btn btn-outline-primary">Join</a>
+                                                <a href="./group/join?group_id={{$result->id}}" role="button" class="btn btn-outline-primary">Join</a>
                                             @endif
                                         </td>
                                     </tr>

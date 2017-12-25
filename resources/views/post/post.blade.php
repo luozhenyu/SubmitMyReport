@@ -46,7 +46,7 @@
                 <div class="container"
                      style="height:85%; overflow: scroll; border-radius: 5px; box-shadow: 0px 2px 7px #bbbbbb; background-color: white;">
                     <div class="row" style="padding-top: 20px; padding-left: 30px; padding-right: 30px;">
-                        <a href="/manage" role="button" class="btn btn-outline-primary">Back</a>
+                        <a href="./manage" role="button" class="btn btn-outline-primary">Back</a>
                         &nbsp&nbsp
                     </div>
                     <div class="row" style="padding-top: 20px; padding-left: 30px; padding-right: 30px;">

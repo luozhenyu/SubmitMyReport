@@ -15,7 +15,7 @@
         </div>
         <div class="text-right" style="width: 50%; padding-right: 20px;">
             @if($group)
-                <a class="btn btn-sm btn-light" href="/post?group_id={{$group->id}}" role="button" style="color:#396be4;">&nbspPost&nbsp</a>
+                <a class="btn btn-sm btn-light" href="./post?group_id={{$group->id}}" role="button" style="color:#396be4;">&nbspPost&nbsp</a>
             @else
                 <a class="btn btn-sm btn-light disabled" href="#" role="button" style="color:#396be4;">&nbspPost&nbsp</a>
             @endif

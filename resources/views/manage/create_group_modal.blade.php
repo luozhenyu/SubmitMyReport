@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="/group/create">
+                <form method="POST" action="./group/create">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="group-name" class="col-form-label">Group Name:</label>
