@@ -11,9 +11,9 @@
                         <ul class="list-group">
                         @for ($i = 0; $i < count($groups, 0); $i++)
                             @if ($groups[$i]->id == $current_group)
-                                <a href="/joined?current_group={{$groups[$i]->id}}" class="list-group-item active">{{$groups[$i]->name}}</a>
+                                <a href="./joined?current_group={{$groups[$i]->id}}" class="list-group-item active">{{$groups[$i]->name}}</a>
                             @else
-                                <a href="/joined?current_group={{$groups[$i]->id}}" class="list-group-item">{{$groups[$i]->name}}</a>
+                                <a href="./joined?current_group={{$groups[$i]->id}}" class="list-group-item">{{$groups[$i]->name}}</a>
                             @endif
                         @endfor
                         </ul>
@@ -23,7 +23,7 @@
                         </div>
                     @endif
                 </div>
-                <div style="padding-top: 10px;"><a href="/join_group" role="button" class="btn btn-primary btn-md" style="width: 100%;">Join Group</a></div>
+                <div style="padding-top: 10px;"><a href="./join_group" role="button" class="btn btn-primary btn-md" style="width: 100%;">Join Group</a></div>
             </div>
 
             <div class="col col-sm-12 offset-sm-0 col-md-8 offset-md-0 col-lg-8 offset-lg-0 col-xl-8 offset-xl-0">

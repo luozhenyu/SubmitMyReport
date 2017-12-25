@@ -9,14 +9,14 @@
             <div class="col col-sm-12 offset-sm-0 col-md-8 offset-md-2" style="overflow: scroll;border-radius: 5px;box-shadow: 0px 2px 7px #bbbbbb; background-color: white; height: 85%; padding-left: 30px; padding-right: 30px;">
                 <div class="container">
                     <div class="row" style="padding-top: 20px;">
-                        <a href="/joined" role="button" class="btn btn-outline-primary">Back</a>
+                        <a href="../public/joined" role="button" class="btn btn-outline-primary">Back</a>
                         &nbsp&nbsp
                     </div>
                     <div class="row" style="padding-top: 20px;">
                         <h4>Join Group</h4>
                     </div>
                     <div class="row" style="padding-top: 20px;">
-                        <form style="width: 100%;" method="POST" action="/join_group">
+                        <form style="width: 100%;" method="POST" action="./join_group">
                             {{ csrf_field() }}
                             <div class="container">
                                 <div class="row">
@@ -42,7 +42,7 @@
                                             @if ($result->joined)
                                                 <button type="button" class="btn btn-outline-primary disabled">Joined</button>
                                             @else
-                                                <a href="/group/join?group_id={{$result->id}}" role="button" class="btn btn-outline-primary">Join</a>
+                                                <a href="./group/join?group_id={{$result->id}}" role="button" class="btn btn-outline-primary">Join</a>
                                             @endif
                                         </td>
                                     </tr>
