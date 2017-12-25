@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.layout')
 @section('title', 'Manage')
 @section('content')
     <div class="container">
@@ -19,7 +19,7 @@
                         </ul>
                     @else
                         <div style="height: 100px;">
-                            @include('empty_view')
+                            @include('layouts.empty_view')
                         </div>
                     @endif
                 </div>

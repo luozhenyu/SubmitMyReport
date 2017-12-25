@@ -6,6 +6,6 @@
             @endforeach
         </table>
     @else
-        @include('empty_view')
+        @include('layouts.empty_view')
     @endif
 </div>

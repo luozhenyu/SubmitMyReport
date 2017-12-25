@@ -46,8 +46,6 @@
                     {{$user->name}}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Info</a>
-                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ url('/logout') }}"
                        onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
