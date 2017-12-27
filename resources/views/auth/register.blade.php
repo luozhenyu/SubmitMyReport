@@ -1,9 +1,9 @@
-@extends('layouts.auth_layout')
+@extends('layouts.auth')
 
 @section('title','Register')
 
 @section('content')
-    <div class="col" style="padding-top: 20px; padding-bottom: 15px;"><h3>Register</h3></div>
+    <h3 class="col" style="padding-top: 20px; padding-bottom: 15px;">Register</h3>
     <form class="form" method="POST" action="{{ route('register') }}">
         {{ csrf_field() }}
 
@@ -16,8 +16,7 @@
 
                 @if ($errors->has('name'))
                     <span class="help-block">
-                        <br>
-                        <small>{{ $errors->first('name') }}</small>
+                        <strong>{{ $errors->first('name') }}</strong>
                     </span>
                 @endif
             </div>
@@ -31,8 +30,7 @@
 
                 @if ($errors->has('email'))
                     <span class="help-block">
-                        <br>
-                        <small>{{ $errors->first('email') }}</small>
+                        <strong>{{ $errors->first('email') }}</strong>
                     </span>
                 @endif
             </div>
@@ -46,8 +44,7 @@
 
                 @if ($errors->has('password'))
                     <span class="help-block">
-                        <br>
-                        <small>{{ $errors->first('password') }}</small>
+                        <strong>{{ $errors->first('password') }}</strong>
                     </span>
                 @endif
             </div>

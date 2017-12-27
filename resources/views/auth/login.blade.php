@@ -1,10 +1,10 @@
-@extends('layouts.auth_layout')
+@extends('layouts.auth')
 
-@section('title','Login')
+@section('title', 'Login')
 
 @section('content')
     <div class="col" style="padding-top: 20px; padding-bottom: 15px;"><h3>Login</h3></div>
-    <form class="form" style="width: 100%;" method="POST" action="{{ route('login') }}">
+    <form class="form" style="width: 100%;margin-bottom: 30px" method="POST" action="{{ route('login') }}">
         {{ csrf_field() }}
 
         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -16,7 +16,6 @@
 
                 @if ($errors->has('email'))
                     <span class="help-block">
-                        <br>
                         <strong>{{ $errors->first('email') }}</strong>
                     </span>
                 @endif
@@ -31,8 +30,7 @@
 
                 @if ($errors->has('password'))
                     <span class="help-block">
-                        <br>
-                        <small>{{ $errors->first('password') }}</small>
+                        <strong>{{ $errors->first('password') }}</strong>
                     </span>
                 @endif
             </div>
@@ -42,7 +40,8 @@
             <div class="col">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
+                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                        Remember Me
                     </label>
                 </div>
             </div>
@@ -57,12 +56,13 @@
                 <a class="btn btn-outline-primary" href="{{ route('register') }}">
                     Register
                 </a>
+            </div>
 
+            <div class="col text-right">
                 <a class="btn btn-link" style="padding-right: 0px;" href="{{ route('password.request') }}">
                     Forgot Your Password?
                 </a>
             </div>
         </div>
     </form>
-    <div style="height: 30px;"></div>
 @endsection

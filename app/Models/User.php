@@ -16,6 +16,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -40,13 +41,16 @@ class User extends Authenticatable
         return $this->hasMany(Submission::class, 'user_id');
     }
 
-    public function managedGroups()
-    {
-        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withPivot('is_admin')->wherePivot('is_admin', 1);
-    }
-
     public function joinedGroups()
     {
-        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withPivot('is_admin');
+        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')
+            ->withPivot('is_admin')
+            ->withTimestamps();
+    }
+
+    public function managedGroups()
+    {
+        return $this->joinedGroups()
+            ->wherePivot('is_admin', true);
     }
 }

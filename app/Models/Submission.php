@@ -12,7 +12,7 @@ class Submission extends Model
      * @var array
      */
     protected $fillable = [
-        'content'
+
     ];
 
     public function user()

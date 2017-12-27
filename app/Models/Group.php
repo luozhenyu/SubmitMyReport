@@ -25,14 +25,17 @@ class Group extends Model
         return $this->hasMany(Assignment::class, 'group_id');
     }
 
-    public function member()
+    public function members()
     {
-        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')->withPivot('is_admin');
+        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')
+            ->withPivot('is_admin')
+            ->withTimestamps();
     }
 
     public function admin()
     {
-        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')->withPivot('is_admin')->wherePivot('is_admin', '=', 1);
+        return $this->members()
+            ->wherePivot('is_admin', true);
     }
 }
 
