@@ -34,4 +34,9 @@ class Submission extends Model
     {
         return $this->belongsToMany(File::class, 'submission_file');
     }
+
+    public function corrected()
+    {
+        return $this->score !== null;
+    }
 }

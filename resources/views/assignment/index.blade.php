@@ -31,8 +31,8 @@
         <tbody>
         @foreach($assignments as $assignment)
             <tr>
-                <td>{{ $assignment->title }}</td>
-                <td>{{ $assignment->description }}</td>
+                <td><a href="{{ url("assignment/{$assignment->id}") }}">{{ $assignment->title }}</a></td>
+                <td><a href="{{ url("assignment/{$assignment->id}") }}">{{ $assignment->description }}</a></td>
                 <td>{{ $assignment->user->name }}</td>
                 <td>{{ $assignment->created_at }}</td>
                 <td>

@@ -52,33 +52,4 @@ class AssignmentController extends Controller
 
         return redirect("group/{$id}");
     }
-
-    public function show(Request $request, $id)
-    {
-        $assignment = Assignment::findOrFail($id);
-        abort_unless($group = $request->user()->joinedGroups()->find($assignment->group->id), 403);
-
-        return view('assignment.show', [
-            'group' => $group,
-            'assignment' => $assignment,
-        ]);
-    }
-
-    public function finish(Request $request, $id)
-    {
-        $assignment = Assignment::findOrFail($id);
-        $user = $request->user();
-        abort_unless($group = $user->joinedGroups()->find($assignment->group->id), 403);
-
-        $this->validate($request, [
-            'content' => 'required|max:65535',
-        ]);
-
-        $assignment->submissions()->create([
-            'content' => $request->input('content'),
-            'user_id' => $user->id,
-        ]);
-
-        return redirect()->route('home');
-    }
 }

@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-    <form class="form-horizontal" method="POST" action="{{ url("assignment/{$assignment->id}") }}">
+    <form class="form-horizontal" method="POST" action="{{ url("assignment/{$assignment->id}/store") }}">
         {{ csrf_field() }}
 
         <div class="form-group">
@@ -42,7 +42,7 @@
             <label for="content" class="col-md-2 control-label">Content</label>
 
             <div class="col-md-8">
-                <textarea id="content" class="form-control" name="content" rows="6"
+                <textarea id="content" class="form-control" name="content" rows="12"
                           required>{{ old('content') }}</textarea>
 
                 @if ($errors->has('content'))

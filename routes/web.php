@@ -32,5 +32,12 @@ Route::get('/group/{id}', 'AssignmentController@index');
 Route::get('/group/{id}/create', 'AssignmentController@create');
 Route::post('/group/{id}/store', 'AssignmentController@store');
 
-Route::get('/assignment/{id}', 'AssignmentController@show');
-Route::post('/assignment/{id}', 'AssignmentController@finish');
+Route::get('/assignment/{id}', 'SubmissionController@index');
+
+Route::get('/assignment/{id}/create', 'SubmissionController@create');
+Route::post('/assignment/{id}/store', 'SubmissionController@store');
+
+Route::get('/submission/{id}', 'SubmissionController@show');
+Route::post('/submission/{id}', 'SubmissionController@mark');
+
+Route::get('/submission/{id}/score', 'SubmissionController@score');

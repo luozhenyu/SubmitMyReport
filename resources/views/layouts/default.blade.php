@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +8,7 @@
 
     <title>@yield('title') - {{ config('app.name') }}</title>
 
-    <link href="{{ url('components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url('components/bootswatch/cerulean/bootstrap.min.css') }}" rel="stylesheet">
     @stack('css')
 
     <script src="{{ url('components/jquery/dist/jquery.min.js') }}"></script>

@@ -32,7 +32,7 @@
                     <th>Description</th>
                     <th>Author</th>
                     <th>Created At</th>
-                    <th>Actions</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,10 +43,20 @@
                         <td>{{ $assignment->user->name }}</td>
                         <td>{{ $assignment->created_at }}</td>
                         <td>
-                            @if(!$submission = $assignment->submissions()->find(Auth::user()->id))
-                                <a class="btn btn-primary btn-xs" href="{{ url("assignment/{$assignment->id}") }}">To do</a>
+                            @if(!$submission = $assignment->submissions()->where('user_id',Auth::user()->id)->first())
+                                <a class="btn btn-danger btn-xs"
+                                   href="{{ url("assignment/{$assignment->id}/create") }}">
+                                    To do
+                                </a>
+                            @elseif(!$submission->corrected())
+                                <span class="btn btn-success btn-xs" disabled>
+                                    Submitted
+                                </span>
                             @else
-
+                                <a class="btn btn-primary btn-xs"
+                                   href="{{ url("submission/{$submission->id}/score") }}">
+                                    {{ "Score {$submission->score}" }}
+                                </a>
                             @endif
                         </td>
                     </tr>
