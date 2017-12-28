@@ -31,7 +31,6 @@
                     <th>Title</th>
                     <th>Description</th>
                     <th>Author</th>
-                    <th>Created At</th>
                     <th>Status</th>
                 </tr>
                 </thead>
@@ -41,7 +40,6 @@
                         <td>{{ $assignment->title }}</td>
                         <td>{{ $assignment->description }}</td>
                         <td>{{ $assignment->user->name }}</td>
-                        <td>{{ $assignment->created_at }}</td>
                         <td>
                             @if(!$current_group->pivot->is_admin)
                                 @if(!$submission = $assignment->submissions()->where('user_id', Auth::user()->id)->first())
