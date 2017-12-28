@@ -24,7 +24,7 @@
             });
 
             $(".member-quit").click(function () {
-                if (confirm("退出后可重新加入，确定要退出？")) {
+                if (confirm("Are you sure you want to quit?")) {
                     $.post("{{ url("group") }}/" + $(this).data("id") + "/quit", function () {
                         window.location.reload();
                     });
@@ -37,15 +37,16 @@
 @section('content')
     <table class="table table-striped table-hover text-left">
         <caption>
-            <a class="btn btn-primary" href="{{ url('group/create') }}">New Group</a>
-            <a class="btn btn-info pull-right" href="{{ url('group/all') }}">Join An Existing Group</a>
+            <a class="btn btn-primary" href="{{ url('group/all') }}">Join An Existing Group</a>
+            <a class="btn btn btn-default" href="{{ url('group/create') }}">Create Group</a>
+
         </caption>
         <thead>
         <tr>
             <th>Name</th>
             <th>Description</th>
             <th>Creator</th>
-            <th>Number of Members</th>
+            <th>Members</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -53,29 +54,28 @@
         @foreach($groups as $group)
             <tr>
                 <td>
-                    @if($group->pivot->is_admin)
-                        <a href="{{ url("group/{$group->id}") }}">
-                            {{ $group->name }}
-                        </a>
-                    @else
-                        {{ $group->name }}
-                    @endif
+                    {{ $group->name }}
                 </td>
-                <td>
+                <td class="col-md-5">
                     @if($group->pivot->is_admin)
-                        <a href="{{ url("group/{$group->id}") }}">
+                        <p>
                             {{ $group->description }}
-                        </a>
+                        </p>
                     @else
                         {{ $group->description }}
                     @endif
                 </td>
                 <td>{{ $group->user->name }}</td>
-                <td>{{ $group->members->count() }}</td>
+                <td><a role="button" class="btn btn-default" href="{{ url("group/{$group->id}/member") }}">{{ $group->members->count() }}</a></td>
                 <td>
-                    <div class="btn-group btn-group-sm">
-                        <a class="btn btn-warning" href="{{ url("group/{$group->id}/member") }}">Show Members</a>
-                        <button class="btn btn-danger member-quit" data-id="{{ $group->id }}"
+                    <div>
+                        @if($group->pivot->is_admin)
+                            <a role="button" class="btn btn-primary btn-block btn-sm" href="{{ url("group/{$group->id}") }}">
+                                Manage
+                            </a>
+                        @endif
+
+                        <button class="btn btn-danger member-quit btn-block btn-sm" data-id="{{ $group->id }}"
                                 {{ $group->user->id === Auth::user()->id? 'disabled' :'' }}>
                             Quit
                         </button>

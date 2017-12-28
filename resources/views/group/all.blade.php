@@ -51,7 +51,7 @@
             <th>Name</th>
             <th>Description</th>
             <th>Creator</th>
-            <th>Number of Members</th>
+            <th>Members</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -59,15 +59,15 @@
         @foreach($groups as $group)
             <tr>
                 <td>{{ $group->name }}</td>
-                <td>{{ $group->description }}</td>
+                <td class="col-md-5">{{ $group->description }}</td>
                 <td>{{ $group->user->name }}</td>
                 <td>{{ $group->members->count() }}</td>
                 <td>
                     <div class="btn-group btn-group-sm">
                         @if(Auth::user()->joinedGroups()->find($group->id))
-                            <button class="btn btn-default" disabled>Joined</button>
+                            <button class="btn btn-default btn-block" disabled>Joined</button>
                         @else
-                            <button class="btn btn-primary member-join" data-id="{{ $group->id }}">Join
+                            <button class="btn btn-primary member-join btn-block" data-id="{{ $group->id }}">Join
                             </button>
                         @endif
                     </div>

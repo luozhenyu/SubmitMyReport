@@ -54,7 +54,7 @@
             </div>
         </div>
     </nav>
-    <div class="col-md-8 col-md-offset-2 text-center" style="background-color: white;padding-top: 15px">
+    <div class="col-md-8 col-md-offset-2 text-center" style="background-color: white;padding-top: 15px;margin-bottom:30px; border-radius:5px; box-shadow: 0px 3px 7px #bbbbbb; min-height: 500px;">
         <div class="row text-left">
             @yield('breadcrumbs')
         </div>
