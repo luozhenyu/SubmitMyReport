@@ -20,7 +20,7 @@
         {{ csrf_field() }}
 
         <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-            <label for="name" class="col-md-2 control-label">Title</label>
+            <label for="title" class="col-md-2 control-label">Title</label>
 
             <div class="col-md-8">
                 <input id="title" type="text" class="form-control" name="title" value="{{ old('title') }}" required>
@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+        <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
             <label for="description" class="col-md-2 control-label">Description</label>
 
             <div class="col-md-8">

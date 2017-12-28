@@ -31,3 +31,6 @@ Route::post('/group/{id}/member', 'GroupController@toggleAdmin');
 Route::get('/group/{id}', 'AssignmentController@index');
 Route::get('/group/{id}/create', 'AssignmentController@create');
 Route::post('/group/{id}/store', 'AssignmentController@store');
+
+Route::get('/assignment/{id}', 'AssignmentController@show');
+Route::post('/assignment/{id}', 'AssignmentController@finish');

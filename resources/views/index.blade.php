@@ -10,6 +10,7 @@
 @section('content')
     @if($current_group)
         <div class="col-md-4">
+            <h3>Groups</h3>
             <div class="list-group">
                 @foreach($groups as $group)
                     <a class="list-group-item{{ $group->id === $current_group->id? ' active' :'' }}"
@@ -24,6 +25,7 @@
 
         <div class="col-md-8">
             <table class="table table-striped table-hover text-left">
+                <caption><h4>Assignments</h4></caption>
                 <thead>
                 <tr>
                     <th>Title</th>
@@ -41,6 +43,11 @@
                         <td>{{ $assignment->user->name }}</td>
                         <td>{{ $assignment->created_at }}</td>
                         <td>
+                            @if(!$submission = $assignment->submissions()->find(Auth::user()->id))
+                                <a class="btn btn-primary btn-xs" href="{{ url("assignment/{$assignment->id}") }}">To do</a>
+                            @else
+
+                            @endif
                         </td>
                     </tr>
                 @endforeach
