@@ -60,13 +60,11 @@ class GroupController extends Controller
 
     public function quit(Request $request, $id)
     {
-        $group = Group::findOrFail($id);
-
         $user = $request->user();
-        if ($group->user->id === $user->id) {
-            $group->members()->detach($user);
-            return 'ok';
-        }
+        $group = $user->joinedGroups()->findOrFail($id);
+
+        $group->members()->detach($user);
+        return 'ok';
     }
 
     public function create()

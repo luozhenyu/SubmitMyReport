@@ -32,6 +32,12 @@ class Group extends Model
             ->withTimestamps();
     }
 
+    public function normal()
+    {
+        return $this->members()
+            ->wherePivot('is_admin', false);
+    }
+
     public function admin()
     {
         return $this->members()

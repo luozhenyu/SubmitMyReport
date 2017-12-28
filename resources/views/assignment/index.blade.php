@@ -25,7 +25,7 @@
             <th>Description</th>
             <th>Author</th>
             <th>Created At</th>
-            <th>Actions</th>
+            <th>Submissions</th>
         </tr>
         </thead>
         <tbody>
@@ -36,6 +36,7 @@
                 <td>{{ $assignment->user->name }}</td>
                 <td>{{ $assignment->created_at }}</td>
                 <td>
+                    {{ $assignment->submissions->count().'/'.$group->normal->count() }}
                 </td>
             </tr>
         @endforeach

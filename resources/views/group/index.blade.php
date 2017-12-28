@@ -52,8 +52,24 @@
         <tbody>
         @foreach($groups as $group)
             <tr>
-                <td><a href="{{ url("group/{$group->id}") }}">{{ $group->name }}</a></td>
-                <td><a href="{{ url("group/{$group->id}") }}">{{ $group->description }}</a></td>
+                <td>
+                    @if($group->pivot->is_admin)
+                        <a href="{{ url("group/{$group->id}") }}">
+                            {{ $group->name }}
+                        </a>
+                    @else
+                        {{ $group->name }}
+                    @endif
+                </td>
+                <td>
+                    @if($group->pivot->is_admin)
+                        <a href="{{ url("group/{$group->id}") }}">
+                            {{ $group->description }}
+                        </a>
+                    @else
+                        {{ $group->description }}
+                    @endif
+                </td>
                 <td>{{ $group->user->name }}</td>
                 <td>{{ $group->members->count() }}</td>
                 <td>

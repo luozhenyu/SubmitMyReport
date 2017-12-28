@@ -28,10 +28,16 @@
         <tbody>
         @foreach($submissions as $submission)
             <tr>
-                <td>{{ $submission->user->name }}</td>
+                <td><a href="{{ url("submission/{$submission->id}") }}">{{ $submission->user->name }}</a></td>
                 <td><a href="{{ url("submission/{$submission->id}") }}">{{ $submission->content }}</a></td>
                 <td>{{ $submission->created_at }}</td>
-                <td>{{ $submission->score }}</td>
+                <td>
+                    @if($submission->corrected())
+                        {{ $submission->score }}
+                    @else
+                        <a class="btn btn-primary btn-xs" href="{{ url("submission/{$submission->id}") }}">Mark Now</a>
+                    @endif
+                </td>
             </tr>
         @endforeach
         </tbody>

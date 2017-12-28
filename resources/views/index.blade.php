@@ -9,21 +9,21 @@
 
 @section('content')
     @if($current_group)
-        <div class="col-md-4">
-            <h3>Groups</h3>
+        <div class="col-md-3">
+            <h4>Groups</h4>
             <div class="list-group">
                 @foreach($groups as $group)
                     <a class="list-group-item{{ $group->id === $current_group->id? ' active' :'' }}"
                        href="{{ url('')."?group={$group->id}" }}">
-                        <h4 class="list-group-item-heading">
+                        <h5 class="list-group-item-heading">
                             {{ $group->name }}
-                        </h4>
+                        </h5>
                     </a>
                 @endforeach
             </div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-9">
             <table class="table table-striped table-hover text-left">
                 <caption><h4>Assignments</h4></caption>
                 <thead>

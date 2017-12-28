@@ -88,7 +88,7 @@ class SubmissionController extends Controller
         $submission->remark = $request->input('remark');
         $submission->save();
 
-        return redirect()->back();
+        return redirect("assignment/{$assignment->id}");
     }
 
     public function score(Request $request, $id)
