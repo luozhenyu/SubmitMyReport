@@ -15,7 +15,9 @@
                 @foreach($groups as $group)
                     <a class="list-group-item{{ $group->id === $current_group->id? ' active' :'' }}"
                        href="{{ url('')."?group={$group->id}" }}">
-                        {{ $group->name }}
+                        <h5 class="list-group-item-heading">
+                            {{ $group->name }}
+                        </h5>
                     </a>
                 @endforeach
             </div>
@@ -29,6 +31,7 @@
                     <th>Title</th>
                     <th>Description</th>
                     <th>Author</th>
+                    <th>Created At</th>
                     <th>Status</th>
                 </tr>
                 </thead>
@@ -38,20 +41,28 @@
                         <td>{{ $assignment->title }}</td>
                         <td>{{ $assignment->description }}</td>
                         <td>{{ $assignment->user->name }}</td>
+                        <td>{{ $assignment->created_at }}</td>
                         <td>
-                            @if(!$submission = $assignment->submissions()->where('user_id',Auth::user()->id)->first())
-                                <a class="btn btn-danger btn-sm"
-                                   href="{{ url("assignment/{$assignment->id}/create") }}">
-                                    To do
-                                </a>
-                            @elseif(!$submission->corrected())
-                                <span class="btn btn-success btn-sm" disabled>
+                            @if(!$current_group->pivot->is_admin)
+                                @if(!$submission = $assignment->submissions()->where('user_id', Auth::user()->id)->first())
+                                    <a class="btn btn-danger btn-sm"
+                                       href="{{ url("assignment/{$assignment->id}/create") }}">
+                                        To do
+                                    </a>
+                                @elseif(!$submission->corrected())
+                                    <span class="btn btn-success btn-sm" disabled>
                                     Submitted
                                 </span>
+                                @else
+                                    <a class="btn btn-primary btn-sm"
+                                       href="{{ url("submission/{$submission->id}/score") }}">
+                                        {{ "Score {$submission->score}" }}
+                                    </a>
+                                @endif
                             @else
                                 <a class="btn btn-primary btn-sm"
-                                   href="{{ url("submission/{$submission->id}/score") }}">
-                                    {{ "Score {$submission->score}" }}
+                                   href="{{ url("assignment/{$assignment->id}") }}">
+                                    Watch Submissions
                                 </a>
                             @endif
                         </td>
