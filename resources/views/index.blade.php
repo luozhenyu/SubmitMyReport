@@ -43,19 +43,26 @@
                         <td>{{ $assignment->user->name }}</td>
                         <td>{{ $assignment->created_at }}</td>
                         <td>
-                            @if(!$submission = $assignment->submissions()->where('user_id',Auth::user()->id)->first())
-                                <a class="btn btn-danger btn-xs"
-                                   href="{{ url("assignment/{$assignment->id}/create") }}">
-                                    To do
-                                </a>
-                            @elseif(!$submission->corrected())
-                                <span class="btn btn-success btn-xs" disabled>
+                            @if(!$current_group->pivot->is_admin)
+                                @if(!$submission = $assignment->submissions()->where('user_id', Auth::user()->id)->first())
+                                    <a class="btn btn-danger btn-xs"
+                                       href="{{ url("assignment/{$assignment->id}/create") }}">
+                                        To do
+                                    </a>
+                                @elseif(!$submission->corrected())
+                                    <span class="btn btn-success btn-xs" disabled>
                                     Submitted
                                 </span>
+                                @else
+                                    <a class="btn btn-primary btn-xs"
+                                       href="{{ url("submission/{$submission->id}/score") }}">
+                                        {{ "Score {$submission->score}" }}
+                                    </a>
+                                @endif
                             @else
                                 <a class="btn btn-primary btn-xs"
-                                   href="{{ url("submission/{$submission->id}/score") }}">
-                                    {{ "Score {$submission->score}" }}
+                                   href="{{ url("assignment/{$assignment->id}") }}">
+                                    Watch Submissions
                                 </a>
                             @endif
                         </td>
