@@ -12,12 +12,12 @@ class Assignment extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'description', 'user_id'
+        'title', 'description', 'deadline', 'owner_id'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function group()
@@ -30,13 +30,8 @@ class Assignment extends Model
         return $this->hasMany(Submission::class, 'assignment_id');
     }
 
-    public function pictures()
-    {
-        return $this->belongsToMany(Picture::class, 'assignment_picture');
-    }
-
     public function files()
     {
-        return $this->belongsToMany(File::class, 'assignment_file');
+        return $this->hasMany(AssignmentFile::class, 'assignment_id');
     }
 }

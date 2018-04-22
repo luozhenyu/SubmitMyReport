@@ -17,12 +17,17 @@ class CreateAssignmentsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('description');
-            $table->timestamps();
+            $table->timestamp('deadline');
+
+            $table->boolean('score_visible')->default(false);
 
             //assignment作者
-            $table->integer('user_id')->unsigned();
+            $table->unsignedInteger('owner_id');
             //assignment所属group
-            $table->integer('group_id')->unsigned();
+            $table->unsignedInteger('group_id');
+
+            $table->timestamps();
+
         });
     }
 

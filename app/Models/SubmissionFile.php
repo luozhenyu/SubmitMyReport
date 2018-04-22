@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Picture extends Model
+class SubmissionFile extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,11 @@ class Picture extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'extension'
+        'filename', 'extension', 'file_id'
     ];
+
+    public function assignment()
+    {
+        return $this->belongsTo(Assignment::class, 'assignment_id');
+    }
 }

@@ -12,12 +12,12 @@ class Submission extends Model
      * @var array
      */
     protected $fillable = [
-        'content', 'user_id',
+        'content', 'owner_id',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function assignment()
@@ -25,18 +25,13 @@ class Submission extends Model
         return $this->belongsTo(Assignment::class, 'assignment_id');
     }
 
-    public function pictures()
-    {
-        return $this->belongsToMany(Picture::class, 'submission_picture');
-    }
-
     public function files()
     {
-        return $this->belongsToMany(File::class, 'submission_file');
+        return $this->hasMany(File::class, 'submission_files');
     }
 
-    public function corrected()
+    public function mark_user()
     {
-        return $this->score !== null;
+        return $this->belongsTo(User::class, 'mark_user_id');
     }
 }

@@ -17,10 +17,12 @@ class CreateGroupsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description');
-            $table->timestamps();
 
             //创建者ID
-            $table->integer('user_id')->unsigned();
+            $table->unsignedInteger('owner_id');
+
+            $table->timestamps();
+
         });
     }
 

@@ -14,7 +14,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'student_id', 'email', 'password',
     ];
 
     /**
@@ -28,17 +28,17 @@ class User extends Authenticatable
 
     public function createdGroups()
     {
-        return $this->hasMany(Group::class, 'user_id');
+        return $this->hasMany(Group::class, 'owner_id');
     }
 
     public function assignments()
     {
-        return $this->hasMany(Assignment::class, 'user_id');
+        return $this->hasMany(Assignment::class, 'owner_id');
     }
 
     public function submissions()
     {
-        return $this->hasMany(Submission::class, 'user_id');
+        return $this->hasMany(Submission::class, 'owner_id');
     }
 
     public function joinedGroups()

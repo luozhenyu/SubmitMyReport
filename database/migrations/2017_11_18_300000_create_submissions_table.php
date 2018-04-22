@@ -16,16 +16,18 @@ class CreateSubmissionsTable extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->increments('id');
             $table->text('content');
-            $table->timestamps();
-
-            //检查后score为非NULL值
-            $table->integer('score')->unsigned()->nullable();
-            $table->text('remark')->nullable();
 
             //submission作者
-            $table->integer('user_id')->unsigned();
+            $table->unsignedInteger('owner_id');
             //submission所属assignment
-            $table->integer('assignment_id')->unsigned();
+            $table->unsignedInteger('assignment_id');
+
+            //检查后mark_user_id为非NULL值
+            $table->unsignedInteger('mark_user_id')->nullable();
+            $table->integer('score')->nullable();
+            $table->text('remark')->nullable();
+
+            $table->timestamps();
         });
     }
 

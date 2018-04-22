@@ -17,7 +17,7 @@ class Group extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function assignments()
@@ -32,13 +32,13 @@ class Group extends Model
             ->withTimestamps();
     }
 
-    public function normal()
+    public function normalUsers()
     {
         return $this->members()
             ->wherePivot('is_admin', false);
     }
 
-    public function admin()
+    public function admins()
     {
         return $this->members()
             ->wherePivot('is_admin', true);

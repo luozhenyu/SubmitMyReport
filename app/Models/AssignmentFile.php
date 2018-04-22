@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class AssignmentFile extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,11 @@ class File extends Model
      * @var array
      */
     protected $fillable = [
-        'sha512', 'size',
+        'filename', 'extension', 'file_id'
     ];
+
+    public function assignment()
+    {
+        return $this->belongsTo(Assignment::class, 'assignment_id');
+    }
 }

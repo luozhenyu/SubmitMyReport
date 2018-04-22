@@ -15,12 +15,13 @@ class CreateGroupUserTable extends Migration
     {
         Schema::create('group_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
-
-            $table->integer('user_id')->unsigned();
-            $table->integer('group_id')->unsigned();
             //是否是管理员
             $table->boolean('is_admin')->default(false);
+
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('group_id');
+
+            $table->timestamps();
         });
     }
 

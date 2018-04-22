@@ -15,9 +15,11 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('extension');
-            $table->string('sha512');
+
+            $table->string('sha512')->unique();
+            $table->unsignedInteger('size');
+            $table->unsignedInteger('reference_count')->default(0);
+
             $table->timestamps();
         });
     }
