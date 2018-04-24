@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
-use App\Models\Group;
 
 class HomeController extends Controller
 {
@@ -19,20 +20,18 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $groups = $request->user()->joinedGroups;
+        $user = $request->user();
 
-        if ($request->has('group')) {
-            $group = $request->input('group');
-            if (!$current_group = $request->user()->joinedGroups()->find($group)) {
-                $current_group = $groups->first();
-            }
-        } else {
-            $current_group = $groups->first();
+        /** @var Collection $groupCollection */
+        $groupCollection = $user->joinedGroups;
+
+        if ((!$group = $request->input('group')) || (!$selectedGroup = $user->joinedGroups()->find($group))) {
+            $selectedGroup = $groupCollection->first();
         }
 
         return view('index', [
-            'current_group' => $current_group,
-            'groups' => $groups,
+            'selectedGroup' => $selectedGroup,
+            'groups' => $groupCollection,
         ]);
     }
 }

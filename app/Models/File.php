@@ -12,6 +12,33 @@ class File extends Model
      * @var array
      */
     protected $fillable = [
-        'sha512', 'size',
+        'random', 'sha512', 'size', 'filename',
     ];
+
+    protected $visible = [
+        'random', 'size', 'filename',
+    ];
+
+    const STORAGE_DIR = 'uploads';
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function info()
+    {
+        return [
+            'fileName' => $this->filename,
+            'url' => "/file/{$this->random}",
+            'random' => $this->random,
+        ];
+    }
+
+    public static function hashToPath(string $sha512)
+    {
+        return static::STORAGE_DIR
+            . DIRECTORY_SEPARATOR . substr($sha512, 0, 2)
+            . DIRECTORY_SEPARATOR . substr($sha512, 2, 2);
+    }
 }

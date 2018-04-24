@@ -13,13 +13,10 @@ class CreateSubmissionFileTable extends Migration
      */
     public function up()
     {
-        Schema::create('submission_files', function (Blueprint $table) {
+        Schema::create('submission_file', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('filename');
-            $table->string('extension');
-
-            $table->unsignedInteger('assignment_id');
+            $table->unsignedInteger('submission_id');
             $table->unsignedInteger('file_id');
 
             $table->timestamps();
@@ -33,6 +30,6 @@ class CreateSubmissionFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('submission_files');
+        Schema::dropIfExists('submission_file');
     }
 }

@@ -16,10 +16,9 @@ class CreateAssignmentsTable extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->text('description');
+            $table->unsignedInteger('sub_problem');
             $table->timestamp('deadline');
-
-            $table->boolean('score_visible')->default(false);
+            $table->mediumText('description');
 
             //assignment作者
             $table->unsignedInteger('owner_id');
@@ -27,7 +26,6 @@ class CreateAssignmentsTable extends Migration
             $table->unsignedInteger('group_id');
 
             $table->timestamps();
-
         });
     }
 

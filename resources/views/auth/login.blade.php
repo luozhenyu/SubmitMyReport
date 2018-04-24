@@ -1,35 +1,38 @@
 @extends('layouts.auth')
 
-@section('title', 'Login')
+@section('title', '登录')
 
 @section('content')
-    <div class="col" style="padding-top: 20px; padding-bottom: 15px;"><h3>Login</h3></div>
-    <form class="form" style="width: 100%;margin-bottom: 30px" method="POST" action="{{ route('login') }}">
-        {{ csrf_field() }}
+    <h3 class="col p-3">登录</h3>
 
-        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-            <label for="email" class="col control-label">E-Mail Address</label>
+    <form class="form" method="post" action="{{ route('login') }}">
+        @csrf
+
+        <div class="form-group">
+            <label for="username" class="col control-form-label">学号 / 邮箱</label>
 
             <div class="col">
-                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required
-                       autofocus>
+                <input id="username" type="text" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}"
+                       name="username" value="{{ old('username') }}" required autofocus>
 
-                @if ($errors->has('email'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('email') }}</strong>
+                @if ($errors->has('username'))
+                    <span class="invalid-feedback">
+                        <strong>{{ $errors->first('username') }}</strong>
                     </span>
                 @endif
             </div>
         </div>
 
-        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-            <label for="password" class="col control-label">Password</label>
+        <div class="form-group">
+            <label for="password" class="col control-form-label">密码</label>
 
             <div class="col">
-                <input id="password" type="password" class="form-control" name="password" required>
+                <input id="password" type="password"
+                       class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                       name="password" required>
 
                 @if ($errors->has('password'))
-                    <span class="help-block">
+                    <span class="invalid-feedback">
                         <strong>{{ $errors->first('password') }}</strong>
                     </span>
                 @endif
@@ -41,7 +44,7 @@
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                        Remember Me
+                        记住密码
                     </label>
                 </div>
             </div>
@@ -49,18 +52,18 @@
 
         <div class="form-group">
             <div class="col text-right">
-                <button type="submit" class="btn btn-primary">
-                    Login
-                </button>
-
                 <a class="btn btn-outline-primary" href="{{ route('register') }}">
-                    Register
+                    注册
                 </a>
+
+                <button type="submit" class="btn btn-primary">
+                    立即登录
+                </button>
             </div>
 
             <div class="col text-right">
-                <a class="btn btn-link" style="padding-right: 0px;" href="{{ route('password.request') }}">
-                    Forgot Your Password?
+                <a class="btn btn-link pr-0" href="{{ route('password.request') }}">
+                    忘记了密码？
                 </a>
             </div>
         </div>

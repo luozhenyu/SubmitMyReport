@@ -1,18 +1,15 @@
-@extends('layouts.default')
+@extends('layouts.basic')
 
 @section('default_content')
-    <div class="container">
-        <div class="row" style="height: 60px;"></div>
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4"
-                 style="border-radius: 5px; box-shadow: 0 2px 7px #bbbbbb; background-color: white; padding: 0;">
-                <div class="bg-primary text-center"
-                     style="border-radius: 5px; padding-top: 5px; padding-bottom: 15px; box-shadow: 0 2px 7px #bbbbbb;">
-                    <h3 style="color: white; font-weight: normal;">{{ config('app.name') }}</h3>
-                </div>
-                <div style="padding: 20px">
-                    @yield('content')
-                </div>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-4 p-0 bg-white"
+             style="border-radius: 5px; box-shadow: 0 2px 7px #bbbbbb;">
+            <div class="bg-primary text-center p-2"
+                 style="border-radius: 5px; box-shadow: 0 2px 7px #bbbbbb;">
+                <h3 class="text-white font-weight-normal">{{ config('app.name') }}</h3>
+            </div>
+            <div class="p-2">
+                @yield('content')
             </div>
         </div>
     </div>

@@ -15,7 +15,7 @@ class Submission extends Model
         'content', 'owner_id',
     ];
 
-    public function user()
+    public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
@@ -27,11 +27,34 @@ class Submission extends Model
 
     public function files()
     {
-        return $this->hasMany(File::class, 'submission_files');
+        return $this->belongsToMany(File::class, 'submission_file');
     }
 
+    /**
+     * 提交的批改人
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function mark_user()
     {
         return $this->belongsTo(User::class, 'mark_user_id');
+    }
+
+    /**
+     * 提交是否批改
+     * @return bool
+     */
+    public function corrected()
+    {
+        return (boolean)$this->mark_user;
+    }
+
+    public function getMarkAttribute($value)
+    {
+        return is_null($value) ? null : json_decode($value);
+    }
+
+    public function getAverageScoreAttribute($value)
+    {
+        return is_null($value) ? null : round($value, 2);
     }
 }

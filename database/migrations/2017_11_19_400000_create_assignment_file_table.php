@@ -13,11 +13,8 @@ class CreateAssignmentFileTable extends Migration
      */
     public function up()
     {
-        Schema::create('assignment_files', function (Blueprint $table) {
+        Schema::create('assignment_file', function (Blueprint $table) {
             $table->increments('id');
-
-            $table->string('filename');
-            $table->string('extension')->nullable();
 
             $table->unsignedInteger('assignment_id');
             $table->unsignedInteger('file_id');
@@ -33,6 +30,6 @@ class CreateAssignmentFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assignment_files');
+        Schema::dropIfExists('assignment_file');
     }
 }

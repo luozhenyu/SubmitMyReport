@@ -1,30 +1,29 @@
-@extends('layouts.basic')
+@extends('layouts.normal')
 
-@section('title', 'Joined Group')
+@section('title', '我加入的小组')
 
 @section('navbar')
-    <li><a href="{{ route('home') }}">Home</a></li>
-    <li class="active"><a>Group</a></li>
+    <li>
+        <a class="nav-link" href="{{ route('home') }}">主页</a>
+    </li>
+
+    <li class="active">
+        <a class="nav-link">我的小组</a>
+    </li>
 @endsection
 
 @section('breadcrumbs')
     <ol class="breadcrumb">
-        <li><a href="{{ route('group') }}">Group</a></li>
-        <li class="active">Joined Groups</li>
+        <li class="breadcrumb-item">小组</li>
+        <li class="breadcrumb-item active">我加入的小组</li>
     </ol>
 @endsection
 
 @push('js')
     <script>
         $(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
             $(".member-quit").click(function () {
-                if (confirm("Are you sure you want to quit?")) {
+                if (confirm("你确定要退出该小组吗?")) {
                     $.post("{{ url("group") }}/" + $(this).data("id") + "/quit", function () {
                         window.location.reload();
                     });
@@ -37,54 +36,55 @@
 @section('content')
     <table class="table table-striped table-hover text-left">
         <caption>
-            <a class="btn btn-primary" href="{{ url('group/all') }}">Join An Existing Group</a>
-            <a class="btn btn btn-default" href="{{ url('group/create') }}">Create Group</a>
-
+            {{ $groups->links() }}
+            <a class="btn btn-primary" href="{{ url('group/list') }}">查找并加入小组</a>
+            <a class="btn btn btn-default" href="{{ url('group/create') }}">创建小组</a>
         </caption>
+
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Creator</th>
-            <th>Members</th>
-            <th>Actions</th>
+            <th scope="col">名称</th>
+            <th scope="col">描述</th>
+            <th scope="col">创建者</th>
+            <th scope="col">成员数</th>
+            <th scope="col">操作</th>
         </tr>
         </thead>
+
         <tbody>
         @foreach($groups as $group)
             <tr>
+                <td>{{ $group->name }}</td>
+                <td>{{ str_limit($group->description, 20) }}</td>
+                <td>{{ $group->owner->name }}</td>
                 <td>
-                    {{ $group->name }}
+                    <a class="btn btn-default" href="{{ url("group/{$group->id}/members") }}" role="button">
+                        {{ $group->members->count() }}
+                    </a>
                 </td>
-                <td class="col-md-5">
-                    @if($group->pivot->is_admin)
-                        <p>
-                            {{ $group->description }}
-                        </p>
-                    @else
-                        {{ $group->description }}
-                    @endif
-                </td>
-                <td>{{ $group->user->name }}</td>
-                <td><a role="button" class="btn btn-default" href="{{ url("group/{$group->id}/member") }}">{{ $group->members->count() }}</a></td>
                 <td>
-                    <div>
-                        @if($group->pivot->is_admin)
-                            <a role="button" class="btn btn-primary btn-block btn-sm" href="{{ url("group/{$group->id}") }}">
-                                Manage
+                    <div class="btn-group" role="group">
+                        @if($group->loginAdmin())
+                            <a class="btn btn-sm btn-primary" href="{{ url("group/{$group->id}") }}"
+                               role="button">
+                                管理小组
                             </a>
                         @endif
 
-                        <button class="btn btn-danger member-quit btn-block btn-sm" data-id="{{ $group->id }}"
-                                {{ $group->user->id === Auth::user()->id? 'disabled' :'' }}>
-                            Quit
-                        </button>
+                        @if($group->owner->id === Auth::user()->id)
+                            <button class="btn btn-sm btn-danger" disabled>
+                                创建者不可退出
+                            </button>
+                        @else
+                            <button class="btn btn-sm btn-danger member-quit" data-id="{{ $group->id }}">
+                                退出小组
+                            </button>
+                        @endif
                     </div>
+
                 </td>
             </tr>
         @endforeach
         </tbody>
     </table>
-
-    {{ $groups->links() }}
 @endsection

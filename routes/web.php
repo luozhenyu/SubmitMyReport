@@ -13,31 +13,60 @@
 
 Auth::routes();
 
+//Home
 Route::get('/', 'HomeController@index')->name('home');
 
-
-//Group
+//Joined group
 Route::get('/group', 'GroupController@index')->name('group');
-Route::get('/group/all', 'GroupController@all');
 
+//all group
+Route::get('/group/list', 'GroupController@list');
+
+//Create group
 Route::get('/group/create', 'GroupController@create');
 Route::post('/group', 'GroupController@store');
 
-Route::post('/group/{id}/join', 'GroupController@join');
-Route::post('/group/{id}/quit', 'GroupController@quit');
-Route::get('/group/{id}/member', 'GroupController@member');
-Route::post('/group/{id}/member', 'GroupController@toggleAdmin');
+//Update group description
+Route::put('/group/{group_id}', 'GroupController@update');
+//Show members
+Route::get('/group/{group_id}/members', 'GroupController@showMembers');
 
-Route::get('/group/{id}', 'AssignmentController@index');
-Route::get('/group/{id}/create', 'AssignmentController@create');
-Route::post('/group/{id}/store', 'AssignmentController@store');
+//Join
+Route::post('/group/{group_id}/join', 'GroupController@join');
+//Quit
+Route::post('/group/{group_id}/quit', 'GroupController@quit');
+//Set admin
+Route::post('/group/{group_id}/admin', 'GroupController@toggleAdmin');
 
-Route::get('/assignment/{id}', 'SubmissionController@index');
 
-Route::get('/assignment/{id}/create', 'SubmissionController@create');
-Route::post('/assignment/{id}/store', 'SubmissionController@store');
+//Show Assignments in group
+Route::get('/group/{group_id}', 'AssignmentController@index');
 
-Route::get('/submission/{id}', 'SubmissionController@show');
-Route::post('/submission/{id}', 'SubmissionController@mark');
+//List and create assignment
+Route::get('/group/{group_id}/create', 'AssignmentController@create');
+Route::post('/group/{group_id}', 'AssignmentController@store');
 
-Route::get('/submission/{id}/score', 'SubmissionController@score');
+//Show assignment in detail
+Route::get('/assignment/{assignment_id}', 'AssignmentController@show');
+Route::get('/assignment/{assignment_id}/edit', 'AssignmentController@edit');
+Route::put('/assignment/{assignment_id}', 'AssignmentController@update');
+//Route::delete('/assignment/{assignment_id}', 'AssignmentController@delete');//TODO:
+
+//List submissions
+Route::get('/assignment/{assignment_id}/submission', 'SubmissionController@index');
+
+//Create submission
+Route::get('/assignment/{assignment_id}/submit', 'SubmissionController@create');
+Route::post('/assignment/{assignment_id}', 'SubmissionController@store');
+
+//Show submission in detail
+Route::get('/submission/{submission_id}', 'SubmissionController@show');//Admin can score while student can not
+Route::get('/submission/{submission_id}/edit', 'SubmissionController@edit');
+Route::put('/submission/{submission_id}', 'SubmissionController@update');
+
+Route::post('/submission/{submission_id}/mark', 'SubmissionController@mark');
+
+
+//File upload and download
+Route::get('/file/{hash}', 'FileController@show');
+Route::post('/file', 'FileController@store')->name('file.upload');

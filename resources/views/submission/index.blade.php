@@ -1,45 +1,75 @@
-@extends('layouts.basic')
+@extends('layouts.normal')
 
-@section('title', "Submissions of {$assignment->title}")
+@section('title', "{$assignment->title}的提交")
 
 @section('navbar')
-    <li><a href="{{ route('home') }}">Home</a></li>
-    <li class="active"><a>Group</a></li>
+    <li>
+        <a class="nav-link" href="{{ route('home') }}">主页</a>
+    </li>
+
+    <li class="active">
+        <a class="nav-link">我的小组</a>
+    </li>
 @endsection
 
 @section('breadcrumbs')
     <ol class="breadcrumb">
-        <li><a href="{{ route('group') }}">Group</a></li>
-        <li><a href="{{ url("group/{$group->id}") }}">{{ $group->name }}</a></li>
-        <li class="active">{{ $assignment->title }}</li>
+        <li class="breadcrumb-item"><a href="{{ route('group') }}">小组</a></li>
+        <li class="breadcrumb-item">
+            <a href="{{ url("group/{$group->id}") }}">{{ $group->name }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ url("/assignment/{$assignment->id}") }}">{{ $assignment->title }}</a>
+        </li>
+        <li class="breadcrumb-item active">提交情况</li>
     </ol>
 @endsection
 
+@php($submissionTotal = $assignment->submissions()->count())
+@php($submissionScored = $assignment->scoredSubmissions()->count())
+
+
 @section('content')
     <table class="table table-striped table-hover text-left">
+        <caption>
+            {{ $submissions->links() }}
+            <h5>
+                共{{ $submissionTotal }}份提交，已评{{ $submissionScored }}份，
+                剩余{{ $submissionTotal - $submissionScored }}份,
+            </h5>
+        </caption>
+
         <thead>
         <tr>
-            <th>Author</th>
-            <th>Submitted at</th>
-            <th>Actions</th>
+            <th>学号</th>
+            <th>姓名</th>
+            <th>内容</th>
+            <th>提交时间</th>
+            <th>分数</th>
+            <th>操作</th>
         </tr>
         </thead>
+
         <tbody>
         @foreach($submissions as $submission)
             <tr>
-                <td>{{ $submission->user->name }}</td>
+                <td>{{ $submission->owner->student_id }}</td>
+                <td>{{ $submission->owner->name }}</td>
+                <td>{{ str_limit(strip_tags($submission->content), 20) }}</td>
                 <td>{{ $submission->created_at }}</td>
+                <td>{{ $submission->average_score }}</td>
                 <td>
                     @if($submission->corrected())
-                        {{ $submission->score }}
+                        <a class="btn btn-outline-success btn-sm" href="{{ url("submission/{$submission->id}") }}"
+                           onmouseover="this.innerHTML='修 改'"
+                           onmouseleave="this.innerHTML='已评分'">已评分</a>
                     @else
-                        <a class="btn btn-primary btn-sm" href="{{ url("submission/{$submission->id}") }}">Score Now</a>
+                        <a class="btn btn-outline-primary btn-sm"
+                           href="{{ url("submission/{$submission->id}") }}">去评分</a>
                     @endif
                 </td>
             </tr>
         @endforeach
         </tbody>
     </table>
-
-    {{ $submissions->links() }}
 @endsection

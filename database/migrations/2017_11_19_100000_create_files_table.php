@@ -16,9 +16,13 @@ class CreateFilesTable extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('sha512')->unique();
+            $table->char('random', 80)->unique();
+
+            $table->string('sha512');
             $table->unsignedInteger('size');
-            $table->unsignedInteger('reference_count')->default(0);
+            $table->string('filename');
+
+            $table->unsignedInteger('owner_id');
 
             $table->timestamps();
         });

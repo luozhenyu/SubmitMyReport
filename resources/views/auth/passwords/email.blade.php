@@ -3,50 +3,43 @@
 @section('title','Reset Password')
 
 @section('content')
-    <div style="padding-left: 20px; padding-right: 20px;">
-        <div style="padding-top: 20px; padding-bottom: 15px;">
-            <h5>Reset Password</h5>
-        </div>
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
+    <h3 class="col p-3">重设密码</h3>
 
-        <form class="form-horizontal" method="POST" action="{{ route('password.email') }}" style="width: 100%;">
-            {{ csrf_field() }}
+    <form class="form" method="post" action="{{ route('password.email') }}">
+        @csrf
 
-            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                <label for="email" class="control-label">E-Mail Address</label>
+        <div class="form-group">
+            <label for="email" class="col control-form-label">邮箱</label>
 
-                <div>
-                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+            <div class="col">
+                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                       name="email" value="{{ old('email') }}" required autofocus>
 
-                    @if ($errors->has('email'))
-                        <span class="help-block">
+                @if ($errors->has('email'))
+                    <span class="invalid-feedback">
                         <strong>{{ $errors->first('email') }}</strong>
                     </span>
-                    @endif
-                </div>
+                @endif
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col text-center">
+                <button type="submit" class="btn btn-primary btn-block">
+                    发送密码重置邮件
+                </button>
             </div>
 
-            <div class="form-group">
-                <div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        Send Password Reset Link
-                    </button>
-                </div>
-                <div class="text-right" style="padding-top: 15px;">
-                    <a href="/login" class="btn btn-outline-primary">
-                        Login
-                    </a>
-                    <a class="btn btn-outline-primary" href="/register">
-                        Register
-                    </a>
-                </div>
+            <div class="col text-right mt-4">
+                <a class="btn btn-outline-primary" href="{{ route('register') }}">
+                    注册
+                </a>
+
+                <a class="btn btn-outline-primary" href="{{ route('login') }}">
+                    登录
+                </a>
             </div>
-        </form>
-        <div style="height: 30px;"></div>
-    </div>
+        </div>
+    </form>
 @endsection
 

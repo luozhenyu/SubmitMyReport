@@ -1,127 +1,122 @@
-@extends('layouts.default')
+@extends('layouts.normal')
 
-@section('title', 'Home')
+@section('title', '主页')
 
-@section('default_content')
-    <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
-            <div class="navbar-header">
+@section('navbar')
+    <li class="active">
+        <a class="nav-link">主页</a>
+    </li>
 
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#app-navbar-collapse" aria-expanded="false">
-                    <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+    <li>
+        <a class="nav-link" href="{{ route('group') }}">我的小组</a>
+    </li>
+@endsection
 
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name') }}
-                </a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a>Home</a></li>
-                    <li><a href="{{ route('group') }}">Group</a></li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    @guest
-                        <li><a href="{{ route('login') }}">Login</a></li>
-                        <li><a href="{{ route('register') }}">Register</a></li>
-                    @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-expanded="false" aria-haspopup="true">
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                          style="display: none;">
-                                        {{ csrf_field() }}
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @endguest
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container">
-        <div class="row" style="height: 30px;"></div>
+@section('content')
+    <div class="container p-4">
         <div class="row">
-            @if($current_group)
-                <div class="col-md-2 col-md-offset-1">
-                    <h4>Groups</h4>
-                    <div class="list-group">
-                        @foreach($groups as $group)
-                            <a class="list-group-item{{ $group->id === $current_group->id? ' active' :'' }}"
-                               href="{{ url('')."?group={$group->id}" }}">
-                                {{ $group->name }}
-                            </a>
-                        @endforeach
-                    </div>
+            <div class="col-md-3">
+                <h5 class="text-center">我加入的</h5>
+                <div class="list-group">
+                    @foreach($groups as $group)
+                        <a href="{{ $group->id === $selectedGroup->id? '#' :route('home', ['group' => $group->id]) }}"
+                           class="list-group-item{{ $group->id === $selectedGroup->id? ' active' :'' }}">
+                            {{ $group->name }}
+                            @if(!$group->loginAdmin() && $count = $group->assignments->count())
+                                <span class="badge badge-primary badge-pill">{{ $count }}</span>
+                            @endif
+                        </a>
+                    @endforeach
                 </div>
-
-                <div class="col-md-8" style="background-color: white;padding-top: 15px;margin-bottom:30px; border-radius:5px; box-shadow: 0px 3px 7px #bbbbbb; min-height: 500px;">
+            </div>
+            <div class="col-md-9 p-4"
+                 style="min-height: 500px; border-radius:5px; box-shadow: 0 3px 7px #bbbbbb;">
+                @if($selectedGroup)
+                    @php($loginNotSubmit = $selectedGroup->loginNotSubmit)
+                    @php($orderedAssignments = $selectedGroup->orderedAssignments()->paginate(6))
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h4>我的作业</h4>
+                        </div>
+                        <div class="col-md-8">
+                            <p class="text-justify">{{ $selectedGroup->description }}</p>
+                        </div>
+                    </div>
                     <table class="table table-striped table-hover text-left">
-                        <caption><h4>Assignments</h4></caption>
+                        <caption>
+                            {{ $orderedAssignments->links() }}
+                            @if($selectedGroup->loginAdmin())
+                                {{-- TODO: --}}
+                            @else
+                                @if($loginNotSubmit->count() > 0)
+                                    <h5>还有{{ $loginNotSubmit->count() }}项未完成作业</h5>
+                                @else
+                                    <h5>暂时没有未完成作业</h5>
+                                @endif
+                            @endif
+                        </caption>
+
                         <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Author</th>
-                            <th>Status</th>
+                            <th scope="col">标题</th>
+                            <th scope="col">描述</th>
+                            <th scope="col">作者</th>
+                            <th scope="col">截止日期</th>
+                            <th scope="col">提交情况</th>
+                            <th scope="col">状态</th>
                         </tr>
                         </thead>
+
                         <tbody>
-                        @foreach($current_group->assignments as $assignment)
+                        @foreach($orderedAssignments as $assignment)
                             <tr>
                                 <td>{{ $assignment->title }}</td>
-                                <td class="col-md-5">{{ $assignment->description }}</td>
-                                <td>{{ $assignment->user->name }}</td>
+                                <td>{{ str_limit(strip_tags($assignment->description), 20) }}</td>
+                                <td>{{ $assignment->owner->name }}</td>
+                                <td>{{ $assignment->deadline }}</td>
+                                <td>{{ $assignment->submissions->count() .'/' .$group->normalMembers->count() }}</td>
                                 <td>
-                                    @if(!$current_group->pivot->is_admin)
-                                        @if(!$submission = $assignment->submissions()->where('user_id', Auth::user()->id)->first())
-                                            <a class="btn btn-danger btn-sm"
-                                               href="{{ url("assignment/{$assignment->id}/create") }}">
-                                                To do
+                                    <a class="btn btn-outline-primary btn-sm"
+                                       href="{{ url("/assignment/{$assignment->id}") }}">
+                                        题目
+                                    </a>
+                                    @if($selectedGroup->loginAdmin())
+                                        <a href="{{ url("/assignment/{$assignment->id}/submission") }}"
+                                           class="btn btn-outline-info btn-sm">
+                                            提交情况
+                                        </a>
+                                    @else
+                                        @if(!$submission = $assignment->loginSubmissions->first())
+                                            <a href="{{ url("/assignment/{$assignment->id}/submit") }}"
+                                               class="btn btn-outline-danger btn-sm">
+                                                待完成
                                             </a>
-                                        @elseif(!$submission->corrected())
-                                            <span class="btn btn-success btn-sm" disabled>
-                                    Submitted
-                                </span>
+                                        @elseif($submission->corrected())
+                                            <a class="btn btn-outline-danger btn-sm"
+                                               href="{{ url("submission/{$submission->id}") }}">
+                                                {{ "{$submission->average_score}" }}分
+                                            </a>
                                         @else
-                                            <a class="btn btn-primary btn-sm"
-                                               href="{{ url("submission/{$submission->id}/score") }}">
-                                                {{ "Score {$submission->score}" }}
+                                            <a class="btn btn-outline-info btn-sm"
+                                               href="{{ url("submission/{$submission->id}") }}">查看提交
+                                            </a>
+                                            <a class="btn btn-outline-success btn-sm submitted"
+                                               href="{{ url("submission/{$submission->id}/edit") }}"
+                                               onmouseover="this.innerHTML='修改提交'"
+                                               onmouseleave="this.innerHTML='提交成功'">
+                                                提交成功
                                             </a>
                                         @endif
-                                    @else
-                                        <a class="btn btn-primary btn-sm"
-                                           href="{{ url("assignment/{$assignment->id}") }}">
-                                            View Submissions
-                                        </a>
                                     @endif
                                 </td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
-                </div>
-            @else
-                <h3>First, join a group.</h3>
-            @endif
+                @else
+                    <h3>第一步，选择一个小组并加入。</h3>
+                @endif
+            </div>
         </div>
     </div>
 @endsection

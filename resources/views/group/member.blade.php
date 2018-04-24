@@ -1,32 +1,37 @@
-@extends('layouts.basic')
+@extends('layouts.normal')
 
-@section('title', "Members of {$group->name}")
+@section('title', "{$group->name}的成员")
 
 @section('navbar')
-    <li><a href="{{ route('home') }}">Home</a></li>
-    <li class="active"><a>Group</a></li>
+    <li>
+        <a class="nav-link" href="{{ route('home') }}">主页</a>
+    </li>
+
+    <li class="active">
+        <a class="nav-link">我的小组</a>
+    </li>
 @endsection
 
 @section('breadcrumbs')
     <ol class="breadcrumb">
-        <li><a href="{{ route('group') }}">Group</a></li>
-        <li><a href="{{ url("group/{$group->id}") }}">{{ $group->name }}</a></li>
-        <li class="active">Members</li>
+        <li class="breadcrumb-item"><a href="{{ route('group') }}">小组</a></li>
+        <li class="breadcrumb-item">
+            @if(Auth::user()->managedGroups()->find($group->id))
+                <a href="{{ url("group/{$group->id}") }}">{{ $group->name }}</a>
+            @else
+                {{ $group->name }}
+            @endif
+        </li>
+        <li class="breadcrumb-item active">小组成员</li>
     </ol>
 @endsection
 
-@if($group->user->id === Auth::user()->id)
+@if($group->owner->id === Auth::user()->id)
     @push('js')
         <script>
             $(function () {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
                 $(".member-toggle").click(function () {
-                    $.post("", {user_id: $(this).data("id")}, function () {
+                    $.post('{{ url("/group/{$group->id}/admin") }}', {user_id: $(this).data("id")}, function () {
                         window.location.reload();
                     });
                 });
@@ -37,34 +42,38 @@
 
 @section('content')
     <table class="table table-striped table-hover text-left">
+        <caption>
+            {{ $members->links() }}
+        </caption>
+
         <thead>
         <tr>
-            <th></th>
-            <th>Member Name</th>
-            <th>Type</th>
-            <th>Joining Date</th>
-            @if($group->user->id === Auth::user()->id)
-                <th>Manage</th>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>类型</th>
+            <th>加入日期</th>
+            @if($group->owner->id === Auth::user()->id)
+                <th>操作</th>
             @endif
         </tr>
         </thead>
         <tbody>
 
-        @foreach($members as $index => $member)
+        @foreach($members as $member)
             <tr>
-                <td>{{ $offset + $index + 1 }}</td>
+                <td>{{ $memberOffset + $loop->iteration }}</td>
                 <td>{{ $member->name }}</td>
-                <td>{{ $member->pivot->is_admin? 'Admin' :'Normal' }}</td>
+                <td>{{ $member->id === $group->owner->id? '创建者' :($member->pivot->is_admin? '管理员' :'普通用户') }}</td>
                 <td>{{ $member->pivot->created_at }}</td>
-                @if($group->user->id === Auth::user()->id)
+                @if($group->owner->id === Auth::user()->id)
                     <td>
                         @if($member->pivot->is_admin)
-                            <button class="btn btn-danger btn-sm member-toggle" data-id="{{ $member->id }}">
-                                Revoke Admin
+                            <button class="btn btn-sm btn-danger member-toggle" data-id="{{ $member->id }}">
+                                取消管理员
                             </button>
                         @else
-                            <button class="btn btn-info btn-sm member-toggle" data-id="{{ $member->id }}">
-                                Set Admin
+                            <button class="btn btn-sm btn-primary member-toggle" data-id="{{ $member->id }}">
+                                设为管理员
                             </button>
                         @endif
                     </td>
@@ -73,6 +82,4 @@
         @endforeach
         </tbody>
     </table>
-
-    {{ $members->links() }}
 @endsection
