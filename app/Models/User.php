@@ -44,11 +44,6 @@ class User extends Authenticatable
         return $this->hasMany(Submission::class, 'owner_id');
     }
 
-    public function files()
-    {
-        return $this->hasMany(File::class, 'owner_id');
-    }
-
     /**
      * 物理存储
      * @param UploadedFile $uploadedFile
@@ -79,6 +74,17 @@ class User extends Authenticatable
         return $storedFile;
     }
 
+    public function files()
+    {
+        return $this->hasMany(File::class, 'owner_id');
+    }
+
+    public function managedGroups()
+    {
+        return $this->joinedGroups()
+            ->wherePivot('is_admin', true);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -87,12 +93,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')
             ->withPivot('is_admin')
             ->withTimestamps();
-    }
-
-    public function managedGroups()
-    {
-        return $this->joinedGroups()
-            ->wherePivot('is_admin', true);
     }
 
 }

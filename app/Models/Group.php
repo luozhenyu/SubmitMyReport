@@ -23,15 +23,21 @@ class Group extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    public function orderedAssignments()
+    {
+        return $this->assignments()
+            ->orderByDesc('deadline');
+    }
+
     public function assignments()
     {
         return $this->hasMany(Assignment::class, 'group_id');
     }
 
-    public function orderedAssignments()
+    public function normalMembers()
     {
-        return $this->assignments()
-            ->orderByDesc('deadline');
+        return $this->members()
+            ->wherePivot('is_admin', false);
     }
 
     /**
@@ -44,12 +50,6 @@ class Group extends Model
             ->withTimestamps()
             ->orderByDesc('is_admin')
             ->orderBy('pivot_created_at');
-    }
-
-    public function normalMembers()
-    {
-        return $this->members()
-            ->wherePivot('is_admin', false);
     }
 
     public function admins()

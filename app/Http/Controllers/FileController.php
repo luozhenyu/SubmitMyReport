@@ -52,6 +52,16 @@ class FileController extends Controller
         );
     }
 
+    /**
+     * 大小限制提示
+     * @return string
+     */
+    public static function uploadLimitHit()
+    {
+        $limit = round(static::UPLOAD_MAX_SIZE / 1024 / 1024, 2);
+        return "[大小 ≤{$limit}MB]";
+    }
+
     public function show(Request $request, $random)
     {
         $storedFile = File::where('random', $random)->first();
@@ -62,15 +72,5 @@ class FileController extends Controller
         $realPath = File::hashToPath($sha512) . DIRECTORY_SEPARATOR . $sha512;
 
         return response()->download(Storage::path($realPath), $filename);
-    }
-
-    /**
-     * 大小限制提示
-     * @return string
-     */
-    public static function uploadLimitHit()
-    {
-        $limit = round(static::UPLOAD_MAX_SIZE / 1024 / 1024, 2);
-        return "[大小 ≤{$limit}MB]";
     }
 }

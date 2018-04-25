@@ -87,13 +87,13 @@ class ImportSubmission extends Command
             }
 
             /** @var Group $group */
-            if(!$group = $user->joinedGroups()->find($assignment->group_id)){
+            if (!$group = $user->joinedGroups()->find($assignment->group_id)) {
                 $this->warn("{$basename} not in the group, skip.");
                 continue;
             }
 
             //不允许重复提交
-            if($assignment->loginSubmissions($user)->count() > 0){
+            if ($assignment->loginSubmissions($user)->count() > 0) {
                 $this->warn("{$basename} exists already, skip.");
                 continue;
             }

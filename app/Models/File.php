@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
+    const STORAGE_DIR = 'uploads';
     /**
      * The attributes that are mass assignable.
      *
@@ -14,12 +15,16 @@ class File extends Model
     protected $fillable = [
         'random', 'sha512', 'size', 'filename',
     ];
-
     protected $visible = [
         'random', 'size', 'filename',
     ];
 
-    const STORAGE_DIR = 'uploads';
+    public static function hashToPath(string $sha512)
+    {
+        return static::STORAGE_DIR
+            . DIRECTORY_SEPARATOR . substr($sha512, 0, 2)
+            . DIRECTORY_SEPARATOR . substr($sha512, 2, 2);
+    }
 
     public function owner()
     {
@@ -33,12 +38,5 @@ class File extends Model
             'url' => "/file/{$this->random}",
             'random' => $this->random,
         ];
-    }
-
-    public static function hashToPath(string $sha512)
-    {
-        return static::STORAGE_DIR
-            . DIRECTORY_SEPARATOR . substr($sha512, 0, 2)
-            . DIRECTORY_SEPARATOR . substr($sha512, 2, 2);
     }
 }

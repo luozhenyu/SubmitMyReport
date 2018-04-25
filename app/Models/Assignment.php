@@ -30,17 +30,17 @@ class Assignment extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function submissions()
+    public function scoredSubmissions()
     {
-        return $this->hasMany(Submission::class, 'assignment_id');
+        return $this->submissions()->where('mark_user_id', '!=', null);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function scoredSubmissions()
+    public function submissions()
     {
-        return $this->submissions()->where('mark_user_id', '!=', null);
+        return $this->hasMany(Submission::class, 'assignment_id');
     }
 
     public function files()
