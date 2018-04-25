@@ -15,7 +15,11 @@
 @section('breadcrumbs')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('group') }}">小组</a></li>
-        <li class="breadcrumb-item"><a href="{{ url("/group/{$group->id}") }}">{{ $group->name }}</a></li>
+        @if($admin)
+            <li class="breadcrumb-item"><a href="{{ url("/group/{$group->id}") }}">{{ $group->name }}</a></li>
+        @else
+            <li class="breadcrumb-item">{{ $group->name }}</li>
+        @endif
         <li class="breadcrumb-item">
             <a href="{{ url("/assignment/{$assignment->id}") }}">{{ $assignment->title }}</a>
         </li>
@@ -70,7 +74,7 @@
                     <span class="badge badge-secondary">作者</span>
                     {{ $assignment->owner->name }}
                     <span class="badge badge-secondary">提交人数</span>
-                    {{ $assignment->submissions->count() .'/' .$group->normalMembers->count() }}
+                    {{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}
                 </h5>
 
                 <h5 class="mt-3">
@@ -169,7 +173,10 @@
                 </section>
             @elseif($corrected)
                 <section class="col mt-3">
-                    <h4 class="text-dark">评分</h4>
+                    <h4 class="text-dark">评分
+                        <span class="text-secondary"
+                              style="font-size: 0.7em">by {{ $submission->mark_user->name }}</span>
+                    </h4>
                     <hr>
                     @for($index = 0; $index < $assignment->sub_problem; $index += 2)
                         <div class="row p-3">

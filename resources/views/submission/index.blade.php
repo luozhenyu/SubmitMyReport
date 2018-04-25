@@ -27,15 +27,16 @@
 
 @php($submissionTotal = $assignment->submissions()->count())
 @php($submissionScored = $assignment->scoredSubmissions()->count())
-
+@php($SubmissionNotScored = $submissionTotal - $submissionScored)
+@php($yourSubmissionScored = $assignment->scoredSubmissions()->where('mark_user_id', Auth::user()->id)->count())
 
 @section('content')
     <table class="table table-striped table-hover text-left">
         <caption>
             {{ $submissions->links() }}
+            <h5>您已评价{{ $yourSubmissionScored }}份</h5>
             <h5>
-                共{{ $submissionTotal }}份提交，已评{{ $submissionScored }}份，
-                剩余{{ $submissionTotal - $submissionScored }}份,
+                共{{ $submissionTotal }}份提交，已评{{ $submissionScored }}份，剩余{{ $SubmissionNotScored }}份
             </h5>
         </caption>
 
@@ -61,8 +62,8 @@
                 <td>
                     @if($submission->corrected())
                         <a class="btn btn-outline-success btn-sm" href="{{ url("submission/{$submission->id}") }}"
-                           onmouseover="this.innerHTML='修 改'"
-                           onmouseleave="this.innerHTML='已评分'">已评分</a>
+                           onmouseover="innerHTML='修 改'"
+                           onmouseleave="innerHTML='已评分'">已评分</a>
                     @else
                         <a class="btn btn-outline-primary btn-sm"
                            href="{{ url("submission/{$submission->id}") }}">去评分</a>

@@ -46,7 +46,6 @@
                         <caption>
                             {{ $orderedAssignments->links() }}
                             @if($selectedGroup->loginAdmin())
-                                {{-- TODO: --}}
                             @else
                                 @if($loginNotSubmit->count() > 0)
                                     <h5>还有{{ $loginNotSubmit->count() }}项未完成作业</h5>
@@ -63,6 +62,9 @@
                             <th scope="col">作者</th>
                             <th scope="col">截止日期</th>
                             <th scope="col">提交情况</th>
+                            @if($selectedGroup->loginAdmin())
+                                <th scope="col">评分情况</th>
+                            @endif
                             <th scope="col">状态</th>
                         </tr>
                         </thead>
@@ -74,7 +76,10 @@
                                 <td>{{ str_limit(strip_tags($assignment->description), 20) }}</td>
                                 <td>{{ $assignment->owner->name }}</td>
                                 <td>{{ $assignment->human_deadline }}</td>
-                                <td>{{ $assignment->submissions->count() .'/' .$group->normalMembers->count() }}</td>
+                                <td>{{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}</td>
+                                @if($selectedGroup->loginAdmin())
+                                    <td>{{ $assignment->submissions()->count() .'/' .$assignment->scoredSubmissions()->count() }}</td>
+                                @endif
                                 <td>
                                     <a class="btn btn-outline-primary btn-sm"
                                        href="{{ url("/assignment/{$assignment->id}") }}">
@@ -93,7 +98,9 @@
                                             </a>
                                         @elseif($submission->corrected())
                                             <a class="btn btn-outline-danger btn-sm"
-                                               href="{{ url("submission/{$submission->id}") }}">
+                                               href="{{ url("submission/{$submission->id}") }}"
+                                               onmouseover="innerHTML='查 看'"
+                                               onmouseleave="innerHTML='{{ "{$submission->average_score}" }}分'">
                                                 {{ "{$submission->average_score}" }}分
                                             </a>
                                         @else
@@ -102,8 +109,8 @@
                                             </a>
                                             <a class="btn btn-outline-success btn-sm submitted"
                                                href="{{ url("submission/{$submission->id}/edit") }}"
-                                               onmouseover="this.innerHTML='修改提交'"
-                                               onmouseleave="this.innerHTML='提交成功'">
+                                               onmouseover="innerHTML='修改提交'"
+                                               onmouseleave="innerHTML='提交成功'">
                                                 提交成功
                                             </a>
                                         @endif

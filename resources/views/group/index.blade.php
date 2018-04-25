@@ -59,7 +59,7 @@
                 <td>{{ $group->owner->name }}</td>
                 <td>
                     <a class="btn btn-default" href="{{ url("group/{$group->id}/members") }}" role="button">
-                        {{ $group->members->count() }}
+                        {{ $group->members()->count() }}
                     </a>
                 </td>
                 <td>

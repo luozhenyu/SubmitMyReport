@@ -28,7 +28,7 @@ class SubmissionController extends Controller
         abort_if(empty($group), 403);
 
         $submissions = $assignment->submissions()
-            ->orderByDesc('mark_user_id')
+            ->orderByRaw('cast("mark_user_id" as boolean) desc, updated_at desc')
             ->paginate(15);
 
         return view('submission.index', [

@@ -60,7 +60,7 @@
                 <td>{{ $group->name }}</td>
                 <td>{{ str_limit($group->description, 20) }}</td>
                 <td>{{ $group->owner->name }}</td>
-                <td>{{ $group->members->count() }}</td>
+                <td>{{ $group->members()->count() }}</td>
                 <td>
                     @if($group->loginJoined())
                         <button class="btn btn-sm btn-success btn-block" disabled>已加入</button>

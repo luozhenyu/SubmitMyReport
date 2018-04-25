@@ -40,7 +40,7 @@ class Assignment extends Model
      */
     public function scoredSubmissions()
     {
-        return $this->submissions()->where('mark_user_id', null);
+        return $this->submissions()->where('mark_user_id', '!=', null);
     }
 
     public function files()

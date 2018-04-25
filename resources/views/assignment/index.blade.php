@@ -107,7 +107,7 @@
                 </td>
                 <td>{{ $assignment->owner->name }}</td>
                 <td>{{ $assignment->updated_at }}</td>
-                <td>{{ $assignment->submissions->count() .'/' .$group->normalMembers->count() }}</td>
+                <td>{{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}</td>
                 <td>
                     <a href="{{ url("/assignment/{$assignment->id}/edit") }}" class="btn btn-sm btn-outline-primary">
                         修改信息

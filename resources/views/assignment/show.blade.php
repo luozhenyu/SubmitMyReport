@@ -15,9 +15,11 @@
 @section('breadcrumbs')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('group') }}">小组</a></li>
-        <li class="breadcrumb-item">
-            <a href="{{ url("/group/{$group->id}") }}">{{ $group->name }}</a>
-        </li>
+        @if($group->pivot->is_admin)
+            <li class="breadcrumb-item"><a href="{{ url("/group/{$group->id}") }}">{{ $group->name }}</a></li>
+        @else
+            <li class="breadcrumb-item">{{ $group->name }}</li>
+        @endif
         <li class="breadcrumb-item active">{{ $assignment->title }}</li>
     </ol>
 @endsection
