@@ -145,6 +145,6 @@ class AssignmentController extends Controller
 
         $assignment->save();
 
-        return redirect("/assignment/{$assignment_id}/show");
+        return redirect("/assignment/{$assignment_id}");
     }
 }

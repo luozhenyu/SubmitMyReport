@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    const UPLOAD_MAX_SIZE = 8 * 1024 * 1024;
+    const UPLOAD_MAX_SIZE = 10 * 1024 * 1024;
 
     public function store(Request $request)
     {
@@ -61,7 +61,7 @@ class FileController extends Controller
         $sha512 = $storedFile->sha512;
         $realPath = File::hashToPath($sha512) . DIRECTORY_SEPARATOR . $sha512;
 
-        return response()->download(realpath(Storage::path($realPath)), $filename);
+        return response()->download(Storage::path($realPath), $filename);
     }
 
     /**
@@ -71,6 +71,6 @@ class FileController extends Controller
     public static function uploadLimitHit()
     {
         $limit = round(static::UPLOAD_MAX_SIZE / 1024 / 1024, 2);
-        return "[大小 ≥{$limit}MB]";
+        return "[大小 ≤{$limit}MB]";
     }
 }

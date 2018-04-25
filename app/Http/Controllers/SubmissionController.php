@@ -46,12 +46,13 @@ class SubmissionController extends Controller
         /** @var Assignment $assignment */
         $assignment = Assignment::findOrFail($assignment_id);
 
-        //不允许重复提交
-        abort_if($assignment->loginSubmissions()->count() > 0, 403);
-
+        //检查是否是当前小组的成员
         /** @var Group $group */
         $group = $user->joinedGroups()->find($assignment->group_id);
         abort_if(empty($group), 403);
+
+        //不允许重复提交
+        abort_if($assignment->loginSubmissions()->count() > 0, 403);
 
         return view('submission.create', [
             'group' => $group,
@@ -67,15 +68,16 @@ class SubmissionController extends Controller
         /** @var Assignment $assignment */
         $assignment = Assignment::findOrFail($assignment_id);
 
-        //不允许重复提交
-        abort_if($assignment->loginSubmissions()->count() > 0, 403);
-
+        //检查是否是当前小组的成员
         /** @var Group $group */
         $group = $user->joinedGroups()->find($assignment->group_id);
         abort_if(empty($group), 403);
 
+        //不允许重复提交
+        abort_if($assignment->loginSubmissions()->count() > 0, 403);
+
         $this->validate($request, [
-            'content' => 'required|max:65535',
+            'content' => 'nullable|max:65535',
             'attachment.*' => 'nullable|exists:files,random',
         ]);
 
@@ -155,7 +157,7 @@ class SubmissionController extends Controller
         abort_if($submission->corrected(), 403);
 
         $this->validate($request, [
-            'content' => 'required|max:65535',
+            'content' => 'nullable|max:65535',
             'attachment.*' => 'nullable|exists:files,random',
         ]);
 
@@ -188,7 +190,7 @@ class SubmissionController extends Controller
             'score' => "required|array|size:{$assignment->sub_problem}",
             'remark' => "required|array|size:{$assignment->sub_problem}",
             'score.*' => "required|integer|between:0,100",
-            'remark.*' => "nullable|max:256",
+            'remark.*' => "nullable|max:255",
         ]);
 
         $score = $request->input('score');

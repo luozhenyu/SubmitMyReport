@@ -8,7 +8,7 @@
 
     <title>@yield('title') - {{ config('app.name') }}</title>
 
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootswatch/4.0.0/cerulean/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {

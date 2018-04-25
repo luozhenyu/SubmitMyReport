@@ -57,7 +57,7 @@ class User extends Authenticatable
      */
     public function storeFile(UploadedFile $uploadedFile, string $filename)
     {
-        $sha512 = hash_file("sha512", $uploadedFile);
+        $sha512 = hash_file("sha512", $uploadedFile->path());
 
         if (!$storedFile = $this->files()->where('sha512', $sha512)->first()) {
 
@@ -94,4 +94,5 @@ class User extends Authenticatable
         return $this->joinedGroups()
             ->wherePivot('is_admin', true);
     }
+
 }

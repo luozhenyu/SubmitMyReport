@@ -28,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
 
-        Paginator::defaultView('vendor.pagination.bootstrap-4');
+        Paginator::defaultView('pagination.bootstrap-4');
     }
 }

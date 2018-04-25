@@ -15,7 +15,7 @@ class CreateSubmissionsTable extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->mediumText('content');
+            $table->mediumText('content')->nullable();
 
             //submission作者
             $table->unsignedInteger('owner_id');

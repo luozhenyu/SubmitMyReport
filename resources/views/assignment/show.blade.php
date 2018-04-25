@@ -58,7 +58,7 @@
 
                 <h5 class="mt-3">
                     <span class="badge badge-secondary">截止日期</span>
-                    {{ $assignment->deadline }}
+                    {{ $assignment->human_deadline }}
                 </h5>
             </header>
 

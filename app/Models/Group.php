@@ -42,6 +42,7 @@ class Group extends Model
         return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')
             ->withPivot('is_admin')
             ->withTimestamps()
+            ->orderByDesc('is_admin')
             ->orderBy('pivot_created_at');
     }
 

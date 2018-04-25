@@ -60,7 +60,7 @@ class GroupController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:20|unique:groups',
-            'description' => 'required|max:256',
+            'description' => 'required|max:255',
         ]);
 
         /** @var Group $group */
@@ -78,7 +78,7 @@ class GroupController extends Controller
         $user = $request->user();
 
         $this->validate($request, [
-            'description' => 'required|max:256',
+            'description' => 'required|max:255',
         ]);
 
         /** @var Group $group */

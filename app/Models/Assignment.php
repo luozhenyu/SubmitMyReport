@@ -48,15 +48,16 @@ class Assignment extends Model
         return $this->belongsToMany(File::class, 'assignment_file');
     }
 
-    public function loginSubmissions()
+    public function loginSubmissions($logined = null)
     {
+        $logined = $logined ?? Auth::user();
         return $this->submissions()
-            ->where('owner_id', Auth::user()->id);
+            ->where('owner_id', $logined->id);
     }
 
-    public function getDeadlineAttribute($value)
+    public function getHumanDeadlineAttribute()
     {
-        $date = Carbon::createFromTimeString($value);
+        $date = Carbon::createFromTimeString($this->deadline);
 
         if ($date->year === Carbon::now()->year) {
             return $date->format("m-d H:i");
