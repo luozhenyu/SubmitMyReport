@@ -40,7 +40,7 @@
     <script src="https://cdn.bootcss.com/flatpickr/4.4.4/flatpickr.min.js"></script>
     <script src="https://cdn.bootcss.com/flatpickr/4.4.4/l10n/zh.js"></script>
 
-    <script src="https://cdn.ckeditor.com/4.9.2/full/ckeditor.js"></script>
+    <script src="{{ url('/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ url('/js/file_upload.js') }}"></script>
 
     <script>
@@ -50,30 +50,8 @@
             };
 
             const editor = CKEDITOR.replace("content", {
-                language: "zh-cn",
                 extraPlugins: "uploadimage",
-                uploadUrl: "{{ route('file.upload') }}",
-                toolbar: [
-                    {name: 'document', items: ['Preview', 'Print', '-', 'Templates']},
-                    {
-                        name: 'clipboard',
-                        items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']
-                    },
-                    {name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']},
-                    {
-                        name: 'basicstyles',
-                        items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat']
-                    },
-                    {
-                        name: 'paragraph',
-                        items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
-                    },
-                    {name: 'links', items: ['Link', 'Unlink', 'Anchor']},
-                    {name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']},
-                    {name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize']},
-                    {name: 'colors', items: ['TextColor', 'BGColor']},
-                    {name: 'tools', items: ['Maximize', 'ShowBlocks']}
-                ]
+                uploadUrl: "{{ route('file.upload') }}"
             });
             editor.on("fileUploadRequest", function (evt) {
                 let xhr = evt.data.fileLoader.xhr;

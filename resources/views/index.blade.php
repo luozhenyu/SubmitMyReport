@@ -78,7 +78,7 @@
                                 <td>{{ $assignment->human_deadline }}</td>
                                 <td>{{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}</td>
                                 @if($selectedGroup->loginAdmin())
-                                    <td>{{ $assignment->submissions()->count() .'/' .$assignment->scoredSubmissions()->count() }}</td>
+                                    <td>{{ $assignment->scoredSubmissions()->count() .'/' .$assignment->submissions()->count() }}</td>
                                 @endif
                                 <td>
                                     <a class="btn btn-outline-primary btn-sm"
