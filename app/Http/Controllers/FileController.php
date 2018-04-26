@@ -69,8 +69,8 @@ class FileController extends Controller
 
         $filename = $storedFile->filename;
         $sha512 = $storedFile->sha512;
-        $realPath = File::hashToPath($sha512) . DIRECTORY_SEPARATOR . $sha512;
+        $storagePath = File::hashToPath($sha512) . DIRECTORY_SEPARATOR . $sha512;
 
-        return response()->download(Storage::path($realPath), $filename);
+        return response()->download(Storage::path($storagePath), $filename);
     }
 }

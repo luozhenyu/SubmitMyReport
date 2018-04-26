@@ -47,8 +47,8 @@ class ImportSubmission extends Command
         $files = (array)$this->argument('file');
 
         foreach ($files as $path) {
-            $pathInfo = pathinfo($path);
-            $basename = $pathInfo['basename'];
+            $path_parts = pathinfo($path);
+            $basename = $path_parts['basename'];
 
             if (!preg_match('/^(\d+)_(.+)_(第\d+次上机)/', $basename, $matches)) {
                 $this->warn("Invaild filename: {$basename}");

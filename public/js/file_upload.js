@@ -50,21 +50,27 @@ function getFileIcon(fileName) {
             return type;
         }
     }
-    return "file-o";
+    return ext[ext.length - 1] === '/' ? 'folder-open-o' : "file-o";
 }
 
 $.parseFile = function (file, editable = false) {
     let fileName = file["fileName"],
         iconClass = "fa fa-" + getFileIcon(fileName),
-        random = file["random"],
-        url = file["url"];
+        random = file["random"] || '',
+        url = file["url"],
+        preview_url = file["preview_url"];
 
     let html = $("<h5>").append(
         $("<span>").addClass(iconClass)
     ).append(
-        $("<a>").addClass("text-primary m-1")
+        $("<a>").addClass("text-info m-1")
             .attr("href", url).attr("title", fileName)
             .text(fileName)
+    ).append(
+        $("<a>").addClass("text-primary ml-4")
+            .attr("href", preview_url)
+            .attr("target", "_blank")
+            .text("预览")
     );
     if (editable) {
         html.append(

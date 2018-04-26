@@ -15,6 +15,7 @@ class File extends Model
     protected $fillable = [
         'random', 'sha512', 'size', 'filename',
     ];
+
     protected $visible = [
         'random', 'size', 'filename',
     ];
@@ -31,11 +32,20 @@ class File extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function conversion()
+    {
+        return $this->hasOne(Conversion::class, 'sha512', 'sha512');
+    }
+
     public function info()
     {
         return [
             'fileName' => $this->filename,
             'url' => "/file/{$this->random}",
+            'preview_url' => "/preview/{$this->random}",
             'random' => $this->random,
         ];
     }

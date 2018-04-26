@@ -70,3 +70,7 @@ Route::post('/submission/{submission_id}/mark', 'SubmissionController@mark');
 //File upload and download
 Route::get('/file/{hash}', 'FileController@show');
 Route::post('/file', 'FileController@store')->name('file.upload');
+
+//Preview file
+Route::get('/preview/{hash}', 'PreviewController@dispatchJob');
+Route::post('/preview/{hash}', 'PreviewController@queryStatus');
