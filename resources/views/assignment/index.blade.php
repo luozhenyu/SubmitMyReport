@@ -77,47 +77,51 @@
 @endsection
 
 @section('content')
-    <table class="table table-striped table-hover text-left">
-        <caption>
-            {{ $assignments->links() }}
-            <a class="btn btn-primary" href="{{ url("group/{$group->id}/create") }}">创建新作业</a>
-        </caption>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover text-left">
+            <caption>
+                {{ $assignments->links() }}
+                <a class="btn btn-primary" href="{{ url("group/{$group->id}/create") }}">创建新作业</a>
+            </caption>
 
-        <thead>
-        <tr>
-            <th>标题</th>
-            <th>描述</th>
-            <th>作者</th>
-            <th>修改日期</th>
-            <th>提交数</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        @foreach($assignments as $assignment)
+            <thead>
             <tr>
-                <td>
-                    <a href="{{ url("/assignment/{$assignment->id}/show") }}">{{ $assignment->title }}</a>
-                </td>
-                <td>
-                    <a href="{{ url("/assignment/{$assignment->id}/show") }}">
-                        {{ str_limit(strip_tags($assignment->description), 20) }}
-                    </a>
-                </td>
-                <td>{{ $assignment->owner->name }}</td>
-                <td>{{ $assignment->updated_at }}</td>
-                <td>{{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}</td>
-                <td>
-                    <a href="{{ url("/assignment/{$assignment->id}/edit") }}" class="btn btn-sm btn-outline-primary">
-                        修改信息
-                    </a>
-                    <a href="{{ url("/assignment/{$assignment->id}/submission") }}" class="btn btn-outline-info btn-sm">
-                        提交情况
-                    </a>
-                </td>
+                <th>标题</th>
+                <th>描述</th>
+                <th>作者</th>
+                <th>修改日期</th>
+                <th>提交数</th>
+                <th>操作</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+            @foreach($assignments as $assignment)
+                <tr>
+                    <td>
+                        <a href="{{ url("/assignment/{$assignment->id}") }}">{{ $assignment->title }}</a>
+                    </td>
+                    <td>
+                        <a href="{{ url("/assignment/{$assignment->id}") }}">
+                            {{ str_limit(strip_tags($assignment->description), 20) }}
+                        </a>
+                    </td>
+                    <td>{{ $assignment->owner->name }}</td>
+                    <td>{{ $assignment->updated_at }}</td>
+                    <td>{{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}</td>
+                    <td>
+                        <a href="{{ url("/assignment/{$assignment->id}/edit") }}"
+                           class="btn btn-sm btn-outline-primary">
+                            修改信息
+                        </a>
+                        <a href="{{ url("/assignment/{$assignment->id}/submission") }}"
+                           class="btn btn-outline-info btn-sm">
+                            提交情况
+                        </a>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

@@ -41,45 +41,47 @@
 @endif
 
 @section('content')
-    <table class="table table-striped table-hover text-left">
-        <caption>
-            {{ $members->links() }}
-        </caption>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover text-left">
+            <caption>
+                {{ $members->links() }}
+            </caption>
 
-        <thead>
-        <tr>
-            <th>序号</th>
-            <th>姓名</th>
-            <th>类型</th>
-            <th>加入日期</th>
-            @if($group->owner->id === Auth::user()->id)
-                <th>操作</th>
-            @endif
-        </tr>
-        </thead>
-        <tbody>
-
-        @foreach($members as $member)
+            <thead>
             <tr>
-                <td>{{ $memberOffset + $loop->iteration }}</td>
-                <td>{{ $member->name }}</td>
-                <td>{{ $member->id === $group->owner->id? '创建者' :($member->pivot->is_admin? '管理员' :'普通用户') }}</td>
-                <td>{{ $member->pivot->created_at }}</td>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>类型</th>
+                <th>加入日期</th>
                 @if($group->owner->id === Auth::user()->id)
-                    <td>
-                        @if($member->pivot->is_admin)
-                            <button class="btn btn-sm btn-danger member-toggle" data-id="{{ $member->id }}">
-                                取消管理员
-                            </button>
-                        @else
-                            <button class="btn btn-sm btn-primary member-toggle" data-id="{{ $member->id }}">
-                                设为管理员
-                            </button>
-                        @endif
-                    </td>
+                    <th>操作</th>
                 @endif
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+
+            @foreach($members as $member)
+                <tr>
+                    <td>{{ $memberOffset + $loop->iteration }}</td>
+                    <td>{{ $member->name }}</td>
+                    <td>{{ $member->id === $group->owner->id? '创建者' :($member->pivot->is_admin? '管理员' :'普通用户') }}</td>
+                    <td>{{ $member->pivot->created_at }}</td>
+                    @if($group->owner->id === Auth::user()->id)
+                        <td>
+                            @if($member->pivot->is_admin)
+                                <button class="btn btn-sm btn-danger member-toggle" data-id="{{ $member->id }}">
+                                    取消管理员
+                                </button>
+                            @else
+                                <button class="btn btn-sm btn-primary member-toggle" data-id="{{ $member->id }}">
+                                    设为管理员
+                                </button>
+                            @endif
+                        </td>
+                    @endif
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

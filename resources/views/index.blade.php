@@ -42,84 +42,86 @@
                             <p class="text-justify">{{ $selectedGroup->description }}</p>
                         </div>
                     </div>
-                    <table class="table table-striped table-hover text-left">
-                        <caption>
-                            {{ $orderedAssignments->links() }}
-                            @if($selectedGroup->loginAdmin())
-                            @else
-                                @if($loginNotSubmit->count() > 0)
-                                    <h5>还有{{ $loginNotSubmit->count() }}项未完成作业</h5>
-                                @else
-                                    <h5>暂时没有未完成作业</h5>
-                                @endif
-                            @endif
-                        </caption>
-
-                        <thead>
-                        <tr>
-                            <th scope="col">标题</th>
-                            <th scope="col">描述</th>
-                            <th scope="col">作者</th>
-                            <th scope="col">截止日期</th>
-                            <th scope="col">提交情况</th>
-                            @if($selectedGroup->loginAdmin())
-                                <th scope="col">评分情况</th>
-                            @endif
-                            <th scope="col">状态</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        @foreach($orderedAssignments as $assignment)
-                            <tr>
-                                <td>{{ $assignment->title }}</td>
-                                <td>{{ str_limit(strip_tags($assignment->description), 20) }}</td>
-                                <td>{{ $assignment->owner->name }}</td>
-                                <td>{{ $assignment->human_deadline }}</td>
-                                <td>{{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}</td>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover text-left">
+                            <caption>
+                                {{ $orderedAssignments->links() }}
                                 @if($selectedGroup->loginAdmin())
-                                    <td>{{ $assignment->scoredSubmissions()->count() .'/' .$assignment->submissions()->count() }}</td>
-                                @endif
-                                <td>
-                                    <a class="btn btn-outline-primary btn-sm"
-                                       href="{{ url("/assignment/{$assignment->id}") }}">
-                                        题目
-                                    </a>
-                                    @if($selectedGroup->loginAdmin())
-                                        <a href="{{ url("/assignment/{$assignment->id}/submission") }}"
-                                           class="btn btn-outline-info btn-sm">
-                                            提交情况
-                                        </a>
+                                @else
+                                    @if($loginNotSubmit->count() > 0)
+                                        <h5>还有{{ $loginNotSubmit->count() }}项未完成作业</h5>
                                     @else
-                                        @if(!$submission = $assignment->loginSubmissions->first())
-                                            <a href="{{ url("/assignment/{$assignment->id}/submit") }}"
-                                               class="btn btn-outline-danger btn-sm">
-                                                待完成
-                                            </a>
-                                        @elseif($submission->corrected())
-                                            <a class="btn btn-outline-danger btn-sm"
-                                               href="{{ url("submission/{$submission->id}") }}"
-                                               onmouseover="innerHTML='查 看'"
-                                               onmouseleave="innerHTML='{{ "{$submission->average_score}" }}分'">
-                                                {{ "{$submission->average_score}" }}分
+                                        <h5>暂时没有未完成作业</h5>
+                                    @endif
+                                @endif
+                            </caption>
+
+                            <thead>
+                            <tr>
+                                <th scope="col">标题</th>
+                                <th scope="col">描述</th>
+                                <th scope="col">作者</th>
+                                <th scope="col">截止日期</th>
+                                <th scope="col">提交情况</th>
+                                @if($selectedGroup->loginAdmin())
+                                    <th scope="col">评分情况</th>
+                                @endif
+                                <th scope="col">状态</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            @foreach($orderedAssignments as $assignment)
+                                <tr>
+                                    <td>{{ $assignment->title }}</td>
+                                    <td>{{ str_limit(strip_tags($assignment->description), 20) }}</td>
+                                    <td>{{ $assignment->owner->name }}</td>
+                                    <td>{{ $assignment->human_deadline }}</td>
+                                    <td>{{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}</td>
+                                    @if($selectedGroup->loginAdmin())
+                                        <td>{{ $assignment->scoredSubmissions()->count() .'/' .$assignment->submissions()->count() }}</td>
+                                    @endif
+                                    <td>
+                                        <a class="btn btn-outline-primary btn-sm"
+                                           href="{{ url("/assignment/{$assignment->id}") }}">
+                                            题目
+                                        </a>
+                                        @if($selectedGroup->loginAdmin())
+                                            <a href="{{ url("/assignment/{$assignment->id}/submission") }}"
+                                               class="btn btn-outline-info btn-sm">
+                                                提交情况
                                             </a>
                                         @else
-                                            <a class="btn btn-outline-info btn-sm"
-                                               href="{{ url("submission/{$submission->id}") }}">查看提交
-                                            </a>
-                                            <a class="btn btn-outline-success btn-sm submitted"
-                                               href="{{ url("submission/{$submission->id}/edit") }}"
-                                               onmouseover="innerHTML='修改提交'"
-                                               onmouseleave="innerHTML='提交成功'">
-                                                提交成功
-                                            </a>
+                                            @if(!$submission = $assignment->loginSubmissions->first())
+                                                <a href="{{ url("/assignment/{$assignment->id}/submit") }}"
+                                                   class="btn btn-outline-danger btn-sm">
+                                                    待完成
+                                                </a>
+                                            @elseif($submission->corrected())
+                                                <a class="btn btn-outline-danger btn-sm"
+                                                   href="{{ url("submission/{$submission->id}") }}"
+                                                   onmouseover="innerHTML='查 看'"
+                                                   onmouseleave="innerHTML='{{ "{$submission->average_score}" }}分'">
+                                                    {{ "{$submission->average_score}" }}分
+                                                </a>
+                                            @else
+                                                <a class="btn btn-outline-info btn-sm"
+                                                   href="{{ url("submission/{$submission->id}") }}">查看提交
+                                                </a>
+                                                <a class="btn btn-outline-success btn-sm submitted"
+                                                   href="{{ url("submission/{$submission->id}/edit") }}"
+                                                   onmouseover="innerHTML='修改提交'"
+                                                   onmouseleave="innerHTML='提交成功'">
+                                                    提交成功
+                                                </a>
+                                            @endif
                                         @endif
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 @else
                     <h3>第一步，选择一个小组并加入。</h3>
                 @endif

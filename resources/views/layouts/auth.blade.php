@@ -1,8 +1,8 @@
 @extends('layouts.basic')
 
 @section('default_content')
-    <div class="row justify-content-center mt-3">
-        <div class="col-md-4 p-0 bg-white"
+    <div class="row m-3">
+        <div class="col-md-4 offset-md-4 p-0 bg-white"
              style="border-radius: 5px; box-shadow: 0 2px 7px #bbbbbb;">
             <div class="bg-primary text-center p-2"
                  style="border-radius: 5px; box-shadow: 0 2px 7px #bbbbbb;">

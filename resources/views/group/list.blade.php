@@ -40,38 +40,40 @@
             </button>
         </div>
     </form>
-    <table class="table table-striped table-hover text-left">
-        <caption>
-            {{ $groups->links() }}
-        </caption>
-        <thead>
-        <tr>
-            <th>名称</th>
-            <th>描述</th>
-            <th>创建者</th>
-            <th>成员</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        @foreach($groups as $group)
+    <div class="table-responsive">
+        <table class="table table-striped table-hover text-left">
+            <caption>
+                {{ $groups->links() }}
+            </caption>
+            <thead>
             <tr>
-                <td>{{ $group->name }}</td>
-                <td>{{ str_limit($group->description, 20) }}</td>
-                <td>{{ $group->owner->name }}</td>
-                <td>{{ $group->members()->count() }}</td>
-                <td>
-                    @if($group->loginJoined())
-                        <button class="btn btn-sm btn-success btn-block" disabled>已加入</button>
-                    @else
-                        <button class="btn btn-sm btn-primary member-join btn-block" data-id="{{ $group->id }}">
-                            加入该组
-                        </button>
-                    @endif
-                </td>
+                <th>名称</th>
+                <th>描述</th>
+                <th>创建者</th>
+                <th>成员</th>
+                <th>操作</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+            @foreach($groups as $group)
+                <tr>
+                    <td>{{ $group->name }}</td>
+                    <td>{{ str_limit($group->description, 20) }}</td>
+                    <td>{{ $group->owner->name }}</td>
+                    <td>{{ $group->members()->count() }}</td>
+                    <td>
+                        @if($group->loginJoined())
+                            <button class="btn btn-sm btn-success btn-block" disabled>已加入</button>
+                        @else
+                            <button class="btn btn-sm btn-primary member-join btn-block" data-id="{{ $group->id }}">
+                                加入该组
+                            </button>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

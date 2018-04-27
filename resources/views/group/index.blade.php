@@ -34,57 +34,59 @@
 @endpush
 
 @section('content')
-    <table class="table table-striped table-hover text-left">
-        <caption>
-            {{ $groups->links() }}
-            <a class="btn btn-primary" href="{{ url('group/list') }}">查找并加入小组</a>
-            <a class="btn btn btn-default" href="{{ url('group/create') }}">创建小组</a>
-        </caption>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover text-left">
+            <caption>
+                {{ $groups->links() }}
+                <a class="btn btn-primary" href="{{ url('group/list') }}">查找并加入小组</a>
+                <a class="btn btn btn-default" href="{{ url('group/create') }}">创建小组</a>
+            </caption>
 
-        <thead>
-        <tr>
-            <th scope="col">名称</th>
-            <th scope="col">描述</th>
-            <th scope="col">创建者</th>
-            <th scope="col">成员数</th>
-            <th scope="col">操作</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        @foreach($groups as $group)
+            <thead>
             <tr>
-                <td>{{ $group->name }}</td>
-                <td>{{ str_limit($group->description, 20) }}</td>
-                <td>{{ $group->owner->name }}</td>
-                <td>
-                    <a class="btn btn-default" href="{{ url("group/{$group->id}/members") }}" role="button">
-                        {{ $group->members()->count() }}
-                    </a>
-                </td>
-                <td>
-                    <div class="btn-group" role="group">
-                        @if($group->loginAdmin())
-                            <a class="btn btn-sm btn-primary" href="{{ url("group/{$group->id}") }}"
-                               role="button">
-                                管理小组
-                            </a>
-                        @endif
-
-                        @if($group->owner->id === Auth::user()->id)
-                            <button class="btn btn-sm btn-danger" disabled>
-                                创建者不可退出
-                            </button>
-                        @else
-                            <button class="btn btn-sm btn-danger member-quit" data-id="{{ $group->id }}">
-                                退出小组
-                            </button>
-                        @endif
-                    </div>
-
-                </td>
+                <th scope="col">名称</th>
+                <th scope="col">描述</th>
+                <th scope="col">创建者</th>
+                <th scope="col">成员数</th>
+                <th scope="col">操作</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+            @foreach($groups as $group)
+                <tr>
+                    <td>{{ $group->name }}</td>
+                    <td>{{ str_limit($group->description, 20) }}</td>
+                    <td>{{ $group->owner->name }}</td>
+                    <td>
+                        <a class="btn btn-default" href="{{ url("group/{$group->id}/members") }}" role="button">
+                            {{ $group->members()->count() }}
+                        </a>
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            @if($group->loginAdmin())
+                                <a class="btn btn-sm btn-primary" href="{{ url("group/{$group->id}") }}"
+                                   role="button">
+                                    管理小组
+                                </a>
+                            @endif
+
+                            @if($group->owner->id === Auth::user()->id)
+                                <button class="btn btn-sm btn-danger" disabled>
+                                    创建者不可退出
+                                </button>
+                            @else
+                                <button class="btn btn-sm btn-danger member-quit" data-id="{{ $group->id }}">
+                                    退出小组
+                                </button>
+                            @endif
+                        </div>
+
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

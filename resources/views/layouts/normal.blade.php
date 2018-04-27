@@ -60,6 +60,7 @@
                 @yield('side_header')
             </div>
         </div>
+
         @yield('content')
     </div>
 @endsection
