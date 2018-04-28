@@ -37,7 +37,7 @@ class File extends Model
      */
     public function conversion()
     {
-        return $this->hasOne(Conversion::class, 'sha512', 'sha512');
+        return $this->hasOne(Conversion::class, 'random', 'random');
     }
 
     public function info()

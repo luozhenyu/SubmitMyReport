@@ -54,7 +54,10 @@ class User extends Authenticatable
     {
         $sha512 = hash_file("sha512", $uploadedFile->path());
 
-        if (!$storedFile = $this->files()->where('sha512', $sha512)->first()) {
+        if (!$storedFile = $this->files()->where([
+            ['sha512', $sha512],
+            ['filename', $filename],
+        ])->first()) {
 
             $targetDir = File::hashToPath($sha512);
             if (!Storage::exists($targetDir)) {

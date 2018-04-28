@@ -38,13 +38,12 @@ class HomeController extends Controller
 
     public function improve(Request $request)
     {
-        /** @var User $user */
-        $user = $request->user();
-
         $this->validate($request, [
             'advice' => 'required|max:255',
         ]);
 
+        /** @var User $user */
+        $user = User::findOrFail(1);
         $user->notify(new SiteMessage($request->input('advice')));
 
         return [

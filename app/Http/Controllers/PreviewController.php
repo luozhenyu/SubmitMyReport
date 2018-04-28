@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Parsedown;
 
 class PreviewController extends Controller
 {
@@ -32,12 +31,12 @@ class PreviewController extends Controller
 
         if ($conversion = $storedFile->conversion) {
             switch ($conversion->status) {
-                case Conversion::SUCCESS:
-                    $sha512 = $storedFile->sha512;
-                    $fullPath = Storage::path(static::hashToPath($sha512));
+                case Conversion::SUCCESS://TODO:
+                    $random = $storedFile->random;
+                    $fullPath = Storage::path(static::strToPath($random));
                     return $this->listDir(
                         $fullPath,
-                        $sha512,
+                        $random,
                         $storedFile->filename,
                         $extraPath,
                         $download
@@ -68,11 +67,11 @@ class PreviewController extends Controller
         return view('preview.wait');
     }
 
-    protected function listDir($dirFullPath, $sha512, $shownName, $extraPath = null, $download = false)
+    protected function listDir($dirFullPath, $random, $shownName, $extraPath = null, $download = false)
     {
         foreach (scandir($dirFullPath) as $item) {
             $pathinfo = pathinfo($item);
-            if ($pathinfo['filename'] === $sha512) {
+            if ($pathinfo['filename'] === $random) {
                 $filePath = $pathinfo['basename'];
                 //if $extraPath
                 if ($extraPath !== null) {
@@ -92,24 +91,24 @@ class PreviewController extends Controller
                     $pathinfo = pathinfo($absolutePath);
                     $extension = strtolower($pathinfo['extension']);
                     switch ($extension) {
-                        case 'md':
-                            $parsedown = new Parsedown();
-                            $content = file_get_contents($absolutePath);
-                            return $parsedown->text($content);
+                        case 'html':
                         case 'txt':
-                            $content = file_get_contents($absolutePath);
-                            $encoding = mb_detect_encoding($content, ['GB2312', 'GBK', 'UTF-16', 'UCS-2', 'UTF-8', 'BIG5', 'ASCII']);
-                            return mb_convert_encoding($content, 'UTF-8', $encoding);
+                            return file_get_contents($absolutePath);
+
                         case 'pdf':
                         case 'jpg':
                         case 'jpeg':
                         case 'bmp':
                         case 'png':
                             return response()->file($absolutePath);
+
                         default:
                             $sha512 = hash_file("sha512", $absolutePath);
                             $user = Auth::user();
-                            if (!$storedFile = $user->files()->where('sha512', $sha512)->first()) {
+                            if (!$storedFile = $user->files()->where([
+                                ['sha512', $sha512],
+                                ['filename', $shownName],
+                            ])->first()) {
                                 $targetDir = File::hashToPath($sha512);
                                 if (!Storage::exists($targetDir)) {
                                     Storage::makeDirectory($targetDir);
@@ -128,7 +127,6 @@ class PreviewController extends Controller
 
                             return redirect("/preview/{$storedFile->random}");
                     }
-
                 } else if (is_dir($absolutePath)) {
                     $files = array_map(function ($basename) use ($absolutePath, $extraPath) {
                         $path = $basename;
@@ -199,10 +197,12 @@ class PreviewController extends Controller
         ];
     }
 
-    public static function hashToPath(string $sha512)
+    public static function strToPath(string $random)
     {
+        $random = strtolower($random);
+
         return static::STORAGE_DIR
-            . DIRECTORY_SEPARATOR . substr($sha512, 0, 2)
-            . DIRECTORY_SEPARATOR . substr($sha512, 2, 2);
+            . DIRECTORY_SEPARATOR . substr($random, 0, 2)
+            . DIRECTORY_SEPARATOR . substr($random, 2, 2);
     }
 }

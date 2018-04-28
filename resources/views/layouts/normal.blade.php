@@ -45,8 +45,17 @@
                         <li><a class="nav-link" href="{{ route('register') }}">注册</a></li>
                     @else
                         <li>
-                            <a class="nav-link mr-3" href="javascript:void(0);" data-toggle="modal"
+                            <a class="nav-link" href="javascript:void(0);" data-toggle="modal"
                                data-target="#improveModal">意见反馈</a>
+                        </li>
+
+                        <li>
+                            <a class="nav-link mr-1" href="javascript:alert('即将上线');">
+                                站内信
+                                @if($unreadNotifications = Auth::user()->unreadNotifications)
+                                    <span class="badge badge-info badge-pill">{{ $unreadNotifications->count() }}</span>
+                                @endif
+                            </a>
                         </li>
 
                         <li class="nav-item dropdown">

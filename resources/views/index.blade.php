@@ -15,7 +15,7 @@
 @section('content')
     <div class="container p-4">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h5 class="text-center">我加入的</h5>
                 <div class="list-group">
                     @foreach($groups as $group)
@@ -29,7 +29,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-md-9 p-4"
+            <div class="col-md-10 p-4"
                  style="min-height: 500px; border-radius:5px; box-shadow: 0 3px 7px #bbbbbb;">
                 @if($selectedGroup)
                     @php($loginNotSubmit = $selectedGroup->loginNotSubmit)

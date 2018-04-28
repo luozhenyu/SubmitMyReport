@@ -15,7 +15,7 @@ class CreateConversionsTable extends Migration
     {
         Schema::create('conversions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('sha512');
+            $table->string('random');
             $table->unsignedTinyInteger('status');
             $table->mediumText('log')->nullable();
 

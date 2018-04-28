@@ -62,7 +62,10 @@ class ImportSubmission extends Command
             }
 
             $sha512 = hash_file("sha512", $path);
-            if (!$storedFile = $user->files()->where('sha512', $sha512)->first()) {
+            if (!$storedFile = $user->files()->where([
+                ['sha512', $sha512],
+                ['filename', $basename],
+            ])->first()) {
                 $targetDir = File::hashToPath($sha512);
                 if (!Storage::exists($targetDir)) {
                     Storage::makeDirectory($targetDir);
