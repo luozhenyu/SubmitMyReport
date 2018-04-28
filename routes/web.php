@@ -16,6 +16,16 @@ Auth::routes();
 //Home
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::post('/improve', 'HomeController@improve')->name('improve');
+
+
+Route::get('/profile', 'Profile\UpdateProfileController@edit')->name('profile');
+Route::put('/profile', 'Profile\UpdateProfileController@update');
+Route::get('/profile/password', 'Profile\UpdatePasswordController@edit')
+    ->name('profile.password');
+Route::put('/profile/password', 'Profile\UpdatePasswordController@update');
+
+
 //Joined group
 Route::get('/group', 'GroupController@index')->name('group');
 

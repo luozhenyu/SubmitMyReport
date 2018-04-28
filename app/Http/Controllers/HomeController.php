@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Notifications\SiteMessage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
@@ -32,5 +34,21 @@ class HomeController extends Controller
             'selectedGroup' => $selectedGroup,
             'groups' => $groupCollection,
         ]);
+    }
+
+    public function improve(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $this->validate($request, [
+            'advice' => 'required|max:255',
+        ]);
+
+        $user->notify(new SiteMessage($request->input('advice')));
+
+        return [
+            'message' => '反馈成功！我们诚挚的感谢您的意见',
+        ];
     }
 }

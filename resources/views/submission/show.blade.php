@@ -152,6 +152,7 @@
                                         <div class="col-md-10">
                                             <textarea id="remark{{ $index }}" name="remark[{{ $index }}]"
                                                       class="form-control{{ $errors->has("remark.{$index}")? ' is-invalid' :'' }}"
+                                                      style="resize: none"
                                                       rows="6">{{ $corrected? $submission->mark[$index]->remark :old("remark.{$index}") }}</textarea>
                                             @if ($errors->has("remark.{$index}"))
                                                 <span class="invalid-feedback">
