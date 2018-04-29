@@ -97,12 +97,12 @@
                                                    class="btn btn-outline-danger btn-sm">
                                                     待完成
                                                 </a>
-                                            @elseif($submission->corrected())
+                                            @elseif($submission->mark)
                                                 <a class="btn btn-outline-danger btn-sm"
                                                    href="{{ url("submission/{$submission->id}") }}"
                                                    onmouseover="innerHTML='查 看'"
-                                                   onmouseleave="innerHTML='{{ "{$submission->average_score}" }}分'">
-                                                    {{ "{$submission->average_score}" }}分
+                                                   onmouseleave="innerHTML='{{ $submission->mark->average_score }}分'">
+                                                    {{ $submission->mark->average_score }}分
                                                 </a>
                                             @else
                                                 <a class="btn btn-outline-info btn-sm"

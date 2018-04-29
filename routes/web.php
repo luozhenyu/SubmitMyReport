@@ -84,3 +84,5 @@ Route::post('/file', 'FileController@store')->name('file.upload');
 //Preview file
 Route::get('/preview/{hash}', 'PreviewController@dispatchJob');
 Route::post('/preview/{hash}', 'PreviewController@queryStatus');
+
+Route::get('/test', 'HomeController@test');

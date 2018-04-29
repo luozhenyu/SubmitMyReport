@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +18,17 @@ class Assignment extends Model
         'title', 'sub_problem', 'deadline', 'description', 'owner_id'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function group()
     {
         return $this->belongsTo(Group::class, 'group_id');
@@ -32,7 +39,17 @@ class Assignment extends Model
      */
     public function scoredSubmissions()
     {
-        return $this->submissions()->where('mark_user_id', '!=', null);
+        return $this->submissions()->whereHas('mark');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function myScoredSubmissions()
+    {
+        return $this->submissions()->whereHas('mark', function (Builder $query) {
+            $query->where('owner_id', Auth::user()->id);
+        });
     }
 
     /**
@@ -43,6 +60,9 @@ class Assignment extends Model
         return $this->hasMany(Submission::class, 'assignment_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function files()
     {
         return $this->belongsToMany(File::class, 'assignment_file');

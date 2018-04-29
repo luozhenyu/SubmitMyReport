@@ -54,12 +54,12 @@
                 <h5 class="mt-3">
                     <span class="badge badge-success">作者</span>
                     {{ $assignment->owner->name }}
-                    <span class="badge badge-info">提交人数</span>
+                    <span class="badge badge-warning">提交人数</span>
                     {{ $assignment->submissions->count() .'/' .$group->normalMembers->count() }}
                 </h5>
 
                 <h5 class="mt-3">
-                    <span class="badge badge-warning">截止日期</span>
+                    <span class="badge badge-info">截止日期</span>
                     {{ $assignment->human_deadline }}
                 </h5>
             </header>

@@ -25,10 +25,26 @@
     </ol>
 @endsection
 
-@php($submissionTotal = $assignment->submissions()->count())
-@php($submissionScored = $assignment->scoredSubmissions()->count())
-@php($SubmissionNotScored = $submissionTotal - $submissionScored)
-@php($yourSubmissionScored = $assignment->scoredSubmissions()->where('mark_user_id', Auth::user()->id)->count())
+@section('side_header')
+    <div class="col-md-8 offset-md-4">
+        <form class="navbar-form" role="search">
+            <div class="input-group">
+                <input type="text" class="form-control" name="wd" value="{{ $wd }}" placeholder="支持 学号/姓名 筛选">
+                <button class="btn btn-primary" type="submit">
+                    <span class="fa fa-search"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+@endsection
+
+@php
+    $submissionTotal = $assignment->submissions()->count();
+    $submissionScored = $assignment->scoredSubmissions()->count();
+    $SubmissionNotScored = $submissionTotal - $submissionScored;
+
+    $yourSubmissionScored = $assignment->myScoredSubmissions()->count();
+@endphp
 
 @section('content')
     <div class="table-responsive">
@@ -59,9 +75,9 @@
                     <td>{{ $submission->owner->name }}</td>
                     <td>{{ str_limit(strip_tags($submission->content), 20) }}</td>
                     <td>{{ $submission->created_at }}</td>
-                    <td>{{ $submission->average_score }}</td>
+                    <td>{{ $submission->mark? $submission->mark->average_score :null }}</td>
                     <td>
-                        @if($submission->corrected())
+                        @if($submission->mark)
                             <a class="btn btn-outline-success btn-sm" href="{{ url("submission/{$submission->id}") }}"
                                onmouseover="innerHTML='修 改'"
                                onmouseleave="innerHTML='已评分'">已评分</a>

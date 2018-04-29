@@ -1,9 +1,9 @@
 @extends('layouts.auth')
 
-@section('title','Reset Password')
+@section('title','重置密码')
 
 @section('content')
-    <h3 class="col p-3">重设密码</h3>
+    <h3 class="col p-3">重置密码</h3>
 
     <form class="form" method="post" action="{{ route('password.request') }}">
         @csrf

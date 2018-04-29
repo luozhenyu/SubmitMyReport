@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
+use App\Models\File;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -132,7 +133,7 @@ class AssignmentController extends Controller
         ]);
 
         $attachments = (array)$request->input('attachment');
-        $files = $user->files()->whereIn('random', $attachments)->get();
+        $files = File::whereIn('random', $attachments)->get();
 
         /** @var Assignment $assignment */
         $assignment->update([

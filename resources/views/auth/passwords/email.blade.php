@@ -1,12 +1,22 @@
 @extends('layouts.auth')
 
-@section('title','Reset Password')
+@section('title','重置密码')
 
 @section('content')
-    <h3 class="col p-3">重设密码</h3>
+    <h3 class="col p-3">重置密码</h3>
 
     <form class="form" method="post" action="{{ route('password.email') }}">
         @csrf
+
+        @if (session('status'))
+            <div class="form-group">
+                <div class="col">
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <div class="form-group">
             <label for="email" class="col control-form-label">邮箱</label>

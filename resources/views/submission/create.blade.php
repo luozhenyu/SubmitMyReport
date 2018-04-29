@@ -87,7 +87,7 @@
             <header class="text-center">
                 <h3 class="text-dark">{{ $assignment->title }}</h3>
                 <h5 class="mt-3">
-                    <span class="badge badge-secondary">截止日期</span>
+                    <span class="badge badge-info">截止日期</span>
                     {{ $assignment->human_deadline }}
                 </h5>
                 <p>{{ str_limit(strip_tags($assignment->description), 100) }}</p>

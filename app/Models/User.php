@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
@@ -29,19 +30,36 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function createdGroups()
     {
         return $this->hasMany(Group::class, 'owner_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function createdAssignments()
     {
         return $this->hasMany(Assignment::class, 'owner_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function createdSubmissions()
     {
         return $this->hasMany(Submission::class, 'owner_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function createdMarks()
+    {
+        return $this->hasMany(Mark::class, 'owner_id');
     }
 
     /**
@@ -96,6 +114,17 @@ class User extends Authenticatable
         return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')
             ->withPivot('is_admin')
             ->withTimestamps();
+    }
+
+    /**
+     * 发送密码重置通知.
+     *
+     * @param  string $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
 }

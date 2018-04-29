@@ -23,6 +23,11 @@
         <li class="breadcrumb-item">
             <a href="{{ url("/assignment/{$assignment->id}") }}">{{ $assignment->title }}</a>
         </li>
+        @if($admin)
+            <li class="breadcrumb-item">
+                <a href="{{ url("/assignment/{$assignment->id}/submission") }}">提交情况</a>
+            </li>
+        @endif
         <li class="breadcrumb-item active">{{ "{$submission->owner->name}的提交" }}</li>
     </ol>
 @endsection
@@ -33,7 +38,6 @@
         return $file->info();
     });
 @endphp
-@php($corrected = $submission->corrected())
 
 @push('js')
     <script src="{{ url('/js/file_upload.js') }}"></script>
@@ -73,12 +77,12 @@
                 <h5 class="mt-3">
                     <span class="badge badge-success">作者</span>
                     {{ $assignment->owner->name }}
-                    <span class="badge badge-info">提交人数</span>
+                    <span class="badge badge-warning">提交人数</span>
                     {{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}
                 </h5>
 
                 <h5 class="mt-3">
-                    <span class="badge badge-warning">截止日期</span>
+                    <span class="badge badge-info">截止日期</span>
                     {{ $assignment->human_deadline }}
                 </h5>
             </section>
@@ -108,7 +112,12 @@
 
             @if($admin)
                 <section class="col mt-3">
-                    <h4 class="text-dark">评分</h4>
+                    <h4 class="text-dark">评分
+                        @if($submission->mark)
+                            <span class="text-secondary"
+                                  style="font-size: 0.7em">by {{ $submission->mark->owner->name }}</span>
+                        @endif
+                    </h4>
                     <hr>
 
                     <form method="post" action="{{ url("/submission/{$submission->id}/mark") }}">
@@ -126,6 +135,7 @@
                         <!-- Tab panes -->
                         <div class="tab-content">
                             @for($index = 0; $index < $assignment->sub_problem; $index++)
+                                @php($problem = $submission->mark? $submission->mark->data[$index] :null)
                                 <div id="problem{{ $index }}"
                                      class="container tab-pane{{ !$index?' active':' fade' }} p-3">
 
@@ -136,7 +146,7 @@
                                             <input id="score{{ $index }}" type="text"
                                                    class="form-control{{ $errors->has("score.{$index}")? ' is-invalid' :'' }}"
                                                    name="score[{{ $index }}]"
-                                                   value="{{ $corrected? $submission->mark[$index]->score :old("score.{$index}") }}"
+                                                   value="{{ $problem? $problem->score :old("score.{$index}") }}"
                                                    placeholder="请输入整数分数" onkeyup="makeCheck(this)">
                                             @if ($errors->has("score.{$index}"))
                                                 <span class="invalid-feedback">
@@ -153,7 +163,7 @@
                                             <textarea id="remark{{ $index }}" name="remark[{{ $index }}]"
                                                       class="form-control{{ $errors->has("remark.{$index}")? ' is-invalid' :'' }}"
                                                       style="resize: none"
-                                                      rows="6">{{ $corrected? $submission->mark[$index]->remark :old("remark.{$index}") }}</textarea>
+                                                      rows="6">{{ $problem? $problem->remark :old("remark.{$index}") }}</textarea>
                                             @if ($errors->has("remark.{$index}"))
                                                 <span class="invalid-feedback">
                                                     <strong>{{ $errors->first("remark.{$index}") }}</strong>
@@ -172,14 +182,15 @@
                         </div>
                     </form>
                 </section>
-            @elseif($corrected)
+            @elseif($submission->mark)
                 <section class="col mt-3">
                     <h4 class="text-dark">评分
                         <span class="text-secondary"
-                              style="font-size: 0.7em">by {{ $submission->mark_user->name }}</span>
+                              style="font-size: 0.7em">by {{ $submission->mark->owner->name }}</span>
                     </h4>
                     <hr>
                     @for($index = 0; $index < $assignment->sub_problem; $index += 2)
+                        @php($data = $submission->mark->data)
                         <div class="row p-3">
                             @if($index < $assignment->sub_problem)
                                 <div class="col-md-6">
@@ -187,9 +198,10 @@
                                         <div class="card-header">
                                             题目 {{ $index + 1 }}
                                         </div>
+
                                         <div class="card-body">
-                                            <h5 class="card-title">{{ $submission->mark[$index]->score }}分</h5>
-                                            <p class="card-text">{{ $submission->mark[$index]->remark }}</p>
+                                            <h5 class="card-title">{{ $data[$index]->score }}分</h5>
+                                            <p class="card-text">{{ $data[$index]->remark }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -201,9 +213,10 @@
                                         <div class="card-header">
                                             题目 {{ $index + 2 }}
                                         </div>
+
                                         <div class="card-body">
-                                            <h5 class="card-title">{{ $submission->mark[$index + 1]->score }}分</h5>
-                                            <p class="card-text">{{ $submission->mark[$index + 1]->remark }}</p>
+                                            <h5 class="card-title">{{ $data[$index + 1]->score }}分</h5>
+                                            <p class="card-text">{{ $data[$index + 1]->remark }}</p>
                                         </div>
                                     </div>
                                 </div>

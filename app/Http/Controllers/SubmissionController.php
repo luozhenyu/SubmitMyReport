@@ -6,6 +6,7 @@ use App\Models\Assignment;
 use App\Models\Group;
 use App\Models\Submission;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class SubmissionController extends Controller
@@ -27,11 +28,22 @@ class SubmissionController extends Controller
         $group = $user->managedGroups()->find($assignment->group_id);
         abort_if(empty($group), 403);
 
-        $submissions = $assignment->submissions()
-            ->orderByRaw('cast("mark_user_id" as boolean) desc, updated_at desc')
+        $query = $assignment->submissions()
+            ->leftJoin('marks', 'submissions.id', 'marks.submission_id')
+            ->select('submissions.*');
+        if ($wd = $request->input('wd')) {
+            $wd = str_replace(['%', '_'], ['\%', '\_'], $wd);
+            $query->whereHas('owner', function (Builder $query) use ($wd) {
+                $query->where('name', 'like', "%{$wd}%")
+                    ->orWhere('student_id', 'like', "%{$wd}%");
+            });
+        };
+
+        $submissions = $query->orderByRaw('CAST(marks.id AS boolean) desc, submissions.updated_at desc')
             ->paginate(15);
 
         return view('submission.index', [
+            'wd' => $wd,
             'group' => $group,
             'assignment' => $assignment,
             'submissions' => $submissions,
@@ -130,7 +142,7 @@ class SubmissionController extends Controller
         $submission = $user->createdSubmissions()->findOrFail($submission_id);
 
         //批改后不允许修改作业
-        abort_if($submission->corrected(), 403);
+        abort_if($submission->mark, 403);
 
         /** @var Assignment $assignment */
         $assignment = $submission->assignment;
@@ -154,7 +166,7 @@ class SubmissionController extends Controller
         $submission = $user->createdSubmissions()->findOrFail($submission_id);
 
         //批改后不允许修改作业
-        abort_if($submission->corrected(), 403);
+        abort_if($submission->mark, 403);
 
         $this->validate($request, [
             'content' => 'nullable|max:65535',
@@ -207,10 +219,12 @@ class SubmissionController extends Controller
             ];
         }
 
-        $submission->mark_user()->associate($user);
-        $submission->mark = json_encode($json);
-        $submission->average_score = $scoreSum / $assignment->sub_problem;
-        $submission->save();
+        $submission->mark()->updateOrCreate([
+        ], [
+            'owner_id' => $user->id,
+            'average_score' => $scoreSum / $assignment->sub_problem,
+            'data' => json_encode($json),
+        ]);
 
         return redirect("/assignment/{$assignment->id}/submission");
     }

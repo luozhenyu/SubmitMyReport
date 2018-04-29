@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubmissionsTable extends Migration
+class CreateMarksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateSubmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('submissions', function (Blueprint $table) {
+        Schema::create('marks', function (Blueprint $table) {
             $table->increments('id');
-            $table->mediumText('content')->nullable();
+            $table->unsignedInteger('submission_id');
 
-            //submission作者
             $table->unsignedInteger('owner_id');
-            //submission所属assignment
-            $table->unsignedInteger('assignment_id');
-
+            $table->float('average_score');
+            $table->jsonb('data');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class CreateSubmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('submissions');
+        Schema::dropIfExists('marks');
     }
 }

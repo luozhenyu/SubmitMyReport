@@ -93,8 +93,6 @@ class PreviewController extends Controller
                     switch ($extension) {
                         case 'html':
                         case 'txt':
-                            return file_get_contents($absolutePath);
-
                         case 'pdf':
                         case 'jpg':
                         case 'jpeg':
@@ -105,7 +103,7 @@ class PreviewController extends Controller
                         default:
                             $sha512 = hash_file("sha512", $absolutePath);
                             $user = Auth::user();
-                            if (!$storedFile = $user->files()->where([
+                            if (!$storedFile = File::where([
                                 ['sha512', $sha512],
                                 ['filename', $shownName],
                             ])->first()) {
@@ -136,15 +134,17 @@ class PreviewController extends Controller
 
                         return [
                             'fileName' => $basename . (is_dir($absolutePath . DIRECTORY_SEPARATOR . $basename) ? '/' : ''),
-                            'url' => url()->current() . '?' . http_build_query([
-                                    'path' => $path, 'type' => 'download']),
-                            'preview_url' => url()->current() . '?' . http_build_query([
-                                    'path' => $path,
-                                ]),
+                            'url' => url()->current() . '?'
+                                . http_build_query(['path' => $path, 'type' => 'download']),
+                            'preview_url' => url()->current() . '?'
+                                . http_build_query(['path' => $path]),
                         ];
-                    }, array_merge(array_filter(scandir($absolutePath), function ($basename) {
-                        return $basename !== "." && $basename !== "..";
-                    })));
+                    }, array_merge(
+                            array_filter(scandir($absolutePath), function ($basename) {
+                                return $basename !== "." && $basename !== "..";
+                            })
+                        )
+                    );
 
                     return view('preview.list', [
                         'basename' => $shownName,
