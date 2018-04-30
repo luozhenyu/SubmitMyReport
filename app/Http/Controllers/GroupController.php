@@ -72,7 +72,7 @@ class GroupController extends Controller
         return redirect()->route('group');
     }
 
-    public function update(Request $request, $group_id)
+    public function update(Request $request, $groupId)
     {
         /** @var User $user */
         $user = $request->user();
@@ -82,7 +82,7 @@ class GroupController extends Controller
         ]);
 
         /** @var Group $group */
-        $group = $user->managedGroups()->findOrFail($group_id);
+        $group = $user->managedGroups()->findOrFail($groupId);
 
         $group->description = $request->input('description');
         $group->save();
@@ -116,13 +116,13 @@ class GroupController extends Controller
         return 'ok';
     }
 
-    public function quit(Request $request, $group_id)
+    public function quit(Request $request, $groupId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Group $group */
-        $group = $user->joinedGroups()->findOrFail($group_id);
+        $group = $user->joinedGroups()->findOrFail($groupId);
 
         //创建者不允许退出
         abort_if($group->owner->id === $user->id, 403);
@@ -131,15 +131,15 @@ class GroupController extends Controller
         return 'ok';
     }
 
-    public function toggleAdmin(Request $request, $group_id)
+    public function toggleAdmin(Request $request, $groupId)
     {
         /** @var Group $group */
-        $group = Group::findOrFail($group_id);
+        $group = Group::findOrFail($groupId);
         abort_unless($group->owner->id === $request->user()->id, 403);
 
-        $user_id = $request->input('user_id');
+        $userId = $request->input('user_id');
         /** @var User $user */
-        $user = $group->members()->findOrFail($user_id);
+        $user = $group->members()->findOrFail($userId);
 
         /** @var Pivot $pivot */
         $pivot = $user->pivot;

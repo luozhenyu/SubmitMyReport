@@ -16,11 +16,11 @@ class AssignmentController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request, $group_id)
+    public function index(Request $request, $groupId)
     {
         /** @var Group $group */
         $group = $request->user()
-            ->managedGroups()->findOrFail($group_id);
+            ->managedGroups()->findOrFail($groupId);
 
         /** @var Assignment $assignments */
         $assignments = $group->assignments()
@@ -33,24 +33,24 @@ class AssignmentController extends Controller
         ]);
     }
 
-    public function create(Request $request, $group_id)
+    public function create(Request $request, $groupId)
     {
         /** @var Group $group */
         $group = $request->user()
-            ->managedGroups()->findOrFail($group_id);
+            ->managedGroups()->findOrFail($groupId);
 
         return view('assignment.create', [
             'group' => $group,
         ]);
     }
 
-    public function store(Request $request, $group_id)
+    public function store(Request $request, $groupId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Group $group */
-        $group = $user->managedGroups()->findOrFail($group_id);
+        $group = $user->managedGroups()->findOrFail($groupId);
 
         $this->validate($request, [
             'title' => 'required|max:40|unique:assignments',
@@ -73,15 +73,15 @@ class AssignmentController extends Controller
         ]);
         $assignment->files()->sync($files);
 
-        return redirect("/group/{$group_id}");
+        return redirect("/group/{$groupId}");
     }
 
-    public function show(Request $request, $assignment_id)
+    public function show(Request $request, $assignmentId)
     {
         /** @var User $user */
         $user = $request->user();
 
-        $assignment = Assignment::findOrFail($assignment_id);
+        $assignment = Assignment::findOrFail($assignmentId);
 
         /** @var Group $group */
         $group = $user->joinedGroups()->where('group_id', $assignment->group_id)->first();
@@ -92,12 +92,12 @@ class AssignmentController extends Controller
         ]);
     }
 
-    public function edit(Request $request, $assignment_id)
+    public function edit(Request $request, $assignmentId)
     {
         /** @var User $user */
         $user = $request->user();
 
-        $assignment = Assignment::findOrFail($assignment_id);
+        $assignment = Assignment::findOrFail($assignmentId);
 
         /** @var Group $group */
         $group = $user->managedGroups()->where('group_id', $assignment->group_id)->first();
@@ -109,12 +109,12 @@ class AssignmentController extends Controller
         ]);
     }
 
-    public function update(Request $request, $assignment_id)
+    public function update(Request $request, $assignmentId)
     {
         /** @var User $user */
         $user = $request->user();
 
-        $assignment = Assignment::findOrFail($assignment_id);
+        $assignment = Assignment::findOrFail($assignmentId);
 
         /** @var Group $group */
         $group = $user->managedGroups()->where('group_id', $assignment->group_id)->first();
@@ -146,6 +146,6 @@ class AssignmentController extends Controller
 
         $assignment->save();
 
-        return redirect("/assignment/{$assignment_id}");
+        return redirect("/assignment/{$assignmentId}");
     }
 }

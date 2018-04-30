@@ -16,13 +16,13 @@ class SubmissionController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request, $assignment_id)
+    public function index(Request $request, $assignmentId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Assignment $assignment */
-        $assignment = Assignment::findOrFail($assignment_id);
+        $assignment = Assignment::findOrFail($assignmentId);
 
         /** @var Group $group */
         $group = $user->managedGroups()->find($assignment->group_id);
@@ -50,13 +50,13 @@ class SubmissionController extends Controller
         ]);
     }
 
-    public function create(Request $request, $assignment_id)
+    public function create(Request $request, $assignmentId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Assignment $assignment */
-        $assignment = Assignment::findOrFail($assignment_id);
+        $assignment = Assignment::findOrFail($assignmentId);
 
         //检查是否是当前小组的成员
         /** @var Group $group */
@@ -72,13 +72,13 @@ class SubmissionController extends Controller
         ]);
     }
 
-    public function store(Request $request, $assignment_id)
+    public function store(Request $request, $assignmentId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Assignment $assignment */
-        $assignment = Assignment::findOrFail($assignment_id);
+        $assignment = Assignment::findOrFail($assignmentId);
 
         //检查是否是当前小组的成员
         /** @var Group $group */
@@ -107,14 +107,14 @@ class SubmissionController extends Controller
         return redirect()->route('home');
     }
 
-    public function show(Request $request, $submission_id)
+    public function show(Request $request, $submissionId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Submission $submission */
-        if (!$submission = $user->createdSubmissions()->find($submission_id)) {
-            $submission = Submission::findOrFail($submission_id);
+        if (!$submission = $user->createdSubmissions()->find($submissionId)) {
+            $submission = Submission::findOrFail($submissionId);
             $assignment = $submission->assignment;
             $group = $user->managedGroups()->find($assignment->group_id);
             $admin = true;
@@ -133,13 +133,13 @@ class SubmissionController extends Controller
         ]);
     }
 
-    public function edit(Request $request, $submission_id)
+    public function edit(Request $request, $submissionId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Submission $submission */
-        $submission = $user->createdSubmissions()->findOrFail($submission_id);
+        $submission = $user->createdSubmissions()->findOrFail($submissionId);
 
         //批改后不允许修改作业
         abort_if($submission->mark, 403);
@@ -157,13 +157,13 @@ class SubmissionController extends Controller
         ]);
     }
 
-    public function update(Request $request, $submission_id)
+    public function update(Request $request, $submissionId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Submission $submission */
-        $submission = $user->createdSubmissions()->findOrFail($submission_id);
+        $submission = $user->createdSubmissions()->findOrFail($submissionId);
 
         //批改后不允许修改作业
         abort_if($submission->mark, 403);
@@ -187,13 +187,13 @@ class SubmissionController extends Controller
         return redirect()->route('home');
     }
 
-    public function mark(Request $request, $submission_id)
+    public function mark(Request $request, $submissionId)
     {
         /** @var User $user */
         $user = $request->user();
 
         /** @var Submission $submission */
-        $submission = Submission::findOrFail($submission_id);
+        $submission = Submission::findOrFail($submissionId);
         $assignment = $submission->assignment;
         $group = $user->managedGroups()->find($assignment->group_id);
         abort_unless((bool)$group, 403);

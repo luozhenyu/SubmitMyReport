@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Notifications\ResetPasswordNotification;
+use App\Notifications\SiteMessage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -125,6 +128,63 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * Get the entity's siteMessages.
+     * @param User|null $theOther
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function siteMessages(User $theOther = null)
+    {
+        $query = $this->morphMany(DatabaseNotification::class, 'notifiable')
+            ->where('type', SiteMessage::class);
+
+        return $theOther ? $query->where([
+            [DB::raw("cast(data->>'type' as int)"), SiteMessage::sent],
+            [DB::raw("cast(data->>'to' as int)"), $theOther->id],
+        ])->orWhere([
+            [DB::raw("cast(data->>'type' as int)"), SiteMessage::received],
+            [DB::raw("cast(data->>'from' as int)"), $theOther->id],
+        ]) : $query;
+    }
+
+    /**
+     * Get the entity's sent siteMessages.
+     * @param User|null $to
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function sentSiteMessages(User $to = null)
+    {
+        $query = $this->siteMessages()
+            ->where(DB::raw("cast(data->>'type' as int)"), SiteMessage::sent);
+
+        return $to ? $query->where(DB::raw("cast(data->>'to' as int)"), $to->id) : $query;
+    }
+
+    /**
+     * Get the entity's received siteMessages.
+     * @param User $from
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function receivedSiteMessages(User $from = null)
+    {
+        $query = $this->siteMessages()
+            ->where(DB::raw("cast(data->>'type' as int)"), SiteMessage::received);
+
+        return $from ? $query->where(DB::raw("cast(data->>'from' as int)"), $from->id) : $query;
+
+    }
+
+    /**
+     * Get the entity's unread siteMessages.
+     * @param User $from
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function unreadReceivedSiteMessages(User $from = null)
+    {
+        return $this->receivedSiteMessages($from)
+            ->whereNull('read_at');
     }
 
 }

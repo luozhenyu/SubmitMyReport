@@ -55,9 +55,9 @@ class ImportSubmission extends Command
                 continue;
             }
 
-            list(, $student_id, , $assignmentName) = $matches;
-            if (!$user = User::where('student_id', $student_id)->first()) {
-                $this->warn("Can't find student with ID: {$student_id}");
+            list(, $studentId, , $assignmentName) = $matches;
+            if (!$user = User::where('student_id', $studentId)->first()) {
+                $this->warn("Can't find student with ID: {$studentId}");
                 continue;
             }
 

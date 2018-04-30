@@ -21,7 +21,6 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/flatpickr/4.4.4/flatpickr.min.css">
 @endpush
 
@@ -33,8 +32,6 @@
 @endphp
 
 @push('js')
-    <script src="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/js/i18n/defaults-zh_CN.min.js"></script>
 
     <script src="https://cdn.bootcss.com/flatpickr/4.4.4/flatpickr.min.js"></script>
     <script src="https://cdn.bootcss.com/flatpickr/4.4.4/l10n/zh.js"></script>
@@ -56,7 +53,7 @@
                 wrap: true,
             });
 
-            $('.selectpicker').selectpicker('val', "{{ $assignment->sub_problem }}");
+            $('#sub_problem').selectpicker('val', "{{ $assignment->sub_problem }}");
 
             const editor = CKEDITOR.replace("description", {
                 uploadUrl: "{{ route('file.upload') }}"
@@ -115,7 +112,7 @@
                     <label for="sub_problem" class="col-md-2 col-form-label">题目数量</label>
 
                     <div class="col-md-10">
-                        <select id="sub_problem" class="form-control selectpicker" name="sub_problem" required>
+                        <select id="sub_problem" class="form-control" name="sub_problem" required>
                             @foreach(range(1, 8) as $problemCount)
                                 <option>{{ $problemCount }}</option>
                             @endforeach

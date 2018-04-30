@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Notifications\SiteMessage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 
 class HomeController extends Controller
 {
@@ -44,8 +42,11 @@ class HomeController extends Controller
         ]);
 
         /** @var User $user */
-        $user = User::findOrFail(1);
-        $user->notify(new SiteMessage($request->input('advice')));
+        $from = $request->user();
+        $to = User::findOrFail(1);
+
+        $message = $request->input('advice');
+        SiteMessageController::sendMessage($message, $from, $to);
 
         return [
             'message' => '反馈成功！我们诚挚的感谢您的意见',

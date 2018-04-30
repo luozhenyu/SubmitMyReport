@@ -16,7 +16,7 @@ $.fn.upload = function (param) {
             let formData = new FormData();
 
             formData.append("upload", file);
-            $.ajax({
+            $.ajax({ 
                 url: param.url,
                 type: "POST",
                 data: formData,
@@ -50,7 +50,7 @@ function getFileIcon(fileName) {
             return type;
         }
     }
-    return ext[ext.length - 1] === '/' ? 'folder-open-o' : "file-o";
+    return ext[ext.length - 1] === '/' ? 'folder-o' : "file-o";
 }
 
 $.parseFile = function (file, editable = false) {

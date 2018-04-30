@@ -4,17 +4,30 @@ namespace App\Notifications;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Auth;
 
-class SiteMessage extends Notification
+class SiteMessage extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    const sent = 1;
+    const received = 2;
 
     /**
      * @var User
      */
     protected $from;
+
+    /**
+     * @var User
+     */
+    protected $to;
+
+    /**
+     * @var int
+     */
+    protected $type;
 
     /**
      * @var string
@@ -26,10 +39,14 @@ class SiteMessage extends Notification
      *
      * @param string $text
      * @param User $from
+     * @param User $to
+     * @param int $type
      */
-    public function __construct(string $text, User $from = null)
+    public function __construct(string $text, User $from, User $to, int $type)
     {
-        $this->from = $from ? $from : Auth::user();
+        $this->from = $from;
+        $this->to = $to;
+        $this->type = $type;
         $this->text = $text;
     }
 
@@ -54,7 +71,20 @@ class SiteMessage extends Notification
     {
         return [
             'from' => $this->from->id,
+            'to' => $this->to->id,
+            'type' => $this->type,
             'text' => $this->text,
         ];
+    }
+
+    /**
+     * @param string $text
+     * @param User $from
+     * @param User $to
+     */
+    public static function sendMessage(string $text, User $from, User $to)
+    {
+        $from->notifyNow(new SiteMessage($text, $from, $to, SiteMessage::sent));
+        $to->notifyNow(new SiteMessage($text, $from, $to, SiteMessage::received));
     }
 }
