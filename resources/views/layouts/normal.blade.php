@@ -1,11 +1,14 @@
 @extends('layouts.basic')
 
+@push('css_import')
+    <link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.6-rc.1/css/select2.min.css">
+@endpush
+
 @push('css')
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/css/bootstrap-select.min.css">
     <style>
         #messageTabContainer {
             max-height: 300px;
-            overflow: scroll;
+            overflow: auto;
         }
 
         #messageTabContainer > a > i {
@@ -18,7 +21,7 @@
         }
 
         .messageArea {
-            overflow: scroll;
+            overflow: auto;
         }
 
         .sent, .received {
@@ -52,15 +55,17 @@
     </style>
 @endpush
 
-@push('js')
-    <script src="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/js/i18n/defaults-zh_CN.min.js"></script>
+@push('js_import')
+    <script src="https://cdn.bootcss.com/select2/4.0.6-rc.1/js/select2.min.js"></script>
+    <script src="https://cdn.bootcss.com/select2/4.0.6-rc.1/js/i18n/zh-CN.js"></script>
+@endpush
 
+@push('js')
     <script>
         $(function () {
             $("#sendAdvice").click(function () {
                 $.post("{{ route('improve') }}", {advice: $("#adviceField").val()}, function (json) {
-                    $("#adviceField").val('');
+                    $("#adviceField").val(null);
                     $("#improveModal").modal('hide');
                     alert(json.message);
                 }).fail(function (xhr) {
@@ -108,7 +113,7 @@
                 }
             }
 
-            function refreshMessageContent($messageContent, forceRefresh = false) {
+            function refreshMessageContent($messageContent, forceRefresh) {
                 if ($messageContent.data("init") && !forceRefresh) {
                     return;
                 }
@@ -138,7 +143,8 @@
                 });
             }
 
-            function addMessageTab(toWhom, name, count = 0) {
+            function addMessageTab(toWhom, name, count) {
+                count = count || 0;
                 let dataTarget = "list-" + toWhom;
 
                 //Add tab contents
@@ -194,7 +200,7 @@
                     .append(name + " ")
                     .on("shown.bs.tab", function () {
                         refreshMessageContent($messageContent);
-                        updateUnread($(this).find(".badge"), 0);
+                        updateUnread($(this), 0);
                     })
                     .click(function (e) {
                         e.preventDefault();
@@ -206,13 +212,11 @@
                         $("<span>").addClass("badge badge-danger").text(count)
                     );
                 }
-
                 $("#messageTabContainer").append($messageTab);
-
                 return $messageTab;
             }
 
-            function refreshMessageTab(forceRefresh = false) {
+            function refreshMessageTab(forceRefresh) {
                 let $messageTabContainer = $("#messageTabContainer");
                 if ($messageTabContainer.data('init') && !forceRefresh) {
                     return;
@@ -240,34 +244,42 @@
             $("#siteMessageModal").on('show.bs.modal', function () {
                 refreshMessageTab();
                 updateUnread($("#siteMessage"), 0);
+            }).on('shown.bs.modal', function () {
+                //Select new user to chat with.
+                let userPicker = $("#userPicker");
+                if (userPicker.data('init')) {
+                    return;
+                }
+                userPicker.data('init', true).select2({
+                    dropdownParent: $(this),
+                    placeholder: '+ 新会话',
+                    width: 'resolve',
+                    templateResult: function (state) {
+                        if (!state.id) {
+                            return state.text;
+                        }
+                        return $("<span>").text(state.text).append(
+                            $("<span>").addClass("text-muted font-weight-light float-right")
+                                .css("font-size", "0.7rem")
+                                .css("line-height", "2")
+                                .text(state.id)
+                        );
+                    },
+                    ajax: {
+                        url: "{{ route('message') }}/query",
+                        type: 'POST',
+                        delay: 150,
+                        cache: true
+                    }
+                }).on('select2:select', function (e) {
+                    let selected = e.params.data;//TODO: avoid duplicated
+                    addMessageTab(selected.id, selected.text).tab('show');
+                    $(this).val(null).trigger('change');
+                });
             });
 
-            //Select new user to chat with.
-            let $userPicker = $("#userPicker").selectpicker()
-                .on('changed.bs.select', function () {
-                    let $option = $(this).find(':selected');
-                    $(this).empty().selectpicker('refresh');
-                    addMessageTab($option.val(), $option.text()).tab('show');
-                });
-
-            let $userPickerNext = $userPicker.next();
-            $userPickerNext.find(".filter-option-inner").css("color", "#fff");
-            $userPickerNext.next().find(".bs-searchbox > input").attr("placeholder", "学号 / 姓名")
-                .keyup(function () {
-                    $.post("{{ route('message') }}/query", {wd: $(this).val()}, function (json) {
-                        $userPicker.empty();
-                        json.forEach(function (item) {
-                            $userPicker.append(
-                                $("<option>").val(item.student_id).text(item.name)
-                            );
-                        });
-                        $userPicker.selectpicker('refresh');
-                        $userPicker.selectpicker('render');
-                    });
-                });
-
             Echo.private('user.{{ Auth::user()->id }}')
-                .listen('.message.received', (evt) => {
+                .listen('.message.received', function (evt) {
                     updateUnread($("#siteMessage"), evt.unread);
                     refreshMessageTab(true);
                 });
@@ -316,7 +328,7 @@
 
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -383,10 +395,7 @@
                 <div class="modal-body" style="min-height: 400px">
                     <div class="row">
                         <div class="col-4">
-                            <select class="form-control" id="userPicker" title="+ 新会话"
-                                    data-live-search="true" data-style="btn-info">
-                            </select>
-
+                            <select id="userPicker" style="width: 100%" title="新会话" data-init="false"></select>
                             <div class="list-group text-center mt-1" id="messageTabContainer"
                                  role="tablist" data-init="false"></div>
                         </div>
@@ -411,7 +420,6 @@
                 @yield('side_header')
             </div>
         </div>
-
         @yield('content')
     </div>
 @endsection

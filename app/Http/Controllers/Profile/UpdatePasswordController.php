@@ -52,16 +52,6 @@ class UpdatePasswordController extends Controller
     }
 
     /**
-     * Get the guard to be used during authentication.
-     *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
-     */
-    protected function guard()
-    {
-        return Auth::guard();
-    }
-
-    /**
      * Attempt to log the user into the application.
      *
      * @param  \Illuminate\Http\Request $request
@@ -70,6 +60,16 @@ class UpdatePasswordController extends Controller
     protected function checkCredentials(Request $request)
     {
         return $this->guard()->validate($this->credentials($request));
+    }
+
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected function guard()
+    {
+        return Auth::guard();
     }
 
     /**

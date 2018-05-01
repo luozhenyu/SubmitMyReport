@@ -20,7 +20,7 @@
     </ol>
 @endsection
 
-@push('css')
+@push('css_import')
     <link rel="stylesheet" href="https://cdn.bootcss.com/flatpickr/4.4.4/flatpickr.min.css">
 @endpush
 
@@ -34,13 +34,13 @@
     }, old('attachment') ?? []));
 @endphp
 
-@push('js')
+@push('js_import')
     <script src="https://cdn.bootcss.com/flatpickr/4.4.4/flatpickr.min.js"></script>
     <script src="https://cdn.bootcss.com/flatpickr/4.4.4/l10n/zh.js"></script>
-
     <script src="{{ url('/ckeditor/ckeditor.js') }}"></script>
-    <script src="{{ url('/js/file_upload.js') }}"></script>
+@endpush
 
+@push('js')
     <script>
         $(function () {
             window.onbeforeunload = function () {
@@ -55,7 +55,7 @@
                 wrap: true,
             });
 
-            $('#sub_problem').selectpicker('val', "{{ old('sub_problem') ?? 1 }}");
+            $('#sub_problem').val("{{ old('sub_problem') ?? 1 }}").select2();
 
             const editor = CKEDITOR.replace("description", {
                 extraPlugins: "uploadimage",
@@ -67,7 +67,7 @@
             });
 
             $("#attachmentBtn").click(function () {
-                $(this).uploadFile({
+                $(this).upload({
                     url: "{{ route('file.upload') }}",
                     maxsize: {{ \App\Http\Controllers\FileController::UPLOAD_MAX_SIZE }},
                     success: function (json) {

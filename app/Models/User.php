@@ -132,6 +132,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the entity's sent siteMessages.
+     * @param User|null $to
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function sentSiteMessages(User $to = null)
+    {
+        $query = $this->siteMessages()
+            ->where(DB::raw("cast(data->>'type' as int)"), SiteMessage::sent);
+
+        return $to ? $query->where(DB::raw("cast(data->>'to' as int)"), $to->id) : $query;
+    }
+
+    /**
      * Get the entity's siteMessages.
      * @param User|null $theOther
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -153,16 +166,14 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the entity's sent siteMessages.
-     * @param User|null $to
+     * Get the entity's unread siteMessages.
+     * @param User $from
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function sentSiteMessages(User $to = null)
+    public function unreadReceivedSiteMessages(User $from = null)
     {
-        $query = $this->siteMessages()
-            ->where(DB::raw("cast(data->>'type' as int)"), SiteMessage::sent);
-
-        return $to ? $query->where(DB::raw("cast(data->>'to' as int)"), $to->id) : $query;
+        return $this->receivedSiteMessages($from)
+            ->whereNull('read_at');
     }
 
     /**
@@ -177,17 +188,6 @@ class User extends Authenticatable
 
         return $from ? $query->where(DB::raw("cast(data->>'from' as int)"), $from->id) : $query;
 
-    }
-
-    /**
-     * Get the entity's unread siteMessages.
-     * @param User $from
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function unreadReceivedSiteMessages(User $from = null)
-    {
-        return $this->receivedSiteMessages($from)
-            ->whereNull('read_at');
     }
 
 }

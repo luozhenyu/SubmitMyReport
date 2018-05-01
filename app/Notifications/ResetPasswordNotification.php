@@ -12,18 +12,17 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     use Queueable;
 
     /**
-     * The password reset token.
-     *
-     * @var string
-     */
-    public $token;
-
-    /**
      * The callback that should be used to build the mail message.
      *
      * @var \Closure|null
      */
     public static $toMailCallback;
+    /**
+     * The password reset token.
+     *
+     * @var string
+     */
+    public $token;
 
     /**
      * Create a notification instance.
@@ -34,6 +33,17 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     public function __construct($token)
     {
         $this->token = $token;
+    }
+
+    /**
+     * Set a callback that should be used when building the notification mail message.
+     *
+     * @param  \Closure $callback
+     * @return void
+     */
+    public static function toMailUsing($callback)
+    {
+        static::$toMailCallback = $callback;
     }
 
     /**
@@ -64,16 +74,5 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
             ->line('您最近申请了重置密码，请点击此链接来重置您的密码：')
             ->action('重置密码', url(config('app.url') . route('password.reset', $this->token, false)))
             ->line('如果不是你本人的操作，请忽略这封邮件。');
-    }
-
-    /**
-     * Set a callback that should be used when building the notification mail message.
-     *
-     * @param  \Closure $callback
-     * @return void
-     */
-    public static function toMailUsing($callback)
-    {
-        static::$toMailCallback = $callback;
     }
 }

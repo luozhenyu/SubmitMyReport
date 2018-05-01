@@ -21,26 +21,30 @@ class SiteMessageController extends Controller
     public function queryUser(Request $request)
     {
         $this->validate($request, [
-            'wd' => 'nullable|max:32',
+            'q' => 'nullable|max:32',
         ]);
 
         /** @var Builder $query */
         $query = new User;
-
-        if ($wd = $request->input('wd')) {
+        if ($wd = $request->input('q')) {
             $wd = str_replace(['%', '_'], ['\%', '\_'], $wd);
             $query = $query->where('name', 'like', "%{$wd}%")
                 ->orWhere('student_id', 'like', "%{$wd}%");
         }
+        $users = $query->orderBy('student_id')
+            ->paginate(6);
 
-        $users = $query->orderBy('student_id')->limit(5)->get();
-
-        return $users->map(function ($user) {
-            return [
-                'student_id' => $user->student_id,
-                'name' => $user->name,
-            ];
-        });
+        return [
+            "results" => array_map(function (User $user) {
+                return [
+                    'id' => $user->student_id,
+                    'text' => $user->name,
+                ];
+            }, $users->items()),
+            "pagination" => [
+                "more" => $users->hasMorePages(),
+            ]
+        ];
     }
 
     /**

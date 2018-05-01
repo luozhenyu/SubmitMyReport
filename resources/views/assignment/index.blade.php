@@ -55,7 +55,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" >修改{{ $group->name }}的描述</h5>
+                    <h5 class="modal-title">修改{{ $group->name }}的描述</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -103,7 +103,7 @@
                     </td>
                     <td>
                         <a href="{{ url("/assignment/{$assignment->id}") }}">
-                            {{ str_limit(strip_tags($assignment->description), 20) }}
+                            {{ str_limit(html_entity_decode(strip_tags($assignment->description)), 20) }}
                         </a>
                     </td>
                     <td>{{ $assignment->owner->name }}</td>

@@ -74,7 +74,7 @@
                             @foreach($orderedAssignments as $assignment)
                                 <tr>
                                     <td>{{ $assignment->title }}</td>
-                                    <td>{{ str_limit(strip_tags($assignment->description), 20) }}</td>
+                                    <td>{{ str_limit(html_entity_decode(strip_tags($assignment->description)), 20) }}</td>
                                     <td>{{ $assignment->owner->name }}</td>
                                     <td>{{ $assignment->human_deadline }}</td>
                                     <td>{{ $assignment->submissions()->count() .'/' .$group->normalMembers()->count() }}</td>

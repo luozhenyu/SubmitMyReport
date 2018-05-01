@@ -3,8 +3,6 @@
 @section('title', $basename)
 
 @push('js')
-    <script src="{{ url('/js/file_upload.js') }}"></script>
-
     <script>
         $(function () {
             let files = @json($files);

@@ -45,19 +45,19 @@ class Assignment extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function myScoredSubmissions()
+    public function submissions()
     {
-        return $this->submissions()->whereHas('mark', function (Builder $query) {
-            $query->where('owner_id', Auth::user()->id);
-        });
+        return $this->hasMany(Submission::class, 'assignment_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function submissions()
+    public function myScoredSubmissions()
     {
-        return $this->hasMany(Submission::class, 'assignment_id');
+        return $this->submissions()->whereHas('mark', function (Builder $query) {
+            $query->where('owner_id', Auth::user()->id);
+        });
     }
 
     /**

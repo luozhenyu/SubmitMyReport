@@ -74,6 +74,56 @@ class PreviewController extends Controller
         return view('preview.wait');
     }
 
+    public static function strToPath(string $random)
+    {
+        $random = strtolower($random);
+
+        return static::STORAGE_DIR
+            . DIRECTORY_SEPARATOR . substr($random, 0, 2)
+            . DIRECTORY_SEPARATOR . substr($random, 2, 2);
+    }
+
+//    /**
+//     * @param Request $request
+//     * @param $random
+//     * @return array
+//     */
+//    public function queryStatus(Request $request, $random)
+//    {
+//        $storedFile = File::where('random', $random)->first();
+//        abort_if(empty($storedFile), 404);
+//
+//        if ($conversion = $storedFile->conversion) {
+//            switch ($conversion->status) {
+//                case Conversion::SUCCESS:
+//                    return [
+//                        'code' => 1,
+//                        'msg' => '转换成功',
+//                    ];
+//
+//                case Conversion::FAIL;
+//                    return [
+//                        'code' => -1,
+//                        'msg' => "转换失败，请手动下载",
+//                    ];
+//
+//                case Conversion::IN_QUEUE;
+//                case Conversion::PROCESSING;
+//                default:
+//                    $seconds = Carbon::now()->diffInSeconds($conversion->created_at);
+//                    return [
+//                        'code' => 0,
+//                        'msg' => "转换中，已耗时{$seconds}秒，请等待...",
+//                    ];
+//            }
+//        }
+//
+//        return [
+//            'code' => -1,
+//            'msg' => '请先预览此文件',
+//        ];
+//    }
+
     protected function listDir($dirFullPath, $random, $shownName, $extraPath = '', $download = false)
     {
         foreach (scandir($dirFullPath) as $item) {
@@ -161,55 +211,5 @@ class PreviewController extends Controller
             }
         }
         return view('preview.fail');
-    }
-
-//    /**
-//     * @param Request $request
-//     * @param $random
-//     * @return array
-//     */
-//    public function queryStatus(Request $request, $random)
-//    {
-//        $storedFile = File::where('random', $random)->first();
-//        abort_if(empty($storedFile), 404);
-//
-//        if ($conversion = $storedFile->conversion) {
-//            switch ($conversion->status) {
-//                case Conversion::SUCCESS:
-//                    return [
-//                        'code' => 1,
-//                        'msg' => '转换成功',
-//                    ];
-//
-//                case Conversion::FAIL;
-//                    return [
-//                        'code' => -1,
-//                        'msg' => "转换失败，请手动下载",
-//                    ];
-//
-//                case Conversion::IN_QUEUE;
-//                case Conversion::PROCESSING;
-//                default:
-//                    $seconds = Carbon::now()->diffInSeconds($conversion->created_at);
-//                    return [
-//                        'code' => 0,
-//                        'msg' => "转换中，已耗时{$seconds}秒，请等待...",
-//                    ];
-//            }
-//        }
-//
-//        return [
-//            'code' => -1,
-//            'msg' => '请先预览此文件',
-//        ];
-//    }
-
-    public static function strToPath(string $random)
-    {
-        $random = strtolower($random);
-
-        return static::STORAGE_DIR
-            . DIRECTORY_SEPARATOR . substr($random, 0, 2)
-            . DIRECTORY_SEPARATOR . substr($random, 2, 2);
     }
 }

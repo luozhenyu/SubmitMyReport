@@ -11,12 +11,16 @@
     },
     "devDependencies": {
         "axios": "^0.17",
+        "bootstrap": "^4.0.0",
         "bootstrap-sass": "^3.3.7",
         "cross-env": "^5.1",
+        "jquery": "^3.2",
         "laravel-mix": "^1.0",
-        "lodash": "^4.17.4"
+        "lodash": "^4.17.4",
+        "popper.js": "^1.12"
     },
     "dependencies": {
-        "laravel-echo": "^1.3.5"
+        "laravel-echo": "^1.3.5",
+        "socket.io-client": "^2.1.0"
     }
 }

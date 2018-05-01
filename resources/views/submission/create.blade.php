@@ -33,13 +33,13 @@
     }, old('attachment') ?? []));
 @endphp
 
-@push('js')
+@push('js_import')
     <script src="https://cdn.bootcss.com/flatpickr/4.4.4/flatpickr.min.js"></script>
     <script src="https://cdn.bootcss.com/flatpickr/4.4.4/l10n/zh.js"></script>
-
     <script src="{{ url('/ckeditor/ckeditor.js') }}"></script>
-    <script src="{{ url('/js/file_upload.js') }}"></script>
+@endpush
 
+@push('js')
     <script>
         $(function () {
             window.onbeforeunload = function () {
@@ -56,7 +56,7 @@
             });
 
             $("#attachmentBtn").click(function () {
-                $(this).uploadFile({
+                $(this).upload({
                     url: "{{ route('file.upload') }}",
                     maxsize: {{ \App\Http\Controllers\FileController::UPLOAD_MAX_SIZE }},
                     success: function (json) {
@@ -87,7 +87,7 @@
                     <span class="badge badge-info">截止日期</span>
                     {{ $assignment->human_deadline }}
                 </h5>
-                <p>{{ str_limit(strip_tags($assignment->description), 100) }}</p>
+                <p>{{ str_limit(html_entity_decode(strip_tags($assignment->description)), 100) }}</p>
             </header>
 
             <hr>

@@ -51,6 +51,17 @@ class SiteMessage extends Notification implements ShouldQueue
     }
 
     /**
+     * @param string $text
+     * @param User $from
+     * @param User $to
+     */
+    public static function sendMessage(string $text, User $from, User $to)
+    {
+        $from->notifyNow(new SiteMessage($text, $from, $to, SiteMessage::sent));
+        $to->notifyNow(new SiteMessage($text, $from, $to, SiteMessage::received));
+    }
+
+    /**
      * Get the notification's delivery channels.
      *
      * @param  mixed $notifiable
@@ -75,16 +86,5 @@ class SiteMessage extends Notification implements ShouldQueue
             'type' => $this->type,
             'text' => $this->text,
         ];
-    }
-
-    /**
-     * @param string $text
-     * @param User $from
-     * @param User $to
-     */
-    public static function sendMessage(string $text, User $from, User $to)
-    {
-        $from->notifyNow(new SiteMessage($text, $from, $to, SiteMessage::sent));
-        $to->notifyNow(new SiteMessage($text, $from, $to, SiteMessage::received));
     }
 }

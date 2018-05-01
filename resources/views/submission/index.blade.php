@@ -73,7 +73,7 @@
                 <tr>
                     <td>{{ $submission->owner->student_id }}</td>
                     <td>{{ $submission->owner->name }}</td>
-                    <td>{{ str_limit(strip_tags($submission->content), 20) }}</td>
+                    <td>{{ str_limit(html_entity_decode(strip_tags($submission->content)), 20) }}</td>
                     <td>{{ $submission->created_at }}</td>
                     <td>{{ $submission->mark? $submission->mark->average_score :null }}</td>
                     <td>

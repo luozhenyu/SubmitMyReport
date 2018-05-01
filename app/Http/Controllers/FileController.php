@@ -13,7 +13,7 @@ class FileController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => 'show']);
     }
 
     public function store(Request $request)
