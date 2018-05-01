@@ -13,6 +13,6 @@
 
 use App\Models\User;
 
-Broadcast::channel('user.{userId}', function ($user, User $userId) {
-    return $user->id === $userId->id;
+Broadcast::channel('user.{thisUser}', function ($user, User $thisUser) {
+    return $user->id === $thisUser->id;
 });

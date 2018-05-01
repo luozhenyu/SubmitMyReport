@@ -4,28 +4,23 @@
 
 @push('js')
     <script>
-        function checkStatus() {
-            $.post('', function (json) {
-                let code = json.code, msg = json.msg;
-                $("#hit").text(msg);
-                if (code === 0) {
-                    setTimeout("checkStatus()", 1000);
-                } else if (code === 1) {
-                    setTimeout("window.location.reload()", 500);
+        Echo.private('user.{{ Auth::user()->id }}')
+            .listen('.conversion.finished', (evt) => {
+                if (evt.success) {
+                    window.location.reload();
+                } else {
+                    $("#hit").text("转换失败，请直接下载。");
                 }
             });
-        }
 
-        $(function () {
-            checkStatus();
-        });
+        setInterval("window.location.reload();", 5000);
     </script>
 @endpush
 
 @section('content')
     <div class="row">
         <div class="col text-center">
-            <h1 class="mt-5" id="hit">正在加载中</h1>
+            <h1 class="mt-5" id="hit">正在加载中...</h1>
         </div>
     </div>
 @endsection

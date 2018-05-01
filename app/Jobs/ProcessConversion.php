@@ -2,9 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Events\ConversionFinished;
 use App\Http\Controllers\PreviewController;
 use App\Models\Conversion;
 use App\Models\File;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -12,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Parsedown;
 use RecursiveDirectoryIterator;
@@ -28,6 +31,11 @@ class ProcessConversion implements ShouldQueue
      * @var int
      */
     public $timeout = 30;
+
+    /**
+     * @var User
+     */
+    protected $user;
 
     /**
      * @var Conversion
@@ -57,6 +65,8 @@ class ProcessConversion implements ShouldQueue
      */
     public function __construct(Conversion $conversion, string $fileFullPath, string $basename)
     {
+        $this->user = Auth::user();
+
         $this->fileFullPath = $fileFullPath;
         $this->basename = $basename;
 
@@ -176,11 +186,15 @@ HTML
                 $this->conversion->status = Conversion::FAIL;
                 $this->conversion->log = 'Extension not support.';
                 $this->conversion->save();
+
+                event(new ConversionFinished(false, $this->user));
                 return;
         }
         $this->conversion->status = Conversion::SUCCESS;
         $this->conversion->finished_at = Carbon::now();
         $this->conversion->save();
+
+        event(new ConversionFinished(true, $this->user));
     }
 
     /**
@@ -214,5 +228,6 @@ HTML
         $this->conversion->log = $exception->getMessage();
         $this->conversion->status = Conversion::FAIL;
         $this->conversion->save();
+        event(new ConversionFinished(false, $this->user));
     }
 }

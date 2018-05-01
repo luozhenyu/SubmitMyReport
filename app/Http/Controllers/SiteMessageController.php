@@ -2,24 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SiteMessageReceived;
 use App\Models\User;
 use App\Notifications\SiteMessage;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\DB;
 
 class SiteMessageController extends Controller
 {
+    public function queryUser(Request $request)
+    {
+        $this->validate($request, [
+            'wd' => 'nullable|max:32',
+        ]);
+
+        /** @var Builder $query */
+        $query = new User;
+
+        if ($wd = $request->input('wd')) {
+            $wd = str_replace(['%', '_'], ['\%', '\_'], $wd);
+            $query = $query->where('name', 'like', "%{$wd}%")
+                ->orWhere('student_id', 'like', "%{$wd}%");
+        }
+
+        $users = $query->orderBy('student_id')->limit(5)->get();
+
+        return $users->map(function ($user) {
+            return [
+                'student_id' => $user->student_id,
+                'name' => $user->name,
+            ];
+        });
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     */
     public function index(Request $request)
     {
         /** @var User $user */
         $user = $request->user();
 
-        return $user->siteMessages()->groupBy(DB::raw("data->>'from'"))->select(DB::raw("data->>'from' as from"))
-            ->get()->map(function (DatabaseNotification $item) use ($user) {
+        return $user->siteMessages()->groupBy(DB::raw("data->>'to'"))
+            ->where(DB::raw("data->>'type'"), SiteMessage::sent)
+            ->select(DB::raw("data->>'to' as \"theOther\""))
+            ->union(
+                $user->siteMessages()->groupBy(DB::raw("data->>'from'"))
+                    ->where(DB::raw("data->>'type'"), SiteMessage::received)
+                    ->select(DB::raw("data->>'from' as \"theOther\""))
+            )->orderBy('theOther')->get()
+            ->map(function (DatabaseNotification $item) use ($user) {
                 /** @var User $from */
-                $from = User::findOrFail($item->from);
+                $from = User::findOrFail($item->theOther);
                 return [
                     'from' => $from->only('student_id', 'name'),
                     'count' => $user->unreadReceivedSiteMessages($from)->count(),
@@ -27,6 +65,11 @@ class SiteMessageController extends Controller
             });
     }
 
+    /**
+     * @param Request $request
+     * @param $studentId
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     */
     public function show(Request $request, $studentId)
     {
         /** @var User $user */
@@ -35,7 +78,14 @@ class SiteMessageController extends Controller
 
         $user->siteMessages($theOther)->update(['read_at' => now()]);
 
-        return $user->siteMessages($theOther)->get()->map(function (DatabaseNotification $item) {
+        $collect = collect(array_reverse(
+            $user->siteMessages($theOther)
+                ->orderByDesc('created_at')
+                ->paginate(30)->items()
+        ));
+        //TODO: javascript dynamic load
+
+        return $collect->map(function (DatabaseNotification $item) {
             /** @var Carbon $created_at */
             if (($created_at = $item->created_at) > Carbon::now()->subHour(1)) {
                 $created_at = $created_at->diffForHumans();
@@ -54,10 +104,17 @@ class SiteMessageController extends Controller
         });
     }
 
+    /**
+     * @param Request $request
+     * @param $studentId
+     * @return array
+     */
     public function put(Request $request, $studentId)
     {
         /** @var User $user */
         $user = $request->user();
+
+        /** @var User $theOther */
         $theOther = User::where('student_id', $studentId)->firstOrFail();
 
         $this->validate($request, [
@@ -65,11 +122,20 @@ class SiteMessageController extends Controller
         ]);
         SiteMessage::sendMessage($request->input('text'), $user, $theOther);
 
+        $unread = $theOther->unreadReceivedSiteMessages()->count();
+
+        event(new SiteMessageReceived($unread, $theOther));
+
         return [
             'message' => 'ack',
         ];
     }
 
+    /**
+     * @param Request $request
+     * @param $studentId
+     * @return array
+     */
     public function delete(Request $request, $studentId)
     {
         /** @var User $user */

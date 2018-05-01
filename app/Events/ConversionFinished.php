@@ -9,23 +9,23 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SiteMessageReceived implements ShouldBroadcastNow
+class ConversionFinished implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $unread;
-
+    public $success;
     private $toWhom;
 
     /**
      * Create a new event instance.
      *
-     * @param int $unreadCount
+     * @param bool $success
      * @param User $toWhom
      */
-    public function __construct(int $unreadCount, User $toWhom)
+    public function __construct(bool $success, User $toWhom)
     {
-        $this->unread = $unreadCount;
+        $this->success = $success;
+
         $this->toWhom = $toWhom;
     }
 
@@ -46,7 +46,6 @@ class SiteMessageReceived implements ShouldBroadcastNow
      */
     public function broadcastAs()
     {
-        return 'message.received';
+        return 'conversion.finished';
     }
-
 }

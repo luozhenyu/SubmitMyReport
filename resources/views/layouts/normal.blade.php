@@ -3,6 +3,20 @@
 @push('css')
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/css/bootstrap-select.min.css">
     <style>
+        #messageTabContainer {
+            max-height: 300px;
+            overflow: scroll;
+        }
+
+        #messageTabContainer > a > i {
+            float: left;
+            line-height: 1.5;
+        }
+
+        #messageTabContainer > a > i:hover {
+            color: red;
+        }
+
         .messageArea {
             overflow: scroll;
         }
@@ -42,9 +56,6 @@
     <script src="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/js/bootstrap-select.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap-select/1.13.0-beta/js/i18n/defaults-zh_CN.min.js"></script>
 
-    <script src="https://{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
-    <script src="{{ url('/js/app.js') }}"></script>
-
     <script>
         $(function () {
             $("#sendAdvice").click(function () {
@@ -61,28 +72,40 @@
             });
         });
 
-
-        @if(Auth::user()->id ===1)
         $(function () {
-
             function scrollToBottom($object) {
                 $object.scrollTop($object[0].scrollHeight);
             }
 
-            function sendMessage($messageContent) {
-                let text = $messageContent.find(".messageInput").val();
-
-                $.ajax({
-                    url: "{{ route('message') }}/" + $messageContent.data('to'),
-                    type: "PUT",
-                    data: {text: text},
-                    success: function (json) {
-                        refreshMessageContent($messageContent, true);
-                    },
-                    error: function (xhr) {
-                        alert("发送失败");
+            function updateUnread($object, unread) {
+                let $badge = $object.find(".badge");
+                if (unread > 0) {
+                    if (!$badge.length) {
+                        $badge = $("<span>").addClass("badge badge-danger badge-pill");
+                        $object.append($badge);
                     }
-                });
+                    $badge.text(unread);
+                } else {
+                    $badge.remove();
+                }
+            }
+
+            function sendMessage($messageContent) {
+                let $messageInput = $messageContent.find(".messageInput");
+                if ($messageInput.val()) {
+                    $.ajax({
+                        url: "{{ route('message') }}/" + $messageContent.data('to'),
+                        type: "PUT",
+                        data: {text: $messageInput.val()},
+                        success: function (json) {
+                            refreshMessageContent($messageContent, true);
+                            $messageInput.val('');
+                        },
+                        error: function (xhr) {
+                            alert(xhr.responseJSON.errors.text[0]);
+                        }
+                    });
+                }
             }
 
             function refreshMessageContent($messageContent, forceRefresh = false) {
@@ -115,6 +138,80 @@
                 });
             }
 
+            function addMessageTab(toWhom, name, count = 0) {
+                let dataTarget = "list-" + toWhom;
+
+                //Add tab contents
+                let $messageContent = $("<div>").addClass("tab-pane fade")
+                    .attr("id", dataTarget)
+                    .data("to", toWhom)
+                    .data("init", false)
+                    .append(
+                        $("<div>").addClass("bg-light messageArea").css("height", "250px")
+                    )
+                    .append(
+                        $("<div>").addClass("row")
+                            .append(
+                                $("<div>").addClass("col-9 pr-0").append(
+                                    $("<textarea>").addClass("form-control messageInput")
+                                        .attr("rows", 3)
+                                        .css("resize", "none")
+                                )
+                            )
+                            .append(
+                                $("<div>").addClass("col-3 pl-0").append(
+                                    $("<button>").attr("type", "button")
+                                        .addClass("btn btn-outline-success btn-lg btn-block px-0 h-100")
+                                        .text("发送")
+                                        .click(function () {
+                                            sendMessage($messageContent);
+                                        })
+                                )
+                            )
+                    );
+
+                $("#messageContentContainer").append($messageContent);
+
+                //Add tabs
+                let $messageTab = $("<a>").addClass("list-group-item list-group-item-action")
+                    .attr("id", dataTarget + "-list")
+                    .attr("href", "#" + dataTarget)
+                    .data("toggle", "list")
+                    .data("to", toWhom)
+                    .append(
+                        $("<i>").addClass("fa fa-times")
+                            .click(function () {
+                                $.ajax({
+                                    url: "{{ route('message') }}/" + toWhom,
+                                    type: "DELETE",
+                                    success: function (json) {
+                                        $($messageTab.attr("href")).remove();
+                                        $messageTab.remove();
+                                    }
+                                });
+                            })
+                    )
+                    .append(name + " ")
+                    .on("shown.bs.tab", function () {
+                        refreshMessageContent($messageContent);
+                        updateUnread($(this).find(".badge"), 0);
+                    })
+                    .click(function (e) {
+                        e.preventDefault();
+                        $(this).tab('show');
+                    });
+
+                if (count > 0) {
+                    $messageTab.append(
+                        $("<span>").addClass("badge badge-danger").text(count)
+                    );
+                }
+
+                $("#messageTabContainer").append($messageTab);
+
+                return $messageTab;
+            }
+
             function refreshMessageTab(forceRefresh = false) {
                 let $messageTabContainer = $("#messageTabContainer");
                 if ($messageTabContainer.data('init') && !forceRefresh) {
@@ -128,91 +225,53 @@
                 $.get("{{ route('message') }}", function (json) {
                     json.forEach(function (item) {
                         let toWhom = item.from.student_id;
-                        if ($.inArray(toWhom, $existUsers) !== -1) {
-                            return;
+                        if ($.inArray(toWhom, $existUsers) === -1) {
+                            addMessageTab(toWhom, item.from.name, item.count);
+                        } else {
+                            updateUnread($messageTabContainer.find("#list-" + toWhom + "-list"), item.count);
                         }
-
-                        let dataTarget = "list-" + toWhom;
-
-                        //Add tab contents
-                        let $messageContent = $("<div>").addClass("tab-pane fade")
-                            .attr("id", dataTarget)
-                            .data("to", toWhom)
-                            .data("init", false)
-                            .append(
-                                $("<div>").addClass("bg-light messageArea").css("height", "250px")
-                            )
-                            .append(
-                                $("<div>").addClass("row")
-                                    .append(
-                                        $("<div>").addClass("col-9 pr-0").append(
-                                            $("<textarea>").addClass("form-control messageInput")
-                                                .attr("rows", 3)
-                                                .css("resize", "none")
-                                        )
-                                    )
-                                    .append(
-                                        $("<div>").addClass("col-3 pl-0").append(
-                                            $("<button>").attr("type", "button")
-                                                .addClass("btn btn-outline-success btn-lg btn-block px-0 h-100")
-                                                .text("发送")
-                                                .click(function () {
-                                                    sendMessage($messageContent);
-                                                })
-                                        )
-                                    )
-                            );
-
-                        $("#messageContentContainer").append($messageContent);
-
-                        //Add tabs
-                        let $messageTab = $("<a>").addClass("list-group-item list-group-item-action")
-                            .attr("id", dataTarget + "-list")
-                            .attr("href", "#" + dataTarget)
-                            .data("toggle", "list")
-                            .data("to", toWhom)
-                            .text(item.from.name + " ")
-                            .on("shown.bs.tab", function () {
-                                refreshMessageContent($messageContent);
-                            })
-                            .click(function (e) {
-                                e.preventDefault();
-                                $(this).tab('show');
-                            });
-
-                        if (item.count > 0) {
-                            $messageTab.append(
-                                $("<span>").addClass("badge badge-danger").text(item.count)
-                            );
-                        }
-
-                        $messageTabContainer.append($messageTab);
                     });
 
                     //Show first panel
-                    $messageTabContainer.find("a:first-child").click();
+                    //$messageTabContainer.find("a:first-child").click();
                 });
             }
 
-            $("#userPicker").selectpicker();
-
             $("#siteMessageModal").on('show.bs.modal', function () {
                 refreshMessageTab();
+                updateUnread($("#siteMessage"), 0);
             });
 
+            //Select new user to chat with.
+            let $userPicker = $("#userPicker").selectpicker()
+                .on('changed.bs.select', function () {
+                    let $option = $(this).find(':selected');
+                    $(this).empty().selectpicker('refresh');
+                    addMessageTab($option.val(), $option.text()).tab('show');
+                });
 
-            //send message button
-            // $("#sendMessage").click(function () {
-            //
-            // });
+            let $userPickerNext = $userPicker.next();
+            $userPickerNext.find(".filter-option-inner").css("color", "#fff");
+            $userPickerNext.next().find(".bs-searchbox > input").attr("placeholder", "学号 / 姓名")
+                .keyup(function () {
+                    $.post("{{ route('message') }}/query", {wd: $(this).val()}, function (json) {
+                        $userPicker.empty();
+                        json.forEach(function (item) {
+                            $userPicker.append(
+                                $("<option>").val(item.student_id).text(item.name)
+                            );
+                        });
+                        $userPicker.selectpicker('refresh');
+                        $userPicker.selectpicker('render');
+                    });
+                });
 
             Echo.private('user.{{ Auth::user()->id }}')
-                .listen('message.received', function (evt) {
-                    console.log(evt);
+                .listen('.message.received', (evt) => {
+                    updateUnread($("#siteMessage"), evt.unread);
+                    refreshMessageTab(true);
                 });
         });
-        @endif
-
     </script>
 @endpush
 
@@ -248,9 +307,9 @@
                         <li>
                             <a class="nav-link mr-1" id="siteMessage" href="javascript:void(0);" data-toggle="modal"
                                data-target="#siteMessageModal">
-                                站内信
-                                @if($unreadNotifications = Auth::user()->unreadNotifications)
-                                    <span class="badge badge-info badge-pill">{{ $unreadNotifications->count() }}</span>
+                                站内信&nbsp;
+                                @if(($unread = Auth::user()->unreadReceivedSiteMessages()->count()) > 0)
+                                    <span class="badge badge-danger badge-pill">{{ $unread }}</span>
                                 @endif
                             </a>
                         </li>
@@ -321,12 +380,11 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-
-
+                <div class="modal-body" style="min-height: 400px">
                     <div class="row">
                         <div class="col-4">
-                            <select class="form-control" id="userPicker" data-live-search="true" title="+ 新会话">
+                            <select class="form-control" id="userPicker" title="+ 新会话"
+                                    data-live-search="true" data-style="btn-info">
                             </select>
 
                             <div class="list-group text-center mt-1" id="messageTabContainer"
@@ -337,8 +395,6 @@
                             <div class="tab-content" id="messageContentContainer"></div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>

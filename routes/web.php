@@ -83,10 +83,11 @@ Route::post('/file', 'FileController@store')->name('file.upload');
 
 //Preview file
 Route::get('/preview/{hash}', 'PreviewController@dispatchJob');
-Route::post('/preview/{hash}', 'PreviewController@queryStatus');
+//Route::post('/preview/{hash}', 'PreviewController@queryStatus');
 
 //Site Message
 Route::get('/message', 'SiteMessageController@index')->name('message');
+Route::post('/message/query', 'SiteMessageController@queryUser');
 Route::get('/message/{studentId}', 'SiteMessageController@show');
 Route::put('/message/{studentId}', 'SiteMessageController@put');
 Route::delete('/message/{studentId}', 'SiteMessageController@delete');

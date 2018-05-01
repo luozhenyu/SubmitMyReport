@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\ResetPasswordNotification;
 use App\Notifications\SiteMessage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\DatabaseNotification;
@@ -140,13 +141,15 @@ class User extends Authenticatable
         $query = $this->morphMany(DatabaseNotification::class, 'notifiable')
             ->where('type', SiteMessage::class);
 
-        return $theOther ? $query->where([
-            [DB::raw("cast(data->>'type' as int)"), SiteMessage::sent],
-            [DB::raw("cast(data->>'to' as int)"), $theOther->id],
-        ])->orWhere([
-            [DB::raw("cast(data->>'type' as int)"), SiteMessage::received],
-            [DB::raw("cast(data->>'from' as int)"), $theOther->id],
-        ]) : $query;
+        return $theOther ? $query->where(function (Builder $query) use ($theOther) {
+            $query->where([
+                [DB::raw("cast(data->>'type' as int)"), SiteMessage::sent],
+                [DB::raw("cast(data->>'to' as int)"), $theOther->id],
+            ])->orWhere([
+                [DB::raw("cast(data->>'type' as int)"), SiteMessage::received],
+                [DB::raw("cast(data->>'from' as int)"), $theOther->id],
+            ]);
+        }) : $query;
     }
 
     /**
