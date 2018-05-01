@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\DB;
 
 class SiteMessageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function queryUser(Request $request)
     {
         $this->validate($request, [

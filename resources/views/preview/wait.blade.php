@@ -13,7 +13,7 @@
                 }
             });
 
-        setInterval("window.location.reload();", 5000);
+        setInterval("window.location.reload();", 15 * 1000);
     </script>
 @endpush
 

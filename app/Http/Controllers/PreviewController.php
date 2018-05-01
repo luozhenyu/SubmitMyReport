@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Jobs\ProcessConversion;
 use App\Models\Conversion;
 use App\Models\File;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +13,11 @@ use Illuminate\Support\Str;
 class PreviewController extends Controller
 {
     const STORAGE_DIR = "conversions";
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     /**
      * @param Request $request
@@ -26,7 +30,10 @@ class PreviewController extends Controller
         $storedFile = File::where('random', $random)->first();
         abort_if(empty($storedFile), 404);
 
-        $extraPath = $request->input('path');
+        if (($extraPath = base64_decode($request->input('path'))) === false) {
+            return view('preview.fail');
+        }
+
         $download = $request->input('type') === 'download';
 
         if ($conversion = $storedFile->conversion) {
@@ -67,14 +74,14 @@ class PreviewController extends Controller
         return view('preview.wait');
     }
 
-    protected function listDir($dirFullPath, $random, $shownName, $extraPath = null, $download = false)
+    protected function listDir($dirFullPath, $random, $shownName, $extraPath = '', $download = false)
     {
         foreach (scandir($dirFullPath) as $item) {
             $pathinfo = pathinfo($item);
             if ($pathinfo['filename'] === $random) {
                 $filePath = $pathinfo['basename'];
                 //if $extraPath
-                if ($extraPath !== null) {
+                if ($extraPath) {
                     $filePath .= DIRECTORY_SEPARATOR . $extraPath;
                     if (!file_exists($dirFullPath . DIRECTORY_SEPARATOR . $filePath)) {
                         return view('preview.fail');
@@ -102,10 +109,10 @@ class PreviewController extends Controller
 
                         default:
                             $sha512 = hash_file("sha512", $absolutePath);
-                            $user = Auth::user();
+
                             if (!$storedFile = File::where([
                                 ['sha512', $sha512],
-                                ['filename', $shownName],
+                                ['filename', $pathinfo['basename']],
                             ])->first()) {
                                 $targetDir = File::hashToPath($sha512);
                                 if (!Storage::exists($targetDir)) {
@@ -115,7 +122,7 @@ class PreviewController extends Controller
                                 $destPath = Storage::path($targetDir . DIRECTORY_SEPARATOR . $sha512);
 
                                 copy($absolutePath, $destPath);
-                                $storedFile = $user->files()->create([
+                                $storedFile = Auth::user()->files()->create([
                                     'random' => Str::random(80),
                                     'sha512' => $sha512,
                                     'size' => filesize($absolutePath),
@@ -128,16 +135,16 @@ class PreviewController extends Controller
                 } else if (is_dir($absolutePath)) {
                     $files = array_map(function ($basename) use ($absolutePath, $extraPath) {
                         $path = $basename;
-                        if ($extraPath !== null) {
+                        if ($extraPath) {
                             $path = $extraPath . DIRECTORY_SEPARATOR . $path;
                         }
-
+                        $base64Path = base64_encode($path);
                         return [
                             'fileName' => $basename . (is_dir($absolutePath . DIRECTORY_SEPARATOR . $basename) ? '/' : ''),
                             'url' => url()->current() . '?'
-                                . http_build_query(['path' => $path, 'type' => 'download']),
+                                . http_build_query(['path' => $base64Path, 'type' => 'download']),
                             'preview_url' => url()->current() . '?'
-                                . http_build_query(['path' => $path]),
+                                . http_build_query(['path' => $base64Path]),
                         ];
                     }, array_merge(
                             array_filter(scandir($absolutePath), function ($basename) {

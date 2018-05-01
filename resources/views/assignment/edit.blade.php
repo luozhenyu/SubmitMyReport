@@ -64,7 +64,7 @@
             });
 
             $("#attachmentBtn").click(function () {
-                $(this).upload({
+                $(this).uploadFile({
                     url: "{{ route('file.upload') }}",
                     maxsize: {{ \App\Http\Controllers\FileController::UPLOAD_MAX_SIZE }},
                     success: function (json) {

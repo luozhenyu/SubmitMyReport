@@ -11,6 +11,11 @@ class FileController extends Controller
 {
     const UPLOAD_MAX_SIZE = 10 * 1024 * 1024;
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function store(Request $request)
     {
         /** @var User $user */

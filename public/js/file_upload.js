@@ -1,6 +1,6 @@
 'use strict';
 
-$.fn.upload = function (param) {
+$.fn.uploadFile = function (param) {
     $("<input>", {type: "file", multiple: true}).change(function () {
         let files = this.files;
         for (let i = 0; i < files.length; i++) {
@@ -16,7 +16,7 @@ $.fn.upload = function (param) {
             let formData = new FormData();
 
             formData.append("upload", file);
-            $.ajax({ 
+            $.ajax({
                 url: param.url,
                 type: "POST",
                 data: formData,
