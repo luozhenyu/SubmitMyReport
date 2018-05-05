@@ -98,7 +98,7 @@ class SubmissionController extends Controller
 
         /** @var Submission $submission */
         $submission = $assignment->submissions()->create([
-            'content' => $request->input('content'),
+            'content' => clean($request->input('content')),
             'owner_id' => $user->id,
         ]);
 
@@ -183,6 +183,7 @@ class SubmissionController extends Controller
         ]);
 
         $submission->files()->sync($files);
+        $submission->touch();
 
         return redirect()->route('home');
     }

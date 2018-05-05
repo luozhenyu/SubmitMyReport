@@ -68,7 +68,7 @@ class PreviewController extends Controller
                     File::hashToPath($storedFile->sha512) . DIRECTORY_SEPARATOR . $storedFile->sha512
                 ),
                 $storedFile->filename
-            );
+            )->delay(now()->addSecond());
         }
 
         return view('preview.wait');
@@ -193,7 +193,8 @@ class PreviewController extends Controller
                             'fileName' => $basename . (is_dir($absolutePath . DIRECTORY_SEPARATOR . $basename) ? '/' : ''),
                             'url' => url()->current() . '?'
                                 . http_build_query(['path' => $base64Path, 'type' => 'download']),
-                            'preview_url' => url()->current() . '?'
+                            'fileSize' => File::human_filesize(filesize($absolutePath . DIRECTORY_SEPARATOR . $basename)),
+                            'previewUrl' => url()->current() . '?'
                                 . http_build_query(['path' => $base64Path]),
                         ];
                     }, array_merge(
@@ -203,8 +204,18 @@ class PreviewController extends Controller
                         )
                     );
 
+                    $backPath = null;
+                    if ($extraPath) {
+                        $dirname = pathinfo($extraPath)['dirname'];
+                        if (empty($dirname) || $dirname === '.') {
+                            $dirname = '';
+                        }
+                        $backPath = url()->current() . "?path=" . base64_encode($dirname);
+                    }
+
                     return view('preview.list', [
                         'basename' => $shownName,
+                        'backPath' => $backPath,
                         'files' => $files,
                     ]);
                 }

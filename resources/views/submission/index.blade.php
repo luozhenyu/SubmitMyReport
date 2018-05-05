@@ -80,7 +80,7 @@
                         @if($submission->mark)
                             <a class="btn btn-outline-success btn-sm" href="{{ url("submission/{$submission->id}") }}"
                                onmouseover="innerHTML='修 改'"
-                               onmouseleave="innerHTML='已评分'">已评分</a>
+                               onmouseleave="innerHTML='{{ $submission->mark->owner->name }}'">{{ $submission->mark->owner->name }}</a>
                         @else
                             <a class="btn btn-outline-primary btn-sm"
                                href="{{ url("submission/{$submission->id}") }}">去评分</a>

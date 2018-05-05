@@ -36,6 +36,7 @@ class UpdateProfileController extends Controller
             'email' => $request->input('email'),
             'name' => $request->input('name'),
         ]);
+        $user->touch();
 
         return view('profile.profile', ['user' => $user, 'success' => true]);
     }

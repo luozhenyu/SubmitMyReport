@@ -162,6 +162,11 @@
                                     $("<textarea>").addClass("form-control messageInput")
                                         .attr("rows", 3)
                                         .css("resize", "none")
+                                        .on('keyup', function (evt) {
+                                            if (evt.keyCode === 13) {
+                                                sendMessage($messageContent);
+                                            }
+                                        })
                                 )
                             )
                             .append(

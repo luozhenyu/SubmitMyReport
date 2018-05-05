@@ -144,7 +144,7 @@ class AssignmentController extends Controller
         ]);
         $assignment->files()->sync($files);
 
-        $assignment->save();
+        $assignment->touch();
 
         return redirect("/assignment/{$assignmentId}");
     }

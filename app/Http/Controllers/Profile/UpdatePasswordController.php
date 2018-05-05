@@ -44,6 +44,7 @@ class UpdatePasswordController extends Controller
             $user->update([
                 'password' => bcrypt($request->input('password')),
             ]);
+            $user->touch();
 
             return view('profile.password', ['user' => $user, 'success' => true]);
         }

@@ -62,22 +62,26 @@ $.extend({
             iconClass = "fa fa-" + getFileIcon(fileName),
             random = file["random"] || '',
             url = file["url"],
-            preview_url = file["preview_url"];
+            fileSize = file["fileSize"],
+            previewUrl = file["previewUrl"];
 
-        let html = $("<h5>").append(
-            $("<span>").addClass(iconClass)
-        ).append(
-            $("<a>").addClass("text-info m-1")
-                .attr("href", url)
-                .attr("target", "_blank")
-                .attr("title", fileName)
-                .text(fileName)
-        ).append(
-            $("<a>").addClass("text-primary ml-4")
-                .attr("href", preview_url)
-                .attr("target", "_blank")
-                .text("预览")
-        );
+        let download = $("<a>").addClass("text-info m-1")
+            .attr("href", url)
+            .attr("title", fileName)
+            .text(fileName);
+        let $preview = $("<a>").addClass("text-primary ml-4 preview")
+            .attr("href", previewUrl)
+            .text("预览");
+        if (fileName[fileName.length - 1] !== "/") {
+            $preview.attr("target", "_blank");
+            download.attr("target", "_blank");
+        }
+
+        let html = $("<h5>")
+            .append($("<span>").addClass(iconClass))
+            .append(download)
+            .append($("<span>").text(fileSize))
+            .append($preview);
         if (editable) {
             html.append(
                 $("<input>").css("display", "none").attr("name", "attachment[]").val(random)

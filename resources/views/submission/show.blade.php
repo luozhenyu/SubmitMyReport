@@ -39,6 +39,18 @@
     });
 @endphp
 
+@push('css')
+    <style>
+        #previewContainer {
+            display: none;
+            border: none;
+            padding: 0;
+            height: 350px;
+            overflow: auto;
+        }
+    </style>
+@endpush
+
 @push('js')
     <script>
         $(function () {
@@ -47,6 +59,31 @@
             for (let i = 0; i < files.length; i++) {
                 $("#attachmentContainer").append($.parseFile(files[i]));
             }
+
+            $(".preview").click(function (evt) {
+                evt.preventDefault();
+                let url = $(this).attr("href");
+                $("#previewContainer").attr("src", url).fadeIn();
+            });
+
+            $(".tab-pane").on('keydown', function (evt) {
+                if (evt.keyCode === 9) {
+                    evt.preventDefault();
+                    let selfID = $(this).attr("id");
+                    let $nextPanel = $("[href='#" + selfID + "']").parent(".nav-item")
+                        .next().find(":first");
+
+                    if ($nextPanel.length > 0) {
+                        $nextPanel.tab("show");
+                    } else {
+                        $("button[type='submit']").focus();
+                    }
+                }
+            });
+
+            $("[data-toggle='tab']").on("shown.bs.tab", function () {
+                $($(this).attr("href")).find("input:first").focus();
+            });
         });
 
         function makeCheck(self) {
@@ -92,9 +129,11 @@
             </section>
 
             <section class="col mt-3">
-                <h4 class="text-dark">{{ $submission->owner->name }}的提交</h4>
+                <h4 class="text-dark">{{ $submission->owner->name }}的提交
+                    <span style="font-size: 0.8em;">On {{ $submission->updated_at }}</span>
+                </h4>
                 <hr>
-                <div>{!! $submission->content !!}</div>
+                <div>{!! $submission->content or '无文本说明' !!}</div>
             </section>
 
             <section class="col">
@@ -106,6 +145,11 @@
                     <div class="card-body" id="attachmentContainer">
                     </div>
                 </div>
+            </section>
+
+            <section class="col">
+                <hr>
+                <iframe class="col-12" id="previewContainer" tabindex="-1"></iframe>
             </section>
 
             @if($admin)
@@ -160,8 +204,8 @@
                                         <div class="col-md-10">
                                             <textarea id="remark{{ $index }}" name="remark[{{ $index }}]"
                                                       class="form-control{{ $errors->has("remark.{$index}")? ' is-invalid' :'' }}"
-                                                      style="resize: none"
-                                                      rows="6">{{ $problem? $problem->remark :old("remark.{$index}") }}</textarea>
+                                                      style="resize: none" rows="6"
+                                                      placeholder="按Tab键切换下一题">{{ $problem? $problem->remark :old("remark.{$index}") }}</textarea>
                                             @if ($errors->has("remark.{$index}"))
                                                 <span class="invalid-feedback">
                                                     <strong>{{ $errors->first("remark.{$index}") }}</strong>
