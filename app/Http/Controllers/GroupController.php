@@ -37,9 +37,10 @@ class GroupController extends Controller
         $query = new Group;
 
         if ($wd = $request->input('wd')) {
-            $wd = str_replace(['%', '_'], ['\%', '\_'], $wd);
-            $query = $query->where('name', 'like', "%{$wd}%")
-                ->orWhere('description', 'like', "%{$wd}%");
+            $parsedWord = str_replace(['%', '_'], ['\%', '\_'], $wd);
+            $parsedWord = str_replace('*', '%', $parsedWord);
+            $query = $query->where('name', 'like', "%{$parsedWord}%")
+                ->orWhere('description', 'like', "%{$parsedWord}%");
         }
         $groups = $query->paginate(10);
 

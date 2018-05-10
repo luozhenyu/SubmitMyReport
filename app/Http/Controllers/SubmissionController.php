@@ -32,10 +32,11 @@ class SubmissionController extends Controller
             ->leftJoin('marks', 'submissions.id', 'marks.submission_id')
             ->select('submissions.*');
         if ($wd = $request->input('wd')) {
-            $wd = str_replace(['%', '_'], ['\%', '\_'], $wd);
-            $query->whereHas('owner', function (Builder $query) use ($wd) {
-                $query->where('name', 'like', "%{$wd}%")
-                    ->orWhere('student_id', 'like', "%{$wd}%");
+            $parsedWord = str_replace(['%', '_'], ['\%', '\_'], $wd);
+            $parsedWord = str_replace('*', '%', $parsedWord);
+            $query->whereHas('owner', function (Builder $query) use ($parsedWord) {
+                $query->where('name', 'like', "%{$parsedWord}%")
+                    ->orWhere('student_id', 'like', "%{$parsedWord}%");
             });
         };
 

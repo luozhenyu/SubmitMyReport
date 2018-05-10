@@ -121,7 +121,7 @@ HTML
 
             case 'txt':
                 $content = file_get_contents($sourceFullPath);
-                $encoding = mb_detect_encoding($content, ['GB2312', 'GBK', 'UTF-16', 'UCS-2', 'UTF-8', 'BIG5', 'ASCII']);
+                $encoding = mb_detect_encoding($content, ['GBK', 'UTF-8', 'ASCII']);
                 file_put_contents(
                     $targetDir . DIRECTORY_SEPARATOR . "{$random}.txt",
                     mb_convert_encoding($content, 'UTF-8', $encoding)

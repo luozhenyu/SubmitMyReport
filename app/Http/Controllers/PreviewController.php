@@ -83,47 +83,6 @@ class PreviewController extends Controller
             . DIRECTORY_SEPARATOR . substr($random, 2, 2);
     }
 
-//    /**
-//     * @param Request $request
-//     * @param $random
-//     * @return array
-//     */
-//    public function queryStatus(Request $request, $random)
-//    {
-//        $storedFile = File::where('random', $random)->first();
-//        abort_if(empty($storedFile), 404);
-//
-//        if ($conversion = $storedFile->conversion) {
-//            switch ($conversion->status) {
-//                case Conversion::SUCCESS:
-//                    return [
-//                        'code' => 1,
-//                        'msg' => '转换成功',
-//                    ];
-//
-//                case Conversion::FAIL;
-//                    return [
-//                        'code' => -1,
-//                        'msg' => "转换失败，请手动下载",
-//                    ];
-//
-//                case Conversion::IN_QUEUE;
-//                case Conversion::PROCESSING;
-//                default:
-//                    $seconds = Carbon::now()->diffInSeconds($conversion->created_at);
-//                    return [
-//                        'code' => 0,
-//                        'msg' => "转换中，已耗时{$seconds}秒，请等待...",
-//                    ];
-//            }
-//        }
-//
-//        return [
-//            'code' => -1,
-//            'msg' => '请先预览此文件',
-//        ];
-//    }
-
     protected function listDir($dirFullPath, $random, $shownName, $extraPath = '', $download = false)
     {
         foreach (scandir($dirFullPath) as $item) {
@@ -149,12 +108,12 @@ class PreviewController extends Controller
                     $extension = strtolower($pathinfo['extension']);
                     switch ($extension) {
                         case 'html':
-                        case 'txt':
                         case 'pdf':
                         case 'jpg':
                         case 'jpeg':
                         case 'bmp':
                         case 'png':
+                        case 'txt':
                             return response()->file($absolutePath);
 
                         default:
@@ -208,9 +167,11 @@ class PreviewController extends Controller
                     if ($extraPath) {
                         $dirname = pathinfo($extraPath)['dirname'];
                         if (empty($dirname) || $dirname === '.') {
-                            $dirname = '';
+                            $backPath = url()->current();
+                        } else {
+                            $backPath = url()->current()
+                                . "?" . http_build_query(['path' => base64_encode($dirname)]);
                         }
-                        $backPath = url()->current() . "?path=" . base64_encode($dirname);
                     }
 
                     return view('preview.list', [

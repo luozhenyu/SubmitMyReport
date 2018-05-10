@@ -162,8 +162,9 @@
                                     $("<textarea>").addClass("form-control messageInput")
                                         .attr("rows", 3)
                                         .css("resize", "none")
-                                        .on('keyup', function (evt) {
+                                        .on('keydown', function (evt) {
                                             if (evt.keyCode === 13) {
+                                                evt.preventDefault();
                                                 sendMessage($messageContent);
                                             }
                                         })

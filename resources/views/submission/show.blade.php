@@ -84,6 +84,8 @@
             $("[data-toggle='tab']").on("shown.bs.tab", function () {
                 $($(this).attr("href")).find("input:first").focus();
             });
+
+            $("html, body").animate({scrollTop: $(document).height()}, 500);
         });
 
         function makeCheck(self) {
