@@ -160,6 +160,13 @@
                         @if($submission->mark)
                             <span class="text-secondary"
                                   style="font-size: 0.7em">by {{ $submission->mark->owner->name }}</span>
+
+                            <button type="button" class="btn btn-sm btn-outline-danger ml-3"
+                                    onclick="if(confirm('取消评分后可重新提交，确认取消评分？'))$('#unmark').submit();">取消评分
+                            </button>
+                            <form method="post" id="unmark" action="{{ url("/submission/{$submission->id}/unmark") }}">
+                            @csrf
+                            </form>
                         @endif
                     </h4>
                     <hr>
@@ -245,7 +252,7 @@
 
                                         <div class="card-body">
                                             <h5 class="card-title">{{ $data[$index]->score }}分</h5>
-                                            <p class="card-text">{{ $data[$index]->remark }}</p>
+                                            <p class="card-text">{!! str_replace("\n", "<br>", $data[$index]->remark) !!}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -260,7 +267,7 @@
 
                                         <div class="card-body">
                                             <h5 class="card-title">{{ $data[$index + 1]->score }}分</h5>
-                                            <p class="card-text">{{ $data[$index + 1]->remark }}</p>
+                                            <p class="card-text">{!! str_replace("\n", "<br>", $data[$index + 1]->remark) !!}</p>
                                         </div>
                                     </div>
                                 </div>

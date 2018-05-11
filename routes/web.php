@@ -75,6 +75,7 @@ Route::get('/submission/{submissionId}/edit', 'SubmissionController@edit');
 Route::put('/submission/{submissionId}', 'SubmissionController@update');
 
 Route::post('/submission/{submissionId}/mark', 'SubmissionController@mark');
+Route::post('/submission/{submissionId}/unmark', 'SubmissionController@unmark');
 
 
 //File upload and download
@@ -83,7 +84,6 @@ Route::post('/file', 'FileController@store')->name('file.upload');
 
 //Preview file
 Route::get('/preview/{hash}', 'PreviewController@dispatchJob');
-//Route::post('/preview/{hash}', 'PreviewController@queryStatus');
 
 //Site Message
 Route::get('/message', 'SiteMessageController@index')->name('message');

@@ -119,7 +119,7 @@ class SubmissionController extends Controller
             $assignment = $submission->assignment;
             $group = $user->managedGroups()->find($assignment->group_id);
             $admin = true;
-            abort_unless((bool)$group, 403);
+            abort_if(empty($group), 403);
         } else {
             $assignment = $submission->assignment;
             $group = $assignment->group;
@@ -198,7 +198,7 @@ class SubmissionController extends Controller
         $submission = Submission::findOrFail($submissionId);
         $assignment = $submission->assignment;
         $group = $user->managedGroups()->find($assignment->group_id);
-        abort_unless((bool)$group, 403);
+        abort_if(empty($group), 403);
 
         $this->validate($request, [
             'score' => "required|array|size:{$assignment->sub_problem}",
@@ -227,6 +227,22 @@ class SubmissionController extends Controller
             'average_score' => $scoreSum / $assignment->sub_problem,
             'data' => json_encode($json),
         ]);
+
+        return redirect("/assignment/{$assignment->id}/submission");
+    }
+
+    public function unmark(Request $request, $submissionId)
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        /** @var Submission $submission */
+        $submission = Submission::findOrFail($submissionId);
+        $assignment = $submission->assignment;
+        $group = $user->managedGroups()->find($assignment->group_id);
+        abort_if(empty($group), 403);
+
+        $submission->mark()->delete();
 
         return redirect("/assignment/{$assignment->id}/submission");
     }

@@ -26,7 +26,7 @@
         <form class="form" method="post" action="{{ route('profile') }}">
             @csrf
 
-            <input type="hidden" name="_method" value="PUT">
+            {{ method_field('PUT') }}
 
             @isset($success)
                 <div class="form-group">

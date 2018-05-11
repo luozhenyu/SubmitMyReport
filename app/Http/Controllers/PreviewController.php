@@ -35,7 +35,6 @@ class PreviewController extends Controller
         }
 
         $download = $request->input('type') === 'download';
-
         if ($conversion = $storedFile->conversion) {
             switch ($conversion->status) {
                 case Conversion::SUCCESS:
@@ -113,7 +112,6 @@ class PreviewController extends Controller
                         case 'jpeg':
                         case 'bmp':
                         case 'png':
-                        case 'txt':
                             return response()->file($absolutePath);
 
                         default:

@@ -89,7 +89,7 @@
         <div class="col-md-8">
             <form method="post" action="{{ url("/assignment/{$assignment->id}") }}">
                 @csrf
-                <input type="hidden" name="_method" value="PUT">
+                {{ method_field('PUT') }}
 
                 <div class="form-group row">
                     <label for="title" class="col-md-2 col-form-label">标题</label>

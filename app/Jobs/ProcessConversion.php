@@ -20,6 +20,7 @@ use Parsedown;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\Process\Process;
+use ZipArchive;
 
 class ProcessConversion implements ShouldQueue
 {
@@ -109,8 +110,10 @@ class ProcessConversion implements ShouldQueue
                 break;
 
             case 'md':
-                $parsedown = new Parsedown();
                 $content = file_get_contents($sourceFullPath);
+                $content = mb_convert_encoding($content, 'UTF-8', mb_detect_encoding($content));
+
+                $parsedown = new Parsedown();
                 $html = $parsedown->text($content);
                 file_put_contents($targetDir . DIRECTORY_SEPARATOR . "{$random}.html", <<<HTML
 <!doctype html>
@@ -121,13 +124,12 @@ HTML
 
             case 'txt':
                 $content = file_get_contents($sourceFullPath);
-                $encoding = mb_detect_encoding($content, ['GBK', 'UTF-8', 'ASCII']);
-                file_put_contents(
-                    $targetDir . DIRECTORY_SEPARATOR . "{$random}.txt",
-                    mb_convert_encoding($content, 'UTF-8', $encoding)
-                );
+                $content = mb_convert_encoding($content, 'UTF-8', mb_detect_encoding($content));
+
+                file_put_contents($targetDir . DIRECTORY_SEPARATOR . "{$random}.html", $content);
                 break;
 
+            case 'rtf':
             case 'doc':
             case 'docx':
             case 'xls':
@@ -157,8 +159,31 @@ HTML
                 }
 
                 if ($extension === 'zip') {
+                    $detect_encoding = function ($path) {
+                        $zip = new ZipArchive;
+                        if ($zip->open($path)) {
+                            $guess = [];
+                            for ($index = 0; $index < $zip->numFiles; $index++) {
+                                $rawEntryName = $zip->getNameIndex($index);
+                                $rawEntryName = @iconv('UTF-8', 'CP437', $rawEntryName) ?: $rawEntryName;
+                                $encoding = mb_detect_encoding($rawEntryName);
+
+                                if (!key_exists($encoding, $guess)) {
+                                    $guess[$encoding] = 1;
+                                } else {
+                                    $guess[$encoding]++;
+                                }
+                            }
+                            $zip->close();
+                        } else {
+                            throw new Exception("Zip file can't be opened.");
+                        }
+                        asort($guess);
+                        return key(array_reverse($guess));
+                    };
+
                     $process = new Process([
-                        '/usr/bin/unar', '-f', '-D', '-q',
+                        '/usr/bin/unar', '-f', '-D', '-q', '-e', $detect_encoding($sourceFullPath),
                         $sourceFullPath, '-o', $outDir,
                     ]);
                 } else if ($extension === 'rar') {

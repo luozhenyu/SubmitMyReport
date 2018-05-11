@@ -91,7 +91,7 @@
             <section>
                 <form method="post" action="{{ url("/submission/{$submission->id}") }}">
                     @csrf
-                    <input type="hidden" name="_method" value="PUT">
+                    {{ method_field('PUT') }}
 
                     <div class="form-group row">
                         <div class="col">
