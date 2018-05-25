@@ -64,7 +64,7 @@
 
             <hr>
             <section>
-                <div>{!! $assignment->description !!}</div>
+                <div class="description">{!! $assignment->description !!}</div>
             </section>
 
             <hr>

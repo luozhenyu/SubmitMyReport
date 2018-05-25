@@ -8,8 +8,9 @@
 
     <title>@yield('title') - {{ config('app.name') }}</title>
 
-    <link rel="stylesheet" href="{{ url('/css/app.css') }}">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@7.20.7/dist/sweetalert2.min.css" rel="stylesheet">
     @stack('css_import')
     <style>
         body {
@@ -17,7 +18,10 @@
         }
     </style>
     @stack('css')
-
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.20.7/dist/sweetalert2.min.js"></script>
     <script src="https://{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
     <script src="{{ url('/js/app.js') }}"></script>
     @stack('js_import')

@@ -106,6 +106,11 @@ class PreviewController extends Controller
                     $pathinfo = pathinfo($absolutePath);
                     $extension = strtolower($pathinfo['extension']);
                     switch ($extension) {
+                        case 'txt':
+                            return response()->file($absolutePath, [
+                                'Content-Type' => 'text/plain',
+                            ]);
+
                         case 'html':
                         case 'pdf':
                         case 'jpg':

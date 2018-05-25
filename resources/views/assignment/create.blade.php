@@ -21,7 +21,7 @@
 @endsection
 
 @push('css_import')
-    <link rel="stylesheet" href="https://cdn.bootcss.com/flatpickr/4.4.4/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.5.0/dist/flatpickr.min.css">
 @endpush
 
 @php
@@ -35,8 +35,8 @@
 @endphp
 
 @push('js_import')
-    <script src="https://cdn.bootcss.com/flatpickr/4.4.4/flatpickr.min.js"></script>
-    <script src="https://cdn.bootcss.com/flatpickr/4.4.4/l10n/zh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.5.0/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.5.0/dist/l10n/zh.js"></script>
     <script src="{{ url('/ckeditor/ckeditor.js') }}"></script>
 @endpush
 

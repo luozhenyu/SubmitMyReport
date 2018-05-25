@@ -1,32 +1,32 @@
 {
-	"authHost": "se.luozy.cn",
-	"authEndpoint": "/broadcasting/auth",
-	"clients": [
-		{
-			"appId": "88d262de6cd5935d",
-			"key": "bade8d6c4f319188e5d0e76fd8b83f85"
-		}
-	],
-	"database": "redis",
-	"databaseConfig": {
-		"redis": {},
-		"sqlite": {
-			"databasePath": "/database/laravel-echo-server.sqlite"
-		}
-	},
-	"devMode": false,
-	"host": null,
-	"port": "6001",
-	"protocol": "https",
-	"socketio": {},
-	"sslCertPath": "/etc/nginx/certs/se.luozy.cn/1_se.luozy.cn_bundle.crt",
-	"sslKeyPath": "/etc/nginx/certs/se.luozy.cn/2_se.luozy.cn.key",
-	"sslCertChainPath": "",
-	"sslPassphrase": "",
-	"apiOriginAllow": {
-		"allowCors": false,
-		"allowOrigin": "",
-		"allowMethods": "",
-		"allowHeaders": ""
-	}
+  "authHost": "se.luozy.cn",
+  "authEndpoint": "/broadcasting/auth",
+  "clients": [
+    {
+      "appId": "88d262de6cd5935d",
+      "key": "bade8d6c4f319188e5d0e76fd8b83f85"
+    }
+  ],
+  "database": "redis",
+  "databaseConfig": {
+    "redis": {},
+    "sqlite": {
+      "databasePath": "/database/laravel-echo-server.sqlite"
+    }
+  },
+  "devMode": false,
+  "host": null,
+  "port": "6001",
+  "protocol": "https",
+  "socketio": {},
+  "sslCertPath": "/etc/nginx/certs/se.luozy.cn/1_se.luozy.cn_bundle.crt",
+  "sslKeyPath": "/etc/nginx/certs/se.luozy.cn/2_se.luozy.cn.key",
+  "sslCertChainPath": "",
+  "sslPassphrase": "",
+  "apiOriginAllow": {
+    "allowCors": false,
+    "allowOrigin": "",
+    "allowMethods": "",
+    "allowHeaders": ""
+  }
 }

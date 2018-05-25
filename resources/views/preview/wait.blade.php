@@ -4,16 +4,18 @@
 
 @push('js')
     <script>
-        Echo.private('user.{{ Auth::user()->id }}')
-            .listen('.conversion.finished', (evt) => {
-                if (evt.success) {
-                    window.location.reload();
-                } else {
-                    $("#hit").text("转换失败，请直接下载。");
-                }
-            });
+        if (Echo !== undefined) {
+            Echo.private('user.{{ Auth::user()->id }}')
+                .listen('.conversion.finished', (evt) => {
+                    if (evt.success) {
+                        window.location.reload();
+                    } else {
+                        $("#hit").text("转换失败，请直接下载。");
+                    }
+                });
+        }
 
-        setInterval("window.location.reload();", 15 * 1000);
+        setInterval("window.location.reload();", 6 * 1000);
     </script>
 @endpush
 

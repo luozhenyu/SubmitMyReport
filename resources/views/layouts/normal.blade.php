@@ -1,7 +1,7 @@
 @extends('layouts.basic')
 
 @push('css_import')
-    <link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.6-rc.1/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css">
 @endpush
 
 @push('css')
@@ -56,8 +56,8 @@
 @endpush
 
 @push('js_import')
-    <script src="https://cdn.bootcss.com/select2/4.0.6-rc.1/js/select2.min.js"></script>
-    <script src="https://cdn.bootcss.com/select2/4.0.6-rc.1/js/i18n/zh-CN.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/i18n/zh-CN.js"></script>
 @endpush
 
 @push('js')
@@ -67,11 +67,11 @@
                 $.post("{{ route('improve') }}", {advice: $("#adviceField").val()}, function (json) {
                     $("#adviceField").val(null);
                     $("#improveModal").modal('hide');
-                    alert(json.message);
+                    swal(json.message, "", "success");
                 }).fail(function (xhr) {
                     let json = xhr.responseJSON;
                     if (json.errors !== undefined) {
-                        alert(json.errors.advice[0]);
+                        swal(json.errors.advice[0], "", "error");
                     }
                 });
             });
@@ -107,7 +107,7 @@
                             $messageInput.val('');
                         },
                         error: function (xhr) {
-                            alert(xhr.responseJSON.errors.text[0]);
+                            swal(xhr.responseJSON.errors.text[0], "", "error");
                         }
                     });
                 }
@@ -193,13 +193,27 @@
                     .append(
                         $("<i>").addClass("fa fa-times")
                             .click(function () {
-                                $.ajax({
-                                    url: "{{ route('message') }}/" + toWhom,
-                                    type: "DELETE",
-                                    success: function (json) {
-                                        $($messageTab.attr("href")).remove();
-                                        $messageTab.remove();
-                                    }
+                                swal({
+                                    title: '删除后不可恢复，您要继续吗？',
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: '是的，删除它',
+                                    cancelButtonColor: '#d33',
+                                    cancelButtonText: "取消操作"
+                                }).then(function (result) {
+                                    $.ajax({
+                                        url: "{{ route('message') }}/" + toWhom,
+                                        type: "DELETE",
+                                        success: function (json) {
+                                            if (result.value) {
+                                                $($messageTab.attr("href")).remove();
+                                                $messageTab.fadeOut(500, function () {
+                                                    $(this).remove();
+                                                });
+                                            }
+                                        }
+                                    });
                                 });
                             })
                     )
@@ -283,12 +297,13 @@
                     $(this).val(null).trigger('change');
                 });
             });
-
-            Echo.private('user.{{ Auth::user()->id }}')
-                .listen('.message.received', function (evt) {
-                    updateUnread($("#siteMessage"), evt.unread);
-                    refreshMessageTab(true);
-                });
+            if (Echo !== undefined) {
+                Echo.private('user.{{ Auth::user()->id }}')
+                    .listen('.message.received', function (evt) {
+                        updateUnread($("#siteMessage"), evt.unread);
+                        refreshMessageTab(true);
+                    });
+            }
         });
     </script>
 @endpush

@@ -90,7 +90,7 @@ class ProcessConversion implements ShouldQueue
         $path_parts = pathinfo($this->basename);
         $extension = strtolower($path_parts['extension']);
 
-        $sourceFullPath = $this->link2tmpfile($this->fileFullPath, "{$sha512}.{$extension}");
+        $sourceFullPath = $this->linkTempFile($this->fileFullPath, "{$sha512}.{$extension}");
 
         $random = $this->conversion->random;
         $targetDir = Storage::path(PreviewController::strToPath($random));
@@ -122,11 +122,22 @@ HTML
                 );
                 break;
 
+            case 'sql':
+            case 'c':
+            case 'cpp':
+            case 'h':
+            case 'hpp':
+            case 'cs':
+            case 'py':
+            case 'php':
+            case 'java':
+            case 'js':
+            case 'css':
             case 'txt':
                 $content = file_get_contents($sourceFullPath);
                 $content = mb_convert_encoding($content, 'UTF-8', mb_detect_encoding($content));
 
-                file_put_contents($targetDir . DIRECTORY_SEPARATOR . "{$random}.html", $content);
+                file_put_contents($targetDir . DIRECTORY_SEPARATOR . "{$random}.txt", $content);
                 break;
 
             case 'rtf':
@@ -194,7 +205,7 @@ HTML
                 } else {
                     $process = new Process([
                         '/usr/bin/7z', 'x', $sourceFullPath,
-                        '-aoa', '-y', '-o', $outDir,
+                        '-aoa', '-y', "-o{$outDir}",
                     ]);
                 }
 
@@ -227,18 +238,18 @@ HTML
      * @param string $tmpBasename
      * @return string
      */
-    protected function link2tmpfile(string $fileFullPath, string $tmpBasename)
+    protected function linkTempFile(string $fileFullPath, string $tmpBasename)
     {
-        $linkDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "SE";
+        $linkDir = DIRECTORY_SEPARATOR . trim(sys_get_temp_dir(), DIRECTORY_SEPARATOR)
+            . DIRECTORY_SEPARATOR . "SE";
         if (!file_exists($linkDir)) {
             mkdir($linkDir);
         }
 
         $link = $linkDir . DIRECTORY_SEPARATOR . $tmpBasename;
-        if (file_exists($link)) {
-            unlink($link);
+        if (!file_exists($link)) {
+            symlink($fileFullPath, $link);
         }
-        symlink($fileFullPath, $link);
         return $link;
     }
 
