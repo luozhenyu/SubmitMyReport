@@ -22,8 +22,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.20.7/dist/sweetalert2.min.js"></script>
-    <script src="https://{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
-    <script src="{{ url('/js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2.1.1/dist/socket.io.js"></script>
+    <script src="{{ asset('/js/app.js') }}"></script>
     @stack('js_import')
     <script>
         $(function () {

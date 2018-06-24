@@ -34,7 +34,7 @@ class GroupController extends Controller
      */
     public function list(Request $request)
     {
-        $query = new Group;
+        $query = Group::query();
 
         if ($wd = $request->input('wd')) {
             $parsedWord = str_replace(['%', '_'], ['\%', '\_'], $wd);
@@ -94,7 +94,7 @@ class GroupController extends Controller
     public function showMembers($id)
     {
         /** @var Group $group */
-        $group = Group::findOrFail($id);
+        $group = Group::query()->findOrFail($id);
 
         $members = $group->members()->paginate(15);
         return view('group.member', [
@@ -110,7 +110,7 @@ class GroupController extends Controller
         $user = $request->user();
 
         /** @var Group $group */
-        $group = Group::findOrFail($id);
+        $group = Group::query()->findOrFail($id);
 
         $group->members()->syncWithoutDetaching($user->id);
 
@@ -135,7 +135,7 @@ class GroupController extends Controller
     public function toggleAdmin(Request $request, $groupId)
     {
         /** @var Group $group */
-        $group = Group::findOrFail($groupId);
+        $group = Group::query()->findOrFail($groupId);
         abort_unless($group->owner->id === $request->user()->id, 403);
 
         $userId = $request->input('user_id');

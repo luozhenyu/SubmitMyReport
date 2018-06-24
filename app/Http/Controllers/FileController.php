@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    const UPLOAD_MAX_SIZE = 10 * 1024 * 1024;
+    const UPLOAD_MAX_SIZE = 16 * 1024 * 1024;
 
     public function __construct()
     {

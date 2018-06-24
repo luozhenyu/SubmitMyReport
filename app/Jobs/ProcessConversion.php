@@ -31,7 +31,7 @@ class ProcessConversion implements ShouldQueue
      *
      * @var int
      */
-    public $timeout = 30;
+    public $timeout = 120;
 
     /**
      * @var User
