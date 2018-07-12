@@ -4,6 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Conversion
+ *
+ * @property-read string $readable_status
+ * @mixin \Eloquent
+ * @property int $id
+ * @property string $random
+ * @property int $status
+ * @property string|null $log
+ * @property string|null $finished_at
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Conversion whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Conversion whereFinishedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Conversion whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Conversion whereLog($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Conversion whereRandom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Conversion whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Conversion whereUpdatedAt($value)
+ */
 class Conversion extends Model
 {
     const IN_QUEUE = 0;

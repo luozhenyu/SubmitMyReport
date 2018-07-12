@@ -82,40 +82,51 @@
                                         <td>{{ $assignment->scoredSubmissions()->count() .'/' .$assignment->submissions()->count() }}</td>
                                     @endif
                                     <td>
-                                        <a class="btn btn-outline-primary btn-sm"
-                                           href="{{ url("/assignment/{$assignment->id}") }}">
-                                            题目
-                                        </a>
-                                        @if($selectedGroup->loginAdmin())
-                                            <a href="{{ url("/assignment/{$assignment->id}/submission") }}"
-                                               class="btn btn-outline-info btn-sm">
-                                                提交情况
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a class="btn btn-outline-primary"
+                                               href="{{ url("/assignment/{$assignment->id}") }}">
+                                                题目
                                             </a>
-                                        @else
-                                            @if(!$submission = $assignment->loginSubmissions->first())
-                                                <a href="{{ url("/assignment/{$assignment->id}/submit") }}"
-                                                   class="btn btn-outline-danger btn-sm">
-                                                    待完成
+                                            @if($selectedGroup->loginAdmin())
+                                                <a href="{{ url("/assignment/{$assignment->id}/submission") }}"
+                                                   class="btn btn-outline-info">
+                                                    提交情况
                                                 </a>
-                                            @elseif($submission->mark)
-                                                <a class="btn btn-outline-danger btn-sm"
-                                                   href="{{ url("submission/{$submission->id}") }}"
-                                                   onmouseover="innerHTML='查 看'"
-                                                   onmouseleave="innerHTML='{{ $submission->mark->average_score }}分'">
-                                                    {{ $submission->mark->average_score }}分
-                                                </a>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                                        更多操作
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="{{ action('AssignmentController@exportGrade', $assignment->id) }}">导出成绩</a>
+                                                        <a class="dropdown-item" href="{{ action('AssignmentController@exportFile', $assignment->id) }}">导出提交文件</a>
+                                                    </div>
+                                                </div>
                                             @else
-                                                <a class="btn btn-outline-info btn-sm"
-                                                   href="{{ url("submission/{$submission->id}") }}">查看提交
-                                                </a>
-                                                <a class="btn btn-outline-success btn-sm submitted"
-                                                   href="{{ url("submission/{$submission->id}/edit") }}"
-                                                   onmouseover="innerHTML='修改提交'"
-                                                   onmouseleave="innerHTML='提交成功'">
-                                                    提交成功
-                                                </a>
+                                                @if(!$submission = $assignment->loginSubmissions->first())
+                                                    <a href="{{ url("/assignment/{$assignment->id}/submit") }}"
+                                                       class="btn btn-outline-danger">
+                                                        待完成
+                                                    </a>
+                                                @elseif($submission->mark)
+                                                    <a class="btn btn-outline-danger"
+                                                       href="{{ url("submission/{$submission->id}") }}"
+                                                       onmouseover="innerHTML='查 看'"
+                                                       onmouseleave="innerHTML='{{ $submission->mark->average_score }}分'">
+                                                        {{ $submission->mark->average_score }}分
+                                                    </a>
+                                                @else
+                                                    <a class="btn btn-outline-info"
+                                                       href="{{ url("submission/{$submission->id}") }}">查看提交
+                                                    </a>
+                                                    <a class="btn btn-outline-success btn-sm submitted"
+                                                       href="{{ url("submission/{$submission->id}/edit") }}"
+                                                       onmouseover="innerHTML='修改提交'"
+                                                       onmouseleave="innerHTML='提交成功'">
+                                                        提交成功
+                                                    </a>
+                                                @endif
                                             @endif
-                                        @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

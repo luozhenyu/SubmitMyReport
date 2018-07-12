@@ -7,6 +7,26 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Models\Group
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Assignment[] $assignments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $members
+ * @property-read \App\Models\User $owner
+ * @mixin \Eloquent
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property int $owner_id
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereUpdatedAt($value)
+ */
 class Group extends Model
 {
     /**

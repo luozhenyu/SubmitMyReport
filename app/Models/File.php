@@ -4,6 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\File
+ *
+ * @property-read \App\Models\Conversion $conversion
+ * @property-read \App\Models\User $owner
+ * @mixin \Eloquent
+ * @property int $id
+ * @property string $random
+ * @property string $sha512
+ * @property int $size
+ * @property string $filename
+ * @property int $owner_id
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\File whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\File whereFilename($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\File whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\File whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\File whereRandom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\File whereSha512($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\File whereSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\File whereUpdatedAt($value)
+ */
 class File extends Model
 {
     const STORAGE_DIR = 'uploads';

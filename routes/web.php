@@ -60,7 +60,9 @@ Route::post('/group/{groupId}', 'AssignmentController@store');
 Route::get('/assignment/{assignmentId}', 'AssignmentController@show');
 Route::get('/assignment/{assignmentId}/edit', 'AssignmentController@edit');
 Route::put('/assignment/{assignmentId}', 'AssignmentController@update');
-//Route::delete('/assignment/{assignmentId}', 'AssignmentController@delete');//TODO:
+Route::get('/assignment/{assignmentId}/export_grade', 'AssignmentController@exportGrade');
+Route::get('/assignment/{assignmentId}/export_file', 'AssignmentController@exportFile');
+
 
 //List submissions
 Route::get('/assignment/{assignmentId}/submission', 'SubmissionController@index');
